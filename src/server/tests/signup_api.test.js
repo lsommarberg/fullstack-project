@@ -10,7 +10,7 @@ describe('signup api tests', () => {
     await User.deleteMany({});
 
     const passwordHash = await bcrypt.hash('testpassword', 10);
-    const user = new User({ username: 'testuser', passwordHash });
+    const user = new User({ username: 'testuser2', passwordHash });
     await user.save();
   });
   test('succeeds with valid credentials', async () => {
@@ -29,7 +29,7 @@ describe('signup api tests', () => {
   });
   test('fails with taken username', async () => {
     const signupData = {
-      username: 'testuser',
+      username: 'testuser2',
       password: 'password',
     };
 
