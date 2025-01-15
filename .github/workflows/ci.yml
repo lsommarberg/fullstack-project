@@ -3,15 +3,30 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - '**'
   pull_request:
     branches:
       - main
 
 jobs:
-  lint:
-    name: Lint
+  lint_and_test:
+    name: Lint and Test
     runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongo --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          MONGO_INITDB_ROOT_USERNAME: the_username
+          MONGO_INITDB_ROOT_PASSWORD: the_password
+          MONGO_INITDB_DATABASE: test_db
 
     steps:
       - name: Checkout code
@@ -41,3 +56,8 @@ jobs:
         run: |
           cd src/server
           npm run lint
+
+      - name: Run backend tests
+        run: |
+          cd src/server
+          npm test
