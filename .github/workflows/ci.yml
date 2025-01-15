@@ -19,7 +19,7 @@ jobs:
       - name: Set up Docker Compose
         uses: hoverkraft-tech/compose-action@v2.0.2
         with:
-          compose-file: "./docker/docker-compose.yml"
+          compose-file: "./docker-compose.yml"
 
       - name: Wait for MongoDB to be ready
         run: |
