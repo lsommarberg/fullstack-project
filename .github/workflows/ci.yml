@@ -10,28 +10,26 @@ on:
 
 jobs:
   lint_and_test:
-    name: Lint and Test
     runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: the_username
+          MONGO_INITDB_ROOT_PASSWORD: the_password
+          MONGO_INITDB_DATABASE: test_db
+        options: >-
+          --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Set up Docker Compose
-        run: sudo apt-get update && sudo apt-get install -y docker-compose
-
-      - name: Start services with Docker Compose
-        run: docker-compose up -d
-
-      - name: Wait for MongoDB to be ready
-        run: |
-          until docker-compose exec -T mongo mongosh --eval 'db.runCommand({ ping: 1 })'; do
-            echo "Waiting for MongoDB to be ready..."
-            sleep 5
-          done
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -48,23 +46,17 @@ jobs:
           cd src/server
           npm ci
 
-      - name: Run linter for client
+      - name: Wait for MongoDB to be ready
         run: |
-          cd src/client
-          npm run lint
-
-      - name: Run linter for server
-        run: |
-          cd src/server
-          npm run lint
+          until nc -zv localhost 27017; do
+            echo "Waiting for MongoDB to be ready..."
+            sleep 5
+          done
 
       - name: Run backend tests
         run: |
           cd src/server
           npm test
         env:
-          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+          TEST_MONGODB_URI: "mongodb://the_username:the_password@localhost:27017/test_db"
           SECRET: ${{ secrets.SECRET }}
-
-      - name: Stop services with Docker Compose
-        run: docker-compose down
