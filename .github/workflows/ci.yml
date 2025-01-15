@@ -12,21 +12,24 @@ jobs:
   lint_and_test:
     runs-on: ubuntu-latest
 
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: the_username
+          MONGO_INITDB_ROOT_PASSWORD: the_password
+          MONGO_INITDB_DATABASE: test_db
+        options: >-
+          --health-cmd="mongosh -u the_username -p the_password --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Compose
-        uses: hoverkraft-tech/compose-action@v2.0.2
-        with:
-          compose-file: "./docker-compose.yml"
-
-      - name: Wait for MongoDB to be ready
-        run: |
-          until docker-compose exec -T mongo mongosh --eval 'db.runCommand({ ping: 1 })'; do
-            echo "Waiting for MongoDB to be ready..."
-            sleep 5
-          done
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -52,6 +55,27 @@ jobs:
         run: |
           cd src/server
           npm run lint
+
+      - name: Wait for MongoDB to be ready
+        run: |
+          until nc -zv localhost 27017; do
+            echo "Waiting for MongoDB to be ready..."
+            sleep 5
+          done
+      
+      - name: Install mongosh
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg
+          wget -qO- https://www.mongodb.org/static/pgp/server-6.0.asc | sudo tee /etc/apt/trusted.gpg.d/server-6.0.asc
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-mongosh
+          mongosh --version
+          
+      - name: Initialize MongoDB
+        run: |
+          mongosh --host localhost:27017 -u the_username -p the_password --authenticationDatabase admin /mongo/mongo-init.js
 
       - name: Run backend tests
         run: |
