@@ -64,6 +64,7 @@ jobs:
           npm test
         env:
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+          SECRET: ${{ secrets.SECRET }}
 
       - name: Stop services with Docker Compose
         run: docker-compose down
