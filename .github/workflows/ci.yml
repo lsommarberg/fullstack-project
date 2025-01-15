@@ -18,30 +18,9 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
-        options: "--health-cmd='mongo --eval \"db.runCommand({ ping: 1 })\"' --health-interval=10s --health-timeout=5s --health-retries=5"
+        options: "--health-cmd='echo \"db.runCommand({ ping: 1 })\" | mongosh localhost:27017/test --quiet' --health-interval=10s --health-timeout=5s --health-retries=5"
 
     steps:
-      - name: Sleep for MongoDB readiness
-        run: sleep 30
-
-      - name: Install MongoDB CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y mongodb-clients
-
-      - name: Wait for MongoDB
-        run: |
-          for i in {1..30}; do
-            if echo "db.runCommand({ ping: 1 })" | mongo localhost:27017/test --quiet; then
-              echo "MongoDB is ready!"
-              exit 0
-            fi
-            echo "Waiting for MongoDB to be ready..."
-            sleep 2
-          done
-          echo "MongoDB did not start in time."
-          exit 1
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -60,9 +39,22 @@ jobs:
           cd src/server
           npm ci
 
+      - name: Run linter for client
+        run: |
+          cd src/client
+          npm run lint
+
+      - name: Run linter for server
+        run: |
+          cd src/server
+          npm run lint
+
       - name: Run backend tests
         run: |
           cd src/server
           npm test
         env:
-          MONGO_URL: ${{ secrets.TEST_MONGODB_URI }}
+          MONGO_URL: mongodb://the_username:the_password@localhost:27017/test_db?authSource=admin
+
+      - name: Stop services with Docker Compose
+        run: docker-compose down
