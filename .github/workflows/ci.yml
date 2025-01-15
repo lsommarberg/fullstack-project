@@ -12,24 +12,21 @@ jobs:
   lint_and_test:
     runs-on: ubuntu-latest
 
-    services:
-      mongo:
-        image: mongo:latest
-        ports:
-          - 27017:27017
-        env:
-          MONGO_INITDB_ROOT_USERNAME: the_username
-          MONGO_INITDB_ROOT_PASSWORD: the_password
-          MONGO_INITDB_DATABASE: test_db
-        options: >-
-          --health-cmd="mongosh -u the_username -p the_password --eval 'db.runCommand({ ping: 1 })'"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        uses: hoverkraft-tech/compose-action@v2.0.2
+        with:
+          compose-file: "./docker/docker-compose.yml"
+
+      - name: Wait for MongoDB to be ready
+        run: |
+          until docker-compose exec -T mongo mongosh --eval 'db.runCommand({ ping: 1 })'; do
+            echo "Waiting for MongoDB to be ready..."
+            sleep 5
+          done
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -55,24 +52,6 @@ jobs:
         run: |
           cd src/server
           npm run lint
-
-      - name: Wait for MongoDB to be ready
-        run: |
-          until nc -zv localhost 27017; do
-            echo "Waiting for MongoDB to be ready..."
-            sleep 5
-          done
-      - name: Install Mongosh
-        run: |
-          wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
-          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
-          sudo apt-get update
-          sudo apt-get install -y mongodb-mongosh
-          
-      - name: Debug MongoDB Connection
-        run: |
-          echo "Testing MongoDB connection..."
-          mongosh "mongodb://the_username:the_password@localhost:27017/test_db" --eval 'db.runCommand({ ping: 1 })'
 
       - name: Run backend tests
         run: |
