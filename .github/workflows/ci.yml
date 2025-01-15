@@ -55,8 +55,13 @@ jobs:
 
       - name: Install mongosh
         run: |
-          curl -fsSL https://dl.mongodb.com/mongosh/dist/mongosh-1.0.0-linux-x64.tgz | tar -xz
-          sudo mv mongosh-1.0.0-linux-x64/bin/mongosh /usr/local/bin/mongosh
+          sudo apt-get update
+          sudo apt-get install -y gnupg
+          wget -qO- https://www.mongodb.org/static/pgp/server-6.0.asc | sudo tee /etc/apt/trusted.gpg.d/server-6.0.asc
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-mongosh
+          mongosh --version
           
       - name: Initialize MongoDB with mongosh
         run: |
