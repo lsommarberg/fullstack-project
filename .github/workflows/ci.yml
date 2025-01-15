@@ -17,6 +17,10 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: the_username
+          MONGO_INITDB_ROOT_PASSWORD: the_password
+          MONGO_INITDB_DATABASE: test_db
         options: >-
           --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
           --health-interval=10s
@@ -49,9 +53,24 @@ jobs:
             sleep 5
           done
 
-      - name: Initialize MongoDB
+      - name: Install mongosh
         run: |
-          mongosh --host localhost:27017 -u admin -p admin --authenticationDatabase admin /mongo/mongo-init.js
+          curl -fsSL https://dl.mongodb.com/mongosh/dist/mongosh-1.0.0-linux-x64.tgz | tar -xz
+          sudo mv mongosh-1.0.0-linux-x64/bin/mongosh /usr/local/bin/mongosh
+          
+      - name: Initialize MongoDB with mongosh
+        run: |
+          mongosh --host localhost:27017 -u the_username -p the_password --authenticationDatabase admin /mongo/mongo-init.js
+
+      - name: Run linter for client
+        run: |
+          cd src/client
+          npm run lint
+  
+      - name: Run linter for server
+        run: |
+          cd src/server
+          npm run lint
 
       - name: Run backend tests
         run: |
