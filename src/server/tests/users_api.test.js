@@ -14,7 +14,7 @@ describe('users api tests', () => {
     await User.deleteMany({});
 
     const passwordHash = await bcrypt.hash('testpassword', 10);
-    const user = new User({ username: 'testuser', passwordHash });
+    const user = new User({ username: 'testuser3', passwordHash });
     const savedUser = await user.save();
     userId = savedUser._id.toString();
 
@@ -32,7 +32,7 @@ describe('users api tests', () => {
       .expect('Content-Type', /application\/json/);
 
     expect(response.body).toHaveLength(1);
-    expect(response.body[0].username).toBe('testuser');
+    expect(response.body[0].username).toBe('testuser3');
   });
 
   test('gets a user by id', async () => {
@@ -42,7 +42,7 @@ describe('users api tests', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/);
 
-    expect(response.body.username).toBe('testuser');
+    expect(response.body.username).toBe('testuser3');
   });
 
   test('fails to get a user by id without token', async () => {
@@ -67,7 +67,7 @@ describe('users api tests', () => {
 
   test('fails to get a user by id with expired token', async () => {
     const userForToken = {
-      username: 'testuser',
+      username: 'testuser3',
       id: userId,
     };
     const expiredToken = jwt.sign(userForToken, process.env.SECRET, {
@@ -84,7 +84,7 @@ describe('users api tests', () => {
 
   test('fails to get a user by id with wrong token', async () => {
     const otherPasswordHash = await bcrypt.hash('testpassword', 10);
-    const otherUser = new User({ username: 'test', otherPasswordHash });
+    const otherUser = new User({ username: 'test2', otherPasswordHash });
     const savedOtherUser = await otherUser.save();
     const savedOtherUserId = savedOtherUser._id.toString();
 
