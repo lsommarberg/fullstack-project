@@ -22,7 +22,7 @@ jobs:
           MONGO_INITDB_ROOT_PASSWORD: the_password
           MONGO_INITDB_DATABASE: test_db
         options: >-
-          --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-cmd="mongosh -u the_username -p the_password --eval 'db.runCommand({ ping: 1 })'"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -46,36 +46,22 @@ jobs:
           cd src/server
           npm ci
 
+      - name: Run linter for client
+        run: |
+          cd src/client
+          npm run lint
+
+      - name: Run linter for server
+        run: |
+          cd src/server
+          npm run lint
+
       - name: Wait for MongoDB to be ready
         run: |
           until nc -zv localhost 27017; do
             echo "Waiting for MongoDB to be ready..."
             sleep 5
           done
-
-      - name: Install mongosh
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gnupg
-          wget -qO- https://www.mongodb.org/static/pgp/server-6.0.asc | sudo tee /etc/apt/trusted.gpg.d/server-6.0.asc
-          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-          sudo apt-get update
-          sudo apt-get install -y mongodb-mongosh
-          mongosh --version
-          
-      - name: Initialize MongoDB with mongosh
-        run: |
-          mongosh --host localhost:27017 -u the_username -p the_password --authenticationDatabase admin /mongo/mongo-init.js
-
-      - name: Run linter for client
-        run: |
-          cd src/client
-          npm run lint
-  
-      - name: Run linter for server
-        run: |
-          cd src/server
-          npm run lint
 
       - name: Run backend tests
         run: |
