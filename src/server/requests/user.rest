@@ -1,0 +1,10 @@
+GET http://localhost:3001/api/users
+Accept: application/json
+
+###
+GET http://localhost:3001/api/users/6784fd15312d0eaed9da392b
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2Nzg0ZmQxNTMxMmQwZWFlZDlkYTM5MmIiLCJpYXQiOjE3MzY4NTA0NjYsImV4cCI6MTczNjg1NDA2Nn0.d1BfSwC1a5yZMYP1TnzTt-oyDOWlF9MlfC29jhumywg
+Accept: application/json
+
+
+# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2Nzg0ZmQxNTMxMmQwZWFlZDlkYTM5MmIiLCJpYXQiOjE3MzY4NTA0NjYsImV4cCI6MTczNjg1NDA2Nn0.d1BfSwC1a5yZMYP1TnzTt-oyDOWlF9MlfC29jhumywg

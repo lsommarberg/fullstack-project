@@ -24,4 +24,11 @@ module.exports = [
       'no-trailing-spaces': 'error',
     },
   },
+  {
+    files: ['**/*.test.js', '**/tests/**'],
+    rules: {
+      'no-unused-expressions': 'off',
+      'no-undef': 'off',
+    },
+  },
 ];
