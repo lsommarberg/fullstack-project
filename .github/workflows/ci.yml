@@ -62,6 +62,11 @@ jobs:
             echo "Waiting for MongoDB to be ready..."
             sleep 5
           done
+          
+      - name: Debug MongoDB Connection
+        run: |
+          echo "Testing MongoDB connection..."
+          mongosh "mongodb://the_username:the_password@localhost:27017/test_db" --eval 'db.runCommand({ ping: 1 })'
 
       - name: Run backend tests
         run: |
