@@ -17,10 +17,6 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
-        env:
-          MONGO_INITDB_ROOT_USERNAME: the_username
-          MONGO_INITDB_ROOT_PASSWORD: the_password
-          MONGO_INITDB_DATABASE: test_db
         options: >-
           --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
           --health-interval=10s
@@ -52,6 +48,10 @@ jobs:
             echo "Waiting for MongoDB to be ready..."
             sleep 5
           done
+
+      - name: Initialize MongoDB
+        run: |
+          mongosh --host localhost:27017 -u admin -p admin --authenticationDatabase admin /mongo/mongo-init.js
 
       - name: Run backend tests
         run: |
