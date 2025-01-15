@@ -12,10 +12,6 @@ router.post('/', async (req, res) => {
       .json({ error: 'Username and password are required' });
   }
 
-  const existingUser = await User.findOne({ username });
-  if (existingUser) {
-    return res.status(400).json({ error: 'Username already exists' });
-  }
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
   const user = new User({

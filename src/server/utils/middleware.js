@@ -29,7 +29,8 @@ const userExtractor = async (req, res, next) => {
   next();
 };
 
-const errorHandler = (error, req, res) => {
+// eslint-disable-next-line no-unused-vars
+const errorHandler = (error, req, res, next) => {
   if (error.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id' });
   } else if (error.name === 'ValidationError') {
@@ -41,6 +42,8 @@ const errorHandler = (error, req, res) => {
     return res.status(400).json({ error: 'expected `username` to be unique' });
   } else if (error.name === 'JsonWebTokenError') {
     return res.status(400).json({ error: 'token missing or invalid' });
+  } else if (error.name === 'TokenExpiredError') {
+    return res.status(401).json({ error: 'token expired' });
   } else {
     return res.status(500).json({ error: 'something went wrong' });
   }
