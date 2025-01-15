@@ -58,5 +58,5 @@ jobs:
           cd src/server
           npm test
         env:
-          TEST_MONGODB_URI: "mongodb://the_username:the_password@localhost:27017/test_db"
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
