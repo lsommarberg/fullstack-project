@@ -1,9 +1,9 @@
-import globals from 'globals'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+const globals = require('globals');
+const react = require('eslint-plugin-react');
+const reactHooks = require('eslint-plugin-react-hooks');
+const reactRefresh = require('eslint-plugin-react-refresh');
 
-export default [
+module.exports = [
   { ignores: ['dist', 'node_modules'] },
   {
     files: ['**/*.{js,jsx}'],
@@ -23,31 +23,18 @@ export default [
       'react-refresh': reactRefresh,
     },
     rules: {
-      'indent': [
-        'error',
-        2
-      ],
-      'linebreak-style': [
-        'error',
-        'unix'
-      ],
-      'quotes': [
-        'error',
-        'single'
-      ],
-      'eqeqeq': 'error',
+      indent: ['error', 2],
+      'linebreak-style': ['error', 'unix'],
+      quotes: ['error', 'single'],
+      eqeqeq: 'error',
       'no-trailing-spaces': 'error',
-      'object-curly-spacing': [
-        'error', 'always'
-      ],
-      'arrow-spacing': [
-        'error', { 'before': true, 'after': true }
-      ],
+      'object-curly-spacing': ['error', 'always'],
+      'arrow-spacing': ['error', { before: true, after: true }],
       'no-console': 0,
       'react/prop-types': 0,
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 0,
-      'no-unused-vars': 0
+      'no-unused-vars': 0,
     },
-  }
-]
+  },
+];
