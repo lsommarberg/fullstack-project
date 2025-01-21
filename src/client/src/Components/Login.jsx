@@ -52,13 +52,11 @@ const Login = ({ setUser }) => {
       <Text fontSize="2xl" mb="4">
         Login
       </Text>
-      <Box mb="4" minHeight="60px" justifyContent="center">
-        {error && (
-          <Text color="red.500" mb="4">
-            {error}
-          </Text>
-        )}
-      </Box>
+      {error && (
+        <Text color="red.500" mb="4">
+          {error}
+        </Text>
+      )}
       <form onSubmit={handleSubmit}>
         <FormControl id="username" isInvalid={!!error} mb="4">
           <FormLabel>Username</FormLabel>

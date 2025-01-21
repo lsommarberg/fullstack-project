@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import signupService from '../services/signup';
-import { useState } from 'react';
+
 import {
   Box,
   FormControl,
@@ -28,27 +28,36 @@ const SignupForm = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
   const navigate = useNavigate();
-  const [backendError, setBackendError] = useState(null);
+
+  const handleSignupError = (exception) => {
+    if (
+      exception.response &&
+      exception.response.data &&
+      exception.response.data.error
+    ) {
+      const errorMessage = exception.response.data.error;
+      if (errorMessage.includes('unique')) {
+        setError('username', {
+          type: 'manual',
+          message: 'Username must be unique',
+        });
+      }
+    }
+    console.log('Error:', exception);
+  };
+
   const onSubmit = async (data) => {
     try {
       await signupService.signup(data);
       navigate('/login');
     } catch (exception) {
-      if (
-        exception.response &&
-        exception.response.data &&
-        exception.response.data.error
-      ) {
-        setBackendError(exception.response.data.error);
-      } else {
-        setBackendError('An unexpected error occurred');
-      }
-      console.log('Error:', exception);
+      handleSignupError(exception);
     }
   };
 
@@ -58,18 +67,9 @@ const SignupForm = () => {
         Sign Up
       </Text>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {backendError && (
-          <Text color="red.500" mb="4">
-            {backendError}
-          </Text>
-        )}
         <FormControl id="username" isInvalid={errors.username} mb="4">
           <FormLabel>Username</FormLabel>
-          <Input
-            type="text"
-            placeholder="Username"
-            {...register('username', { required: 'Username is required' })}
-          />
+          <Input type="text" placeholder="Username" {...register('username')} />
           {errors.username && (
             <Text color="red.500" mt="1">
               {errors.username.message}
@@ -81,7 +81,7 @@ const SignupForm = () => {
           <Input
             type="password"
             placeholder="Password"
-            {...register('password', { required: 'Password is required' })}
+            {...register('password')}
           />
           {errors.password && (
             <Text color="red.500" mt="1">
@@ -98,9 +98,7 @@ const SignupForm = () => {
           <Input
             type="password"
             placeholder="Confirm Password"
-            {...register('passwordConfirm', {
-              required: 'Confirm Password is required',
-            })}
+            {...register('passwordConfirm')}
           />
           {errors.passwordConfirm && (
             <Text color="red.500" mt="1">
