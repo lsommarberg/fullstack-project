@@ -10,32 +10,41 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-const Login = () => {
+const Login = ({ setUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (credentials) => {
     try {
-      await loginService.login({ username, password });
+      const user = await loginService.login(credentials);
+      setUser(user);
       navigate('/');
     } catch (exception) {
-      if (
-        exception.response &&
-        exception.response.data &&
-        exception.response.data.error
-      ) {
-        setError(exception.response.data.error);
-      } else {
-        setError('An unexpected error occurred');
-      }
-      setTimeout(() => {
-        setError(null);
-      }, 5000);
-      console.log('Error:', exception);
+      handleLoginError(exception);
     }
+  };
+
+  const handleLoginError = (exception) => {
+    if (
+      exception.response &&
+      exception.response.data &&
+      exception.response.data.error
+    ) {
+      setError(exception.response.data.error);
+    } else {
+      setError('An unexpected error occurred');
+    }
+    setTimeout(() => {
+      setError(null);
+    }, 5000);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const credentials = { username, password };
+    handleLogin(credentials);
   };
 
   return (
@@ -43,11 +52,13 @@ const Login = () => {
       <Text fontSize="2xl" mb="4">
         Login
       </Text>
-      {error && (
-        <Text color="red.500" mb="4">
-          {error}
-        </Text>
-      )}
+      <Box mb="4" minHeight="60px" justifyContent="center">
+        {error && (
+          <Text color="red.500" mb="4">
+            {error}
+          </Text>
+        )}
+      </Box>
       <form onSubmit={handleSubmit}>
         <FormControl id="username" isInvalid={!!error} mb="4">
           <FormLabel>Username</FormLabel>

@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Login from './Components/Login';
+import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Navigation from './components/Navigation';
 
@@ -29,7 +29,7 @@ function App() {
 
   return (
     <div>
-      <Navigation user={user} />
+      <Navigation user={user} setUser={setUser} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
