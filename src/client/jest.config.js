@@ -1,0 +1,16 @@
+module.exports = {
+  setupFilesAfterEnv: ['./jest.setup.js'],
+  transform: {
+    '^.+\\.jsx?$': 'babel-jest',
+  },
+  moduleFileExtensions: ['js', 'jsx'],
+  testEnvironment: 'jsdom',
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx}',
+    '!src/**/*.test.{js,jsx}',
+    '!src/**/index.{js,jsx}',
+  ],
+  coverageDirectory: 'coverage',
+  coverageReporters: ['html', 'text', 'lcov'],
+};
