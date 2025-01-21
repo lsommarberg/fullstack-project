@@ -1,33 +1,44 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Login from './Components/Login';
+import SignUp from './components/SignUp';
+import Navigation from './components/Navigation';
+
+const Home = () => <h2>Home</h2>;
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('user-token');
+    if (loggedUserJSON) {
+      try {
+        const { user, expirationTime } = JSON.parse(loggedUserJSON);
+        if (new Date().getTime() > expirationTime) {
+          localStorage.removeItem('user-token');
+          setUser(null);
+        } else {
+          setUser(user);
+        }
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+        localStorage.removeItem('user-token');
+      }
+    }
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <Navigation user={user} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" /> : <Login setUser={setUser} />}
+        />
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
+    </div>
   );
 }
 
