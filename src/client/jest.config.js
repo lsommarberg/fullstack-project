@@ -11,10 +11,6 @@ module.exports = {
     '!src/**/*.test.{js,jsx}',
     '!src/**/index.{js,jsx}',
   ],
-  moduleDirectories: ['node_modules', 'src'],
   coverageDirectory: 'coverage',
   coverageReporters: ['html', 'text', 'lcov'],
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
 };

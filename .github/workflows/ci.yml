@@ -43,11 +43,6 @@ jobs:
           cd src/client
           npm ci
 
-      - name: List files for debugging
-        run: |
-          cd src/client/src/components
-          ls -R
-
       - name: Install dependencies for server
         run: |
           cd src/server
@@ -72,6 +67,6 @@ jobs:
           SECRET: ${{ secrets.SECRET }}
 
       - name: Run frontend tests
-        run: |
-          cd src/client
-          npm test
+        working-directory: src/client
+        run: npm test
+        
