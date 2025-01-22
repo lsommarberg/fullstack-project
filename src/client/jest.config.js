@@ -14,4 +14,7 @@ module.exports = {
   moduleDirectories: ['node_modules', 'src'],
   coverageDirectory: 'coverage',
   coverageReporters: ['html', 'text', 'lcov'],
+  moduleNameMapper: {
+    '^components/(.*)$': '<rootDir>/src/components/$1',
+  },
 };
