@@ -65,3 +65,8 @@ jobs:
         env:
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
+
+      - name: Run frontend tests
+        run: |
+          cd src/client
+          npm test
