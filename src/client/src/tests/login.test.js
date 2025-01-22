@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import Login from '../components/Login';
+import Login from 'components/Login';
 import loginService from '../services/login';
 
 jest.mock('../services/login');
