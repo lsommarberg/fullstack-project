@@ -15,6 +15,6 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageReporters: ['html', 'text', 'lcov'],
   moduleNameMapper: {
-    '^components/(.*)$': '<rootDir>/src/client/src/components/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
 };
