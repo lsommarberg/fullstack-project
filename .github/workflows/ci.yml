@@ -45,7 +45,7 @@ jobs:
 
       - name: List files for debugging
         run: |
-          cd src/client
+          cd src/client/src/components
           ls -R
 
       - name: Install dependencies for server
