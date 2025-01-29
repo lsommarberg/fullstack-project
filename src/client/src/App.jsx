@@ -45,7 +45,7 @@ function App() {
           element={user ? <Navigate to="/" /> : <Login setUser={setUser} />}
         />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/users/:id" element={<UserPage />} />
+        <Route path="/users/:id" element={<UserPage user={user} />} />
       </Routes>
     </div>
   );

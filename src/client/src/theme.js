@@ -3,15 +3,14 @@ import { createSystem, defaultBaseConfig } from '@chakra-ui/react';
 const customConfig = {
   styles: {
     global: {
-      // Global styles applied to all components
       body: {
-        bg: 'gray.50', // Background for the entire app
-        color: 'gray.800', // Default text color
+        bg: 'gray.50',
+        color: 'gray.800',
       },
       '.container': {
-        bg: 'gray.100', // Default container background
+        bg: 'gray.100',
         border: '1px solid',
-        borderColor: 'gray.300', // Default border color
+        borderColor: 'gray.300',
         borderRadius: 'md',
         padding: 4,
       },
