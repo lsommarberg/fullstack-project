@@ -45,7 +45,6 @@ const Login = ({ setUser }) => {
   return (
     <form onSubmit={handleSubmit}>
       {' '}
-      {/* Ensure the form tag is present */}
       <Fieldset.Root
         size="lg"
         maxW="sm"

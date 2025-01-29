@@ -6,7 +6,12 @@ global.TextDecoder = TextDecoder;
 
 // Polyfill for structuredClone
 if (typeof global.structuredClone === 'undefined') {
-  global.structuredClone = (obj) => JSON.parse(JSON.stringify(obj));
+  global.structuredClone = (obj) => {
+    if (obj === undefined) {
+      return undefined;
+    }
+    return JSON.parse(JSON.stringify(obj));
+  };
 }
 
 Object.defineProperty(window, 'matchMedia', {

@@ -72,33 +72,39 @@ const SignupForm = () => {
         </Stack>
 
         <Fieldset.Content>
-          <Field label="Username" error={errors.username?.message}>
+          <Field label="Username" invalid={!!errors.username}>
             <Input
               name="username"
               placeholder="Username"
               {...register('username')}
             />
+            {errors.username && (
+              <Text color="red.500">{errors.username.message}</Text>
+            )}
           </Field>
 
-          <Field label="Password" error={errors.password?.message}>
+          <Field label="Password" invalid={!!errors.password}>
             <Input
               name="password"
               type="password"
               placeholder="Password"
               {...register('password')}
             />
+            {errors.password && (
+              <Text color="red.500">{errors.password.message}</Text>
+            )}
           </Field>
 
-          <Field
-            label="Confirm Password"
-            error={errors.passwordConfirm?.message}
-          >
+          <Field label="Confirm Password" invalid={!!errors.passwordConfirm}>
             <Input
               name="passwordConfirm"
               type="password"
               placeholder="Confirm Password"
               {...register('passwordConfirm')}
             />
+            {errors.passwordConfirm && (
+              <Text color="red.500">{errors.passwordConfirm.message}</Text>
+            )}
           </Field>
         </Fieldset.Content>
 

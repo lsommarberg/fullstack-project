@@ -64,23 +64,24 @@ describe('Sign Up Component', () => {
     );
   });
 
-  // test('displays error message on signup failure', async () => {
-  //   signupService.signup.mockRejectedValueOnce({
-  //     response: { data: { error: 'expected username to be unique' } },
-  //   });
-  //   render(<SignUp />);
-  //   fireEvent.change(screen.getByLabelText(/username/i), {
-  //     target: { value: 'testuser' },
-  //   });
-  //   fireEvent.change(screen.getByPlaceholderText('Password'), {
-  //     target: { value: 'password' },
-  //   });
-  //   fireEvent.change(screen.getByPlaceholderText('Confirm Password'), {
-  //     target: { value: 'password' },
-  //   });
-  //   fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
-  //   await waitFor(() =>
-  //     expect(screen.getByText(/Username must be unique/i)).toBeInTheDocument(),
-  //   );
-  // });
+  test('displays error message on signup failure', async () => {
+    signupService.signup.mockRejectedValueOnce({
+      response: { data: { error: 'expected username to be unique' } },
+    });
+    render(<SignUp />);
+    fireEvent.change(screen.getByLabelText(/username/i), {
+      target: { value: 'testuser' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Password'), {
+      target: { value: 'password' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Confirm Password'), {
+      target: { value: 'password' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
+
+    await waitFor(() =>
+      expect(screen.getByText(/Username must be unique/i)).toBeInTheDocument(),
+    );
+  });
 });

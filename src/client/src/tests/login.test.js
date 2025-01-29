@@ -52,20 +52,20 @@ describe('Login Component', () => {
     );
   });
 
-  // test('displays error message on login failure', async () => {
-  //   loginService.login.mockRejectedValueOnce({
-  //     response: { data: { error: 'Invalid credentials' } },
-  //   });
-  //   render(<Login />);
-  //   fireEvent.change(screen.getByLabelText(/username/i), {
-  //     target: { value: 'testuser' },
-  //   });
-  //   fireEvent.change(screen.getByLabelText(/password/i), {
-  //     target: { value: 'password' },
-  //   });
-  //   fireEvent.click(screen.getByRole('button', { name: /login/i }));
-  //   await waitFor(() =>
-  //     expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument(),
-  //   );
-  // });
+  test('displays error message on login failure', async () => {
+    loginService.login.mockRejectedValueOnce({
+      response: { data: { error: 'Invalid credentials' } },
+    });
+    render(<Login />);
+    fireEvent.change(screen.getByLabelText(/username/i), {
+      target: { value: 'testuser' },
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: 'password' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+    await waitFor(() =>
+      expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument(),
+    );
+  });
 });
