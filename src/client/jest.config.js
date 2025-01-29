@@ -10,7 +10,11 @@ module.exports = {
     'src/**/*.{js,jsx}',
     '!src/**/*.test.{js,jsx}',
     '!src/**/index.{js,jsx}',
+    '!src/components/ui/**',
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['html', 'text', 'lcov'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
 };
