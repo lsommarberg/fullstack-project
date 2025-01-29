@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import loginService from '../services/login';
-import {
-  Box,
-  FormControl,
-  FormLabel,
-  Input,
-  Button,
-  Text,
-} from '@chakra-ui/react';
+import { Button, Fieldset, Input, Stack, Text } from '@chakra-ui/react';
+import { Field } from '@/components/ui/field';
 
 const Login = ({ setUser }) => {
   const [username, setUsername] = useState('');
@@ -19,6 +13,7 @@ const Login = ({ setUser }) => {
   const handleLogin = async (credentials) => {
     try {
       const user = await loginService.login(credentials);
+      window.localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
       navigate('/');
     } catch (exception) {
@@ -48,41 +43,49 @@ const Login = ({ setUser }) => {
   };
 
   return (
-    <Box maxW="300px" mx="auto" mt="10">
-      <Text fontSize="2xl" mb="4">
-        Login
-      </Text>
-      {error && (
-        <Text color="red.500" mb="4">
-          {error}
-        </Text>
-      )}
-      <form onSubmit={handleSubmit}>
-        <FormControl id="username" isInvalid={!!error} mb="4">
-          <FormLabel>Username</FormLabel>
-          <Input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            tabIndex="1"
-          />
-        </FormControl>
-        <FormControl id="password" isInvalid={!!error} mb="4">
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            tabIndex="2"
-          />
-        </FormControl>
+    <form onSubmit={handleSubmit}>
+      {' '}
+      {/* Ensure the form tag is present */}
+      <Fieldset.Root
+        size="lg"
+        maxW="sm"
+        mx="auto"
+        mt={10}
+        p={6}
+        borderRadius="md"
+        shadow="md"
+      >
+        <Stack>
+          <Fieldset.Legend>Login</Fieldset.Legend>
+          {error && <Text color="red.500">{error}</Text>}
+        </Stack>
+
+        <Fieldset.Content>
+          <Field label="Username">
+            <Input
+              name="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </Field>
+
+          <Field label="Password">
+            <Input
+              name="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </Field>
+        </Fieldset.Content>
+
         <Button type="submit" colorScheme="teal" width="full">
           Login
         </Button>
-      </form>
-    </Box>
+      </Fieldset.Root>
+    </form>
   );
 };
 

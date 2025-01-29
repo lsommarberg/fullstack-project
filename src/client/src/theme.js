@@ -1,18 +1,22 @@
-import { extendTheme } from '@chakra-ui/react';
+import { createSystem, defaultBaseConfig } from '@chakra-ui/react';
 
-const theme = extendTheme({
-  config: {
-    initialColorMode: 'light',
-    useSystemColorMode: false,
-  },
+const customConfig = {
   styles: {
-    global: (props) => ({
+    global: {
+      // Global styles applied to all components
       body: {
-        bg: props.colorMode === 'dark' ? 'gray.800' : '#e3c2e7',
-        color: props.colorMode === 'dark' ? '#e3c2e7' : 'gray.800',
+        bg: 'gray.50', // Background for the entire app
+        color: 'gray.800', // Default text color
       },
-    }),
+      '.container': {
+        bg: 'gray.100', // Default container background
+        border: '1px solid',
+        borderColor: 'gray.300', // Default border color
+        borderRadius: 'md',
+        padding: 4,
+      },
+    },
   },
-});
+};
 
-export default theme;
+export const system = createSystem(defaultBaseConfig, customConfig);

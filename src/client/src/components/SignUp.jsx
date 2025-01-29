@@ -5,14 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import signupService from '../services/signup';
 
-import {
-  Box,
-  FormControl,
-  FormLabel,
-  Input,
-  Button,
-  Text,
-} from '@chakra-ui/react';
+import { Button, Fieldset, Input, Stack, Text } from '@chakra-ui/react';
+import { Field } from '@/components/ui/field';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
@@ -33,6 +27,7 @@ const SignupForm = () => {
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
+
   const navigate = useNavigate();
 
   const handleSignupError = (exception) => {
@@ -62,55 +57,56 @@ const SignupForm = () => {
   };
 
   return (
-    <Box maxW="300px" mx="auto" mt="10">
-      <Text fontSize="2xl" mb="4">
-        Sign Up
-      </Text>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl id="username" isInvalid={errors.username} mb="4">
-          <FormLabel>Username</FormLabel>
-          <Input type="text" placeholder="Username" {...register('username')} />
-          {errors.username && (
-            <Text color="red.500" mt="1">
-              {errors.username.message}
-            </Text>
-          )}
-        </FormControl>
-        <FormControl id="password" isInvalid={errors.password} mb="4">
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            placeholder="Password"
-            {...register('password')}
-          />
-          {errors.password && (
-            <Text color="red.500" mt="1">
-              {errors.password.message}
-            </Text>
-          )}
-        </FormControl>
-        <FormControl
-          id="passwordConfirm"
-          isInvalid={errors.passwordConfirm}
-          mb="4"
-        >
-          <FormLabel>Confirm Password</FormLabel>
-          <Input
-            type="password"
-            placeholder="Confirm Password"
-            {...register('passwordConfirm')}
-          />
-          {errors.passwordConfirm && (
-            <Text color="red.500" mt="1">
-              {errors.passwordConfirm.message}
-            </Text>
-          )}
-        </FormControl>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Fieldset.Root
+        size="lg"
+        maxW="sm"
+        mx="auto"
+        mt={10}
+        p={6}
+        borderRadius="md"
+        shadow="md"
+      >
+        <Stack>
+          <Fieldset.Legend>Sign Up</Fieldset.Legend>
+        </Stack>
+
+        <Fieldset.Content>
+          <Field label="Username" error={errors.username?.message}>
+            <Input
+              name="username"
+              placeholder="Username"
+              {...register('username')}
+            />
+          </Field>
+
+          <Field label="Password" error={errors.password?.message}>
+            <Input
+              name="password"
+              type="password"
+              placeholder="Password"
+              {...register('password')}
+            />
+          </Field>
+
+          <Field
+            label="Confirm Password"
+            error={errors.passwordConfirm?.message}
+          >
+            <Input
+              name="passwordConfirm"
+              type="password"
+              placeholder="Confirm Password"
+              {...register('passwordConfirm')}
+            />
+          </Field>
+        </Fieldset.Content>
+
         <Button type="submit" colorScheme="teal" width="full">
           Sign Up
         </Button>
-      </form>
-    </Box>
+      </Fieldset.Root>
+    </form>
   );
 };
 
