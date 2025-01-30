@@ -13,7 +13,9 @@ const Login = ({ setUser }) => {
   const handleLogin = async (credentials) => {
     try {
       const user = await loginService.login(credentials);
-      window.localStorage.setItem('user', JSON.stringify(user));
+      const expirationTime = new Date().getTime() + 3600000;
+      const userWithExpiration = { user, expirationTime };
+      window.localStorage.setItem('user', JSON.stringify(userWithExpiration));
       setUser(user);
       navigate('/');
     } catch (exception) {
