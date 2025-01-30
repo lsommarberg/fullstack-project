@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { render, screen } from './test-utils';
 import Login from '../components/Login';
 import loginService from '../services/login';
+import { fireEvent, waitFor } from '@testing-library/react';
 
 jest.mock('../services/login');
 
@@ -12,23 +12,18 @@ describe('Login Component', () => {
   });
 
   test('renders login form', () => {
-    render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>,
-    );
-    expect(screen.getByText('Login', { selector: 'p' })).toBeInTheDocument();
+    render(<Login />);
+
+    expect(
+      screen.getByText('Login', { selector: 'legend' }),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
   });
 
   test('updates state on input change', () => {
-    render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>,
-    );
+    render(<Login />);
     fireEvent.change(screen.getByLabelText(/username/i), {
       target: { value: 'testuser' },
     });
@@ -41,11 +36,7 @@ describe('Login Component', () => {
 
   test('calls login service on form submit', async () => {
     loginService.login.mockResolvedValueOnce({});
-    render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>,
-    );
+    render(<Login />);
     fireEvent.change(screen.getByLabelText(/username/i), {
       target: { value: 'testuser' },
     });
@@ -65,11 +56,7 @@ describe('Login Component', () => {
     loginService.login.mockRejectedValueOnce({
       response: { data: { error: 'Invalid credentials' } },
     });
-    render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>,
-    );
+    render(<Login />);
     fireEvent.change(screen.getByLabelText(/username/i), {
       target: { value: 'testuser' },
     });
