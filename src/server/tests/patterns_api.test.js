@@ -10,6 +10,8 @@ const api = supertest(app);
 let token;
 let userId;
 let patternId;
+let anotherUserId;
+let anotherUserToken;
 
 beforeAll(async () => {
   await User.deleteMany({});
@@ -25,6 +27,20 @@ beforeAll(async () => {
     .send({ username: 'testuser', password: 'password' });
 
   token = response.body.token;
+
+  const anotherPasswordHash = await bcrypt.hash('password', 10);
+  const anotherUser = new User({
+    username: 'anotheruser',
+    passwordHash: anotherPasswordHash,
+  });
+  const savedAnotherUser = await anotherUser.save();
+  anotherUserId = savedAnotherUser._id;
+
+  const anotherUserResponse = await api
+    .post('/api/login')
+    .send({ username: 'anotheruser', password: 'password' });
+
+  anotherUserToken = anotherUserResponse.body.token;
 
   const newPattern = new Pattern({
     name: 'Basic Knit Scarf',
@@ -91,14 +107,6 @@ describe('Pattern API', () => {
   });
 
   test('should return 403 Forbidden for getting patterns of another user', async () => {
-    const anotherUser = new User({
-      username: 'anotheruser',
-      passwordHash: await bcrypt.hash('password', 10),
-    });
-    const savedAnotherUser = await anotherUser.save();
-
-    const anotherUserId = savedAnotherUser._id;
-
     const response = await api
       .get(`/api/patterns/${anotherUserId}`)
       .set('Authorization', `Bearer ${token}`)
@@ -109,14 +117,6 @@ describe('Pattern API', () => {
   });
 
   test('should return 403 Forbidden for getting a specific pattern of another user', async () => {
-    const anotherUser = new User({
-      username: 'anotheruser1',
-      passwordHash: await bcrypt.hash('password', 10),
-    });
-    const savedAnotherUser = await anotherUser.save();
-
-    const anotherUserId = savedAnotherUser._id;
-
     const response = await api
       .get(`/api/patterns/${anotherUserId}/${patternId}`)
       .set('Authorization', `Bearer ${token}`)
@@ -134,6 +134,46 @@ describe('Pattern API', () => {
       .expect('Content-Type', /application\/json/);
 
     expect(response.body.name).toBe('Basic Knit Scarf');
+  });
+
+  test('should delete a specific pattern for the authenticated user', async () => {
+    await api
+      .delete(`/api/patterns/${userId}/${patternId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(204);
+
+    const patternsAtEnd = await Pattern.find({});
+    expect(patternsAtEnd).toHaveLength(1);
+  });
+
+  test('should return 403 Forbidden for deleting a specific pattern of another user', async () => {
+    const newPattern = new Pattern({
+      name: 'Another Knit Scarf',
+      text: 'This is another simple knitting pattern for beginners.',
+      link: 'https://example.com/another-knit-scarf-pattern',
+      tags: ['knitting', 'scarf', 'beginner', 'simple'],
+      notes: ['This pattern is great for beginners.'],
+      user: anotherUserId,
+    });
+
+    const savedPattern = await newPattern.save();
+    const anotherPatternId = savedPattern._id;
+
+    const response = await api
+      .delete(`/api/patterns/${anotherUserId}/${anotherPatternId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(403)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.error).toBe('forbidden');
+  });
+
+  test('should return 404 Not Found for deleting a non-existent pattern', async () => {
+    await api
+      .delete(`/api/patterns/${userId}/123456789012345678901234`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404)
+      .expect('Content-Type', /application\/json/);
   });
 });
 
