@@ -136,6 +136,51 @@ describe('Pattern API', () => {
     expect(response.body.name).toBe('Basic Knit Scarf');
   });
 
+  test('should update a specific pattern for the authenticated user', async () => {
+    const updatedPattern = {
+      name: 'Updated Knit Scarf',
+      text: 'This is an updated simple knitting pattern for beginners.',
+      tags: ['knitting', 'scarf', 'beginner', 'simple'],
+      notes: ['This pattern is great for beginners.'],
+    };
+    const response = await api
+      .put(`/api/patterns/${userId}/${patternId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(updatedPattern)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.name).toBe('Updated Knit Scarf');
+  });
+
+  test('should return 403 Forbidden for updating a specific pattern of another user', async () => {
+    const updatedPattern = {
+      name: 'Updated Knit Scarf',
+    };
+
+    const response = await api
+      .put(`/api/patterns/${anotherUserId}/${patternId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(updatedPattern)
+      .expect(403)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.error).toBe('forbidden');
+  });
+
+  test('should return 404 Not Found for updating a non-existent pattern', async () => {
+    const updatedPattern = {
+      name: 'Updated Knit Scarf',
+    };
+
+    await api
+      .put(`/api/patterns/${userId}/123456789012345678901234`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(updatedPattern)
+      .expect(404)
+      .expect('Content-Type', /application\/json/);
+  });
+
   test('should delete a specific pattern for the authenticated user', async () => {
     await api
       .delete(`/api/patterns/${userId}/${patternId}`)
