@@ -48,4 +48,23 @@ router.delete('/:id/:patternId', userExtractor, async (req, res) => {
   res.status(204).end();
 });
 
+router.put('/:id/:patternId', userExtractor, async (req, res) => {
+  if (req.user.id.toString() !== req.params.id.toString()) {
+    return res.status(403).json({ error: 'forbidden' });
+  }
+  console.log('pattern id', req.params.patternId);
+  const pattern = await Pattern.findById(req.params.patternId);
+  if (!pattern) {
+    return res.status(404).json({ error: 'pattern not found' });
+  }
+  console.log('pattern', pattern);
+  const updatedPattern = await Pattern.findByIdAndUpdate(
+    req.params.patternId,
+    { $set: req.body },
+    { new: true, runValidators: true },
+  );
+
+  res.json(updatedPattern);
+});
+
 module.exports = router;
