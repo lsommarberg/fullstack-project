@@ -1,9 +1,9 @@
 POST http://localhost:3001/api/patterns
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4MjUyMTUzLCJleHAiOjE3MzgyNTU3NTN9.7MeGeDJvt0sV3Wv8azWsTcnrw6-h6shAgBRjgAhhh7k
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4MzEwNjQyLCJleHAiOjE3MzgzMTQyNDJ9.eIuUskIukbRmgVMILwL5RHN8d71lWjZb0KtNJm5WHDM
 Content-Type: application/json
 
 {
-    "name": "Basic Knit Scarf",
+    "name": "Other Knit Scarf",
     "text": "This is a simple knitting pattern for beginners. Cast on 40 stitches and knit every row until the desired length is achieved. Bind off and weave in the ends.",
     "link": "https://example.com/basic-knit-scarf-pattern",
     "tags": ["knitting", "scarf", "beginner", "simple"],
@@ -12,10 +12,15 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3001/api/patterns/679b8cec2656a4ebb2a3c70b
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4MjUyMTUzLCJleHAiOjE3MzgyNTU3NTN9.7MeGeDJvt0sV3Wv8azWsTcnrw6-h6shAgBRjgAhhh7k
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4MzEwNjQyLCJleHAiOjE3MzgzMTQyNDJ9.eIuUskIukbRmgVMILwL5RHN8d71lWjZb0KtNJm5WHDM
 Accept: application/json
 
 ###
-GET http://localhost:3001/api/patterns/679b8cec2656a4ebb2a3c70b/679ba0204cd7290acf4cc994
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4MjUyMTUzLCJleHAiOjE3MzgyNTU3NTN9.7MeGeDJvt0sV3Wv8azWsTcnrw6-h6shAgBRjgAhhh7k
+GET http://localhost:3001/api/patterns/679b8cec2656a4ebb2a3c70b/679c8d0152448cd0b6afb7e3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4MzEwNjQyLCJleHAiOjE3MzgzMTQyNDJ9.eIuUskIukbRmgVMILwL5RHN8d71lWjZb0KtNJm5WHDM
+Accept: application/json
+
+###
+DELETE http://localhost:3001/api/patterns/679b8cec2656a4ebb2a3c70b/679c8d0152448cd0b6afb7e3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4MzEwNjQyLCJleHAiOjE3MzgzMTQyNDJ9.eIuUskIukbRmgVMILwL5RHN8d71lWjZb0KtNJm5WHDM
 Accept: application/json

@@ -33,4 +33,19 @@ router.get('/:id/:patternId', userExtractor, async (req, res) => {
   res.json(pattern);
 });
 
+router.delete('/:id/:patternId', userExtractor, async (req, res) => {
+  if (req.user.id.toString() !== req.params.id.toString()) {
+    return res.status(403).json({ error: 'forbidden' });
+  }
+
+  const pattern = await Pattern.findById(req.params.patternId);
+
+  if (!pattern) {
+    return res.status(404).json({ error: 'pattern not found' });
+  }
+  await Pattern.deleteOne({ _id: req.params.patternId });
+
+  res.status(204).end();
+});
+
 module.exports = router;
