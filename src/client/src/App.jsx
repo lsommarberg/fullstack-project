@@ -5,7 +5,7 @@ import SignUp from './components/SignUp';
 import Navigation from './components/Navigation';
 import UserPage from './components/UserPage';
 import PatternList from './components/PatternsList';
-import PatternPage from './components/PatternPage';
+import PatternPage from './components/pattern/PatternPage';
 
 function App() {
   const [user, setUser] = useState(null);

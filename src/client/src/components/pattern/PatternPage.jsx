@@ -5,8 +5,12 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import patternService from '../services/pattern';
-import SidebarLayout from './SidebarLayout';
+import patternService from '../../services/pattern';
+import SidebarLayout from '../SidebarLayout';
+import NoteList from './Notes';
+import AddNoteForm from './AddNote';
+import TagList from './TagList';
+import PatternText from './PatternText';
 
 const Pattern = () => {
   const { id, patternId } = useParams();
@@ -86,43 +90,24 @@ const Pattern = () => {
           {name}
         </Text>
 
-        <Box mb={4} ml={4}>
-          <ReactMarkdown>
-            {showMore ? text : `${text.substring(0, 100)}...`}
-          </ReactMarkdown>
-          <Link color="teal.500" onClick={toggleShowMore} ml={2}>
-            {showMore ? 'Show Less' : 'Show More'}
-          </Link>
-        </Box>
+        <PatternText text={text} />
 
-        <Link href={link} color="teal.500" isExternal>
-          View Full Pattern
-        </Link>
+        {link && (
+          <Link href={link} color="teal.500" isExternal>
+            Link to pattern
+          </Link>
+        )}
         <Box mt={4}>
           <Text fontSize="lg" mb={4}>
             Notes for this pattern:
           </Text>
-          <List.Root>
-            {notes.map((note, index) => (
-              <Box key={index} display="flex" alignItems="center">
-                <List.Item>{note}</List.Item>
-                <Button ml={4} size="xs" onClick={() => handleRemoveNote(note)}>
-                  Delete
-                </Button>
-              </Box>
-            ))}
-          </List.Root>
+          <NoteList notes={notes} onRemove={handleRemoveNote} />
           {isVisible && (
-            <Box mt={4}>
-              <Input
-                placeholder="Add a new note"
-                value={newNote}
-                onChange={(e) => setNewNote(e.target.value)}
-              />
-              <Button mt={2} colorScheme="teal" onClick={handleAddNote}>
-                Save Note
-              </Button>
-            </Box>
+            <AddNoteForm
+              newNote={newNote}
+              setNewNote={setNewNote}
+              onSave={handleAddNote}
+            />
           )}
           <Button
             mt={4}
@@ -133,13 +118,9 @@ const Pattern = () => {
             {isVisible ? 'Cancel' : 'Add Note'}
           </Button>
         </Box>
-        <Box mt={4}>
-          {tags.map((tag, index) => (
-            <Tag key={index} mr={2} mb={2}>
-              {tag}
-            </Tag>
-          ))}
-        </Box>
+
+        <TagList tags={tags} />
+
         <HStack mt={4} align="start">
           <Button colorScheme="red" size="sm" onClick={handleDelete}>
             Delete Pattern
