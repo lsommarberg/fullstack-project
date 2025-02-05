@@ -1,9 +1,9 @@
 POST http://localhost:3001/api/patterns
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4MzEwNjQyLCJleHAiOjE3MzgzMTQyNDJ9.eIuUskIukbRmgVMILwL5RHN8d71lWjZb0KtNJm5WHDM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2Nzg0ZmQxNTMxMmQwZWFlZDlkYTM5MmIiLCJpYXQiOjE3Mzg3NTE2NTIsImV4cCI6MTczODc1NTI1Mn0.2JVgaO2k5dVTR1nw399CNtTJkIPvd0MjssI300fOaGw
 Content-Type: application/json
 
 {
-    "name": "Other Knit Scarf",
+    "name": "Some Scarf Pattern 2",
     "text": "This is a simple knitting pattern for beginners. Cast on 40 stitches and knit every row until the desired length is achieved. Bind off and weave in the ends.",
     "link": "https://example.com/basic-knit-scarf-pattern",
     "tags": ["knitting", "scarf", "beginner", "simple"],
@@ -11,13 +11,13 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3001/api/patterns/679b8cec2656a4ebb2a3c70b
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4MzIwMDg5LCJleHAiOjE3MzgzMjM2ODl9.ORL4PuJXDjO-MtzKZJ1uwFzLvTziFLskLxXeQkwuzME
+GET http://localhost:3001/api/patterns/6784fd15312d0eaed9da392b
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2Nzg0ZmQxNTMxMmQwZWFlZDlkYTM5MmIiLCJpYXQiOjE3Mzg3NTE2NTIsImV4cCI6MTczODc1NTI1Mn0.2JVgaO2k5dVTR1nw399CNtTJkIPvd0MjssI300fOaGw
 Accept: application/json
 
 ###
 GET http://localhost:3001/api/patterns/679b8cec2656a4ebb2a3c70b/679c8d0152448cd0b6afb7e3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4MzEwNjQyLCJleHAiOjE3MzgzMTQyNDJ9.eIuUskIukbRmgVMILwL5RHN8d71lWjZb0KtNJm5WHDM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4NTgzMjU5LCJleHAiOjE3Mzg1ODY4NTl9.HWVi9Z1qUEzRJx-9_VojbDjIJxx8qHNAAIxGHHf5T6w
 Accept: application/json
 
 ###
@@ -26,12 +26,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc
 Accept: application/json
 
 ###
-PUT http://localhost:3001/api/patterns/679b8cec2656a4ebb2a3c70b/679ba0204cd7290acf4cc994
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzM4MzIwMDg5LCJleHAiOjE3MzgzMjM2ODl9.ORL4PuJXDjO-MtzKZJ1uwFzLvTziFLskLxXeQkwuzME
+PUT http://localhost:3001/api/patterns/6784fd15312d0eaed9da392b/67a33eb69da86abf5ba256c5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2Nzg0ZmQxNTMxMmQwZWFlZDlkYTM5MmIiLCJpYXQiOjE3Mzg3NTE2NTIsImV4cCI6MTczODc1NTI1Mn0.2JVgaO2k5dVTR1nw399CNtTJkIPvd0MjssI300fOaGw
 Content-Type: application/json
 Accept: application/json
 
 {
-  "name": "Updated Knit Scarf",
+  "name": "Updated Knit Scarf 2",
   "notes": ["This pattern is updated for better clarity."]
+}
+
+###
+PUT http://localhost:3001/api/patterns/6784fd15312d0eaed9da392b/67a33eb69da86abf5ba256c5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2Nzg0ZmQxNTMxMmQwZWFlZDlkYTM5MmIiLCJpYXQiOjE3Mzg3NTE2NTIsImV4cCI6MTczODc1NTI1Mn0.2JVgaO2k5dVTR1nw399CNtTJkIPvd0MjssI300fOaGw
+Content-Type: application/json
+Accept: application/json
+
+{
+  "removeNote": "This pattern is great for beginners."
 }

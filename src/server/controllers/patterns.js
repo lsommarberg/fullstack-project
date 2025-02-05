@@ -22,6 +22,9 @@ router.post('/', userExtractor, async (req, res) => {
     user: user._id,
   });
   const savedPattern = await pattern.save();
+  user.patterns = user.patterns.concat(savedPattern._id);
+  await user.save();
+
   res.status(201).json(savedPattern);
 });
 
@@ -52,17 +55,31 @@ router.put('/:id/:patternId', userExtractor, async (req, res) => {
   if (req.user.id.toString() !== req.params.id.toString()) {
     return res.status(403).json({ error: 'forbidden' });
   }
-  console.log('pattern id', req.params.patternId);
+
   const pattern = await Pattern.findById(req.params.patternId);
   if (!pattern) {
     return res.status(404).json({ error: 'pattern not found' });
   }
-  console.log('pattern', pattern);
+
+  if (req.body.notes) {
+    pattern.notes = pattern.notes.concat(req.body.notes);
+  }
+
+  if (req.body.removeNote) {
+    pattern.notes = pattern.notes.filter(
+      (note) => note !== req.body.removeNote,
+    );
+  }
+
+  const updateFields = { ...req.body };
+  delete updateFields.notes;
+  delete updateFields.removeNote;
+
   const updatedPattern = await Pattern.findByIdAndUpdate(
     req.params.patternId,
-    { $set: req.body },
-    { new: true, runValidators: true },
-  );
+    { ...updateFields, notes: pattern.notes },
+    { new: true },
+  ).populate('user', { username: 1, name: 1 });
 
   res.json(updatedPattern);
 });
