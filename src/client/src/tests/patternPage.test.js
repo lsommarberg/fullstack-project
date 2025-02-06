@@ -92,6 +92,8 @@ describe('PatternPage', () => {
     patternService.getPatternById.mockResolvedValue(getMockPattern());
     patternService.deletePattern.mockResolvedValue({});
 
+    window.confirm = jest.fn().mockImplementation(() => true);
+
     render(<PatternPage />);
 
     await waitFor(() => {

@@ -69,8 +69,10 @@ const Pattern = () => {
 
   const handleDelete = async () => {
     try {
-      await patternService.deletePattern(id, patternId);
-      navigate(`/patterns/${id}`);
+      if (window.confirm('Are you sure you want to delete this pattern?')) {
+        await patternService.deletePattern(id, patternId);
+        navigate(`/patterns/${id}`);
+      }
     } catch (error) {
       console.error('Error deleting pattern:', error);
     }
