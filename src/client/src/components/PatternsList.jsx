@@ -25,6 +25,10 @@ const PatternList = () => {
     getPatternData();
   }, [id, navigate]);
 
+  if (!patterns.length) {
+    return <Text>No patterns yet</Text>;
+  }
+
   return (
     <SidebarLayout userId={id}>
       <Stack spacing={4}>
