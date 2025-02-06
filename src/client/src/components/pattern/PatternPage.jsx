@@ -1,10 +1,8 @@
 import React from 'react';
-import { Box, Text, Link, Button, List, Input, HStack } from '@chakra-ui/react';
-import { Tag } from '@/components/ui/tag';
+import { Box, Text, Link, Button, HStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 import patternService from '../../services/pattern';
 import SidebarLayout from '../SidebarLayout';
 import NoteList from './Notes';
@@ -17,7 +15,6 @@ const Pattern = () => {
   const [patternData, setPatternData] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [newNote, setNewNote] = useState('');
-  const [showMore, setShowMore] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,10 +33,6 @@ const Pattern = () => {
     return <Text> Loading... </Text>;
   }
   const { name, text, link, notes, tags } = patternData;
-
-  const toggleShowMore = () => {
-    setShowMore(!showMore);
-  };
 
   const toggleInputVisibility = () => {
     setIsVisible(!isVisible);
