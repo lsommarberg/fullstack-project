@@ -9,7 +9,7 @@ const AddNoteForm = ({ newNote, setNewNote, onSave }) => (
       onChange={(e) => setNewNote(e.target.value)}
     />
     <Button mt={2} colorScheme="teal" onClick={onSave}>
-      Save Note
+      Save
     </Button>
   </Box>
 );
