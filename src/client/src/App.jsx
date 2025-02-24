@@ -4,6 +4,8 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Navigation from './components/Navigation';
 import UserPage from './components/UserPage';
+import PatternList from './components/PatternsList';
+import PatternPage from './components/pattern/PatternPage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -46,6 +48,8 @@ function App() {
         />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/users/:id" element={<UserPage user={user} />} />
+        <Route path="/patterns/:id" element={<PatternList />} />
+        <Route path="/patterns/:id/:patternId" element={<PatternPage />} />
       </Routes>
     </div>
   );

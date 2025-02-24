@@ -25,10 +25,6 @@ module.exports = [
     },
   },
   {
-    files: ['**/*.test.js', '**/tests/**'],
-    rules: {
-      'no-unused-expressions': 'off',
-      'no-undef': 'off',
-    },
+    ignores: ['**/*.test.js', '**/tests/**'],
   },
 ];

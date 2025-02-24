@@ -7,7 +7,7 @@
     "dev": "NODE_ENV=development nodemon index.js",
     "start": "NODE_ENV=production node index.js",
     "test": "NODE_ENV=test jest --runInBand",
-    "test:coverage": "NODE_ENV=test jest --coverage",
+    "test:coverage": "NODE_ENV=test jest --coverage --runInBand",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
