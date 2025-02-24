@@ -5,16 +5,13 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import patternService from '../../services/pattern';
 import SidebarLayout from '../SidebarLayout';
-import NoteList from './Notes';
-import AddNoteForm from './AddNote';
+import Notes from './Notes';
 import TagList from './TagList';
 import PatternText from './PatternText';
 
 const Pattern = () => {
   const { id, patternId } = useParams();
   const [patternData, setPatternData] = useState(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [newNote, setNewNote] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,39 +30,7 @@ const Pattern = () => {
     return <Text> Loading... </Text>;
   }
   const { name, text, link, notes, tags } = patternData;
-
-  const toggleInputVisibility = () => {
-    setIsVisible(!isVisible);
-  };
-
-  const handleAddNote = async () => {
-    if (newNote.trim() === '') {
-      console.log('Note cannot be empty');
-      return;
-    }
-
-    try {
-      const updatedPattern = await patternService.updatePattern(id, patternId, {
-        notes: newNote,
-      });
-      setPatternData(updatedPattern);
-      setNewNote('');
-      setIsVisible(false);
-    } catch (error) {
-      console.error('Error adding note:', error);
-    }
-  };
-
-  const handleRemoveNote = async (note) => {
-    try {
-      const updatedPattern = await patternService.updatePattern(id, patternId, {
-        removeNote: note,
-      });
-      setPatternData(updatedPattern);
-    } catch (error) {
-      console.error('Error removing note:', error);
-    }
-  };
+  console.log('notes:', notes);
 
   const handleDelete = async () => {
     try {
@@ -96,22 +61,7 @@ const Pattern = () => {
           <Text fontSize="lg" mb={4}>
             Notes for this pattern:
           </Text>
-          <NoteList notes={notes} onRemove={handleRemoveNote} />
-          {isVisible && (
-            <AddNoteForm
-              newNote={newNote}
-              setNewNote={setNewNote}
-              onSave={handleAddNote}
-            />
-          )}
-          <Button
-            mt={4}
-            size="sm"
-            colorScheme="teal"
-            onClick={toggleInputVisibility}
-          >
-            {isVisible ? 'Cancel' : 'Add Note'}
-          </Button>
+          <Notes notes={notes} />
         </Box>
 
         <TagList tags={tags} />

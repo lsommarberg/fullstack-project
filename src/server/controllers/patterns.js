@@ -61,23 +61,11 @@ router.put('/:id/:patternId', userExtractor, async (req, res) => {
     return res.status(404).json({ error: 'pattern not found' });
   }
 
-  if (req.body.notes) {
-    pattern.notes = pattern.notes.concat(req.body.notes);
-  }
-
-  if (req.body.removeNote) {
-    pattern.notes = pattern.notes.filter(
-      (note) => note !== req.body.removeNote,
-    );
-  }
-
   const updateFields = { ...req.body };
-  delete updateFields.notes;
-  delete updateFields.removeNote;
 
   const updatedPattern = await Pattern.findByIdAndUpdate(
     req.params.patternId,
-    { ...updateFields, notes: pattern.notes },
+    { ...updateFields },
     { new: true },
   ).populate('user', { username: 1, name: 1 });
 

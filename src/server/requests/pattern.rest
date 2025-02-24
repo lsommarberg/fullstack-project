@@ -1,5 +1,5 @@
 POST http://localhost:3001/api/patterns
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2Nzg0ZmQxNTMxMmQwZWFlZDlkYTM5MmIiLCJpYXQiOjE3Mzg3NTE2NTIsImV4cCI6MTczODc1NTI1Mn0.2JVgaO2k5dVTR1nw399CNtTJkIPvd0MjssI300fOaGw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2Nzg0ZmQxNTMxMmQwZWFlZDlkYTM5MmIiLCJpYXQiOjE3NDAzODQ3NjQsImV4cCI6MTc0MDM4ODM2NH0.bCo8drBSB2tfCo805x9XNvz0rdDkcgdV3gjfTcgsFdY
 Content-Type: application/json
 
 {
@@ -7,7 +7,7 @@ Content-Type: application/json
     "text": "This is a simple knitting pattern for beginners. Cast on 40 stitches and knit every row until the desired length is achieved. Bind off and weave in the ends.",
     "link": "https://example.com/basic-knit-scarf-pattern",
     "tags": ["knitting", "scarf", "beginner", "simple"],
-    "notes": ["This pattern is great for beginners.", "This pattern is great for scarves."]
+    "notes": "This pattern is great for beginners. \n\nThis pattern is great for scarves."
 }
 
 ###

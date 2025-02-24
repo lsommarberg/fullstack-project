@@ -20,7 +20,7 @@ const patternSchema = new mongoose.Schema({
     type: [String],
   },
   notes: {
-    type: [String],
+    type: String,
   },
   files: {
     type: [String],

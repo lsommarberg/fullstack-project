@@ -47,7 +47,7 @@ beforeAll(async () => {
     text: 'This is a simple knitting pattern for beginners.',
     link: 'https://example.com/basic-knit-scarf-pattern',
     tags: ['knitting', 'scarf', 'beginner', 'simple'],
-    notes: ['This pattern is great for beginners.'],
+    notes: 'This pattern is great for beginners.',
     user: userId,
   });
 
@@ -62,7 +62,7 @@ describe('Pattern API', () => {
       text: 'This is a simple knitting pattern for beginners.',
       link: 'https://example.com/basic-knit-scarf-pattern',
       tags: ['knitting', 'scarf', 'beginner', 'simple'],
-      notes: ['This pattern is great for beginners.'],
+      notes: 'This pattern is great for beginners.',
     };
 
     await api
@@ -96,7 +96,7 @@ describe('Pattern API', () => {
       text: 'This pattern should not be created.',
       link: 'https://example.com/unauthorized-pattern',
       tags: ['unauthorized'],
-      notes: ['This should not be created.'],
+      notes: 'This should not be created.',
     };
 
     await api
@@ -141,7 +141,7 @@ describe('Pattern API', () => {
       name: 'Updated Knit Scarf',
       text: 'This is an updated simple knitting pattern for beginners.',
       tags: ['knitting', 'scarf', 'beginner', 'simple'],
-      notes: ['This pattern is great for beginners.'],
+      notes: 'This pattern is great for beginners.',
     };
     const response = await api
       .put(`/api/patterns/${userId}/${patternId}`)
@@ -197,7 +197,7 @@ describe('Pattern API', () => {
       text: 'This is another simple knitting pattern for beginners.',
       link: 'https://example.com/another-knit-scarf-pattern',
       tags: ['knitting', 'scarf', 'beginner', 'simple'],
-      notes: ['This pattern is great for beginners.'],
+      notes: 'This pattern is great for beginners.',
       user: anotherUserId,
     });
 
