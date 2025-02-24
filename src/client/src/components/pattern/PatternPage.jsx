@@ -30,7 +30,6 @@ const Pattern = () => {
     return <Text> Loading... </Text>;
   }
   const { name, text, link, notes, tags } = patternData;
-  console.log('notes:', notes);
 
   const handleDelete = async () => {
     try {
