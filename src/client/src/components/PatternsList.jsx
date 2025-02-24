@@ -25,36 +25,36 @@ const PatternList = () => {
     getPatternData();
   }, [id, navigate]);
 
-  if (!patterns.length) {
-    return <Text>No patterns yet</Text>;
-  }
-
   return (
     <SidebarLayout userId={id}>
       <Stack spacing={4}>
-        {patterns.map((pattern, index) => (
-          <Card.Root key={index} variant="outline">
-            <RouterLink
-              to={`/patterns/${id}/${pattern.id}`}
-              style={{ textDecoration: 'none' }}
-            >
-              <Card.Body>
-                <Flex justify="space-between" align="center">
-                  <Text fontSize="lg" fontWeight="bold">
-                    {pattern.name}
-                  </Text>
-                  <Flex>
-                    {pattern.tags.map((tag, tagIndex) => (
-                      <Tag key={tagIndex} colorScheme="blue" mr={2}>
-                        {tag}
-                      </Tag>
-                    ))}
+        {patterns.length === 0 ? (
+          <Text>No patterns yet</Text>
+        ) : (
+          patterns.map((pattern, index) => (
+            <Card.Root key={index} variant="outline">
+              <RouterLink
+                to={`/patterns/${id}/${pattern.id}`}
+                style={{ textDecoration: 'none' }}
+              >
+                <Card.Body>
+                  <Flex justify="space-between" align="center">
+                    <Text fontSize="lg" fontWeight="bold">
+                      {pattern.name}
+                    </Text>
+                    <Flex>
+                      {pattern.tags.map((tag, tagIndex) => (
+                        <Tag key={tagIndex} colorScheme="blue" mr={2}>
+                          {tag}
+                        </Tag>
+                      ))}
+                    </Flex>
                   </Flex>
-                </Flex>
-              </Card.Body>
-            </RouterLink>
-          </Card.Root>
-        ))}
+                </Card.Body>
+              </RouterLink>
+            </Card.Root>
+          ))
+        )}
       </Stack>
     </SidebarLayout>
   );
