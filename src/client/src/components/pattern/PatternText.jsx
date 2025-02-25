@@ -3,7 +3,7 @@ import { Box, Link } from '@chakra-ui/react';
 import ReactMarkdown from 'react-markdown';
 
 const PatternText = ({ text }) => {
-  const [showMore, setShowMore] = useState(false);
+  const [showMore, setShowMore] = useState(true);
 
   const toggleShowMore = () => {
     setShowMore(!showMore);

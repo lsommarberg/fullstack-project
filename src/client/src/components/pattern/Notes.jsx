@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 
 const Notes = ({ notes }) => {
   return (
-    <Box>
+    <Box mb={4} ml={4}>
       <ReactMarkdown>{notes}</ReactMarkdown>
     </Box>
   );
