@@ -54,8 +54,8 @@ const Pattern = () => {
     } catch (error) {
       console.error('Error deleting pattern:', error);
       toaster.error({
-        title: 'Error deleting pattern',
         description: 'An error occurred while deleting the pattern.',
+        duration: 5000,
       });
     }
   };
@@ -70,14 +70,14 @@ const Pattern = () => {
       setPatternData(updatedPattern);
       setIsEditing(false);
       toaster.success({
-        title: 'Pattern updated',
         description: 'Pattern updated successfully.',
+        duration: 5000,
       });
     } catch (error) {
       console.error('Error updating pattern:', error);
       toaster.error({
-        title: 'Error updating pattern',
         description: 'An error occurred while updating the pattern.',
+        duration: 5000,
       });
     }
   };
