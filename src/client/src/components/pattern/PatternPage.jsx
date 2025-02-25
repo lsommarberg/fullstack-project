@@ -1,5 +1,13 @@
 import React from 'react';
-import { Box, Text, Link, Button, HStack } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Link,
+  Button,
+  HStack,
+  Flex,
+  Spacer,
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -9,11 +17,13 @@ import Notes from './Notes';
 import TagList from './TagList';
 import PatternText from './PatternText';
 import EditPattern from './EditPattern';
+import { toaster } from '../ui/toaster';
 
 const Pattern = () => {
   const { id, patternId } = useParams();
   const [patternData, setPatternData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -24,6 +34,7 @@ const Pattern = () => {
         setPatternData(patternData);
       } catch (error) {
         console.error('Error fetching pattern data:', error);
+        setError(error);
       }
     };
     getPatternData();
@@ -42,6 +53,10 @@ const Pattern = () => {
       }
     } catch (error) {
       console.error('Error deleting pattern:', error);
+      toaster.error({
+        title: 'Error deleting pattern',
+        description: 'An error occurred while deleting the pattern.',
+      });
     }
   };
 
@@ -54,8 +69,16 @@ const Pattern = () => {
       await patternService.updatePattern(id, patternId, updatedPattern);
       setPatternData(updatedPattern);
       setIsEditing(false);
+      toaster.success({
+        title: 'Pattern updated',
+        description: 'Pattern updated successfully.',
+      });
     } catch (error) {
       console.error('Error updating pattern:', error);
+      toaster.error({
+        title: 'Error updating pattern',
+        description: 'An error occurred while updating the pattern.',
+      });
     }
   };
 
@@ -65,7 +88,11 @@ const Pattern = () => {
 
   return (
     <SidebarLayout userId={id}>
-      {isEditing ? (
+      {!patternData ? (
+        <Text>Loading...</Text>
+      ) : error ? (
+        <Text color="red.500">{error}</Text>
+      ) : isEditing ? (
         <EditPattern
           name={name}
           text={text}
@@ -97,18 +124,21 @@ const Pattern = () => {
 
           <TagList tags={tags} />
 
-          <HStack mt={4} align="start">
-            <Button colorScheme="red" size="sm" onClick={handleDelete}>
-              Delete Pattern
-            </Button>
+          <Flex mt={4} align="center">
             <Button colorScheme="teal" size="sm">
               Start Project
             </Button>
-            <Button colorScheme="teal" size="sm" onClick={toggleIsEditing}>
-              {' '}
-              Edit Pattern{' '}
-            </Button>
-          </HStack>
+            <Spacer />
+
+            <HStack spacing={4}>
+              <Button colorScheme="teal" size="sm" onClick={toggleIsEditing}>
+                Edit Pattern
+              </Button>
+              <Button colorScheme="red" size="sm" onClick={handleDelete}>
+                Delete Pattern
+              </Button>
+            </HStack>
+          </Flex>
         </Box>
       )}
     </SidebarLayout>

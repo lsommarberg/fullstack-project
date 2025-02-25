@@ -6,8 +6,9 @@ import Navigation from './components/Navigation';
 import UserPage from './components/UserPage';
 import PatternList from './components/PatternsList';
 import PatternPage from './components/pattern/PatternPage';
+import { Toaster } from './components/ui/toaster';
 
-function App() {
+const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -30,6 +31,7 @@ function App() {
 
   return (
     <div>
+      <Toaster />
       <Navigation user={user} setUser={setUser} />
       <Routes>
         <Route
@@ -53,6 +55,6 @@ function App() {
       </Routes>
     </div>
   );
-}
+};
 
 export default App;

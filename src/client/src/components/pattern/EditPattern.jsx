@@ -1,12 +1,12 @@
-import React from 'react';
+import { useState } from 'react';
 import { Box, Textarea, Input, Button } from '@chakra-ui/react';
 
 const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
-  const [editableName, setEditableName] = React.useState(name);
-  const [editableText, setEditableText] = React.useState(text);
-  const [editableLink, setEditableLink] = React.useState(link);
-  const [editableTags, setEditableTags] = React.useState(tags.join(', '));
-  const [editableNotes, setEditableNotes] = React.useState(notes);
+  const [editableName, setEditableName] = useState(name);
+  const [editableText, setEditableText] = useState(text);
+  const [editableLink, setEditableLink] = useState(link);
+  const [editableTags, setEditableTags] = useState(tags.join(', '));
+  const [editableNotes, setEditableNotes] = useState(notes);
 
   const handleSave = () => {
     onSave({
