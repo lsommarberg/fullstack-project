@@ -27,13 +27,6 @@ const PatternForm = () => {
     e.preventDefault();
 
     const tagsArray = tagsString.split(',').map((item) => item.trim());
-    console.log('Pattern created:', {
-      name,
-      text,
-      link,
-      tags: tagsArray,
-      notes,
-    });
     try {
       await patternService.createPattern({
         name,
@@ -122,7 +115,7 @@ const PatternForm = () => {
               <Button colorScheme="gray" onClick={handleCancel}>
                 Cancel
               </Button>
-              <Button type="submit" colorScheme="teal">
+              <Button type="submit" colorScheme="teal" name="Create Pattern">
                 Create Pattern
               </Button>
             </HStack>
