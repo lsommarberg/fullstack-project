@@ -6,6 +6,7 @@ import Navigation from './components/Navigation';
 import UserPage from './components/UserPage';
 import PatternList from './components/PatternsList';
 import PatternPage from './components/pattern/PatternPage';
+import PatternForm from './components/CreatePattern';
 import { Toaster } from './components/ui/toaster';
 
 const App = () => {
@@ -52,6 +53,7 @@ const App = () => {
         <Route path="/users/:id" element={<UserPage user={user} />} />
         <Route path="/patterns/:id" element={<PatternList />} />
         <Route path="/patterns/:id/:patternId" element={<PatternPage />} />
+        <Route path="/patterns/:id/create" element={<PatternForm />} />
       </Routes>
     </div>
   );
