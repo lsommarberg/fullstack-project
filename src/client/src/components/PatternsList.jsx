@@ -32,7 +32,7 @@ const PatternList = () => {
           <Text>No patterns yet</Text>
         ) : (
           patterns.map((pattern, index) => (
-            <Card.Root key={index} variant="outline">
+            <Card.Root key={index} variant="outline" bg="box">
               <RouterLink
                 to={`/patterns/${id}/${pattern.id}`}
                 style={{ textDecoration: 'none' }}

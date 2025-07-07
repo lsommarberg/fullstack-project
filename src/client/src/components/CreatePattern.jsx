@@ -52,7 +52,7 @@ const PatternForm = () => {
 
   return (
     <SidebarLayout userId={id}>
-      <Box size="lg" maxW="lg">
+      <Box p={5} shadow="md" borderWidth="1px" bg="box">
         <form onSubmit={handleSubmit}>
           <Fieldset.Root>
             <Stack spacing={4}>
@@ -69,6 +69,7 @@ const PatternForm = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   width="100%"
+                  bg={'secondaryBox'}
                 />
               </Field>
               <Field label="Text" required>
@@ -78,6 +79,7 @@ const PatternForm = () => {
                   onChange={(e) => setText(e.target.value)}
                   width="100%"
                   minHeight={200}
+                  bg={'secondaryBox'}
                 />
               </Field>
               <Field
@@ -89,6 +91,7 @@ const PatternForm = () => {
                   value={link}
                   onChange={(e) => setLink(e.target.value)}
                   width="100%"
+                  bg={'secondaryBox'}
                 />
               </Field>
               <Field
@@ -100,6 +103,7 @@ const PatternForm = () => {
                   value={tagsString}
                   onChange={(e) => setTagsString(e.target.value)}
                   width="100%"
+                  bg={'secondaryBox'}
                 />
               </Field>
               <Field label="Notes">
@@ -108,6 +112,7 @@ const PatternForm = () => {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   width="100%"
+                  bg={'secondaryBox'}
                 />
               </Field>
             </Fieldset.Content>

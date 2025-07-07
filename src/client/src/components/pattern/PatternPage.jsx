@@ -103,7 +103,7 @@ const Pattern = () => {
           onCancel={handleCancel}
         />
       ) : (
-        <Box p={5} shadow="md" borderWidth="1px">
+        <Box p={5} shadow="md" borderWidth="1px" bg="box">
           <Text fontSize="2xl" mb={4}>
             {name}
           </Text>
@@ -111,7 +111,7 @@ const Pattern = () => {
           <PatternText text={text} />
 
           {link && (
-            <Link href={link} color="teal.500" isExternal>
+            <Link href={link} color="blue.500" isExternal>
               Link to pattern
             </Link>
           )}
@@ -125,16 +125,14 @@ const Pattern = () => {
           <TagList tags={tags} />
 
           <Flex mt={4} align="center">
-            <Button colorScheme="teal" size="sm">
-              Start Project
-            </Button>
+            <Button size="sm">Start Project</Button>
             <Spacer />
 
             <HStack spacing={4}>
-              <Button colorScheme="teal" size="sm" onClick={toggleIsEditing}>
+              <Button size="sm" onClick={toggleIsEditing}>
                 Edit Pattern
               </Button>
-              <Button colorScheme="red" size="sm" onClick={handleDelete}>
+              <Button size="sm" onClick={handleDelete}>
                 Delete Pattern
               </Button>
             </HStack>

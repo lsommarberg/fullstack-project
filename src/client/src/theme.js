@@ -1,21 +1,36 @@
-import { createSystem, defaultBaseConfig } from '@chakra-ui/react';
+import { defineConfig } from '@chakra-ui/react';
 
-const customConfig = {
-  styles: {
-    global: {
-      body: {
-        bg: 'gray.50',
-        color: 'gray.800',
+export const config = defineConfig({
+  theme: {
+    tokens: {
+      colors: {
+        primary: { value: '#a5bcf8' },
+        secondary: { value: '#e9d5ff' },
+        tertiary: { value: '#f3e8ff' },
+        // tertiary: { value: '#bbf7d0' },
+
+        dark: { value: '#000000' },
+        light: { value: '#ffffff' },
       },
-      '.container': {
-        bg: 'gray.100',
-        border: '1px solid',
-        borderColor: 'gray.300',
-        borderRadius: 'md',
-        padding: 4,
+    },
+    semanticTokens: {
+      colors: {
+        nav: {
+          value: { base: '{colors.primary}', _dark: '{colors.dark}' },
+        },
+        text: {
+          value: { base: '{colors.dark}', _dark: '{colors.light}' },
+        },
+        box: {
+          value: { base: '{colors.secondary}', _dark: '{colors.dark}' },
+        },
+        secondaryBox: {
+          value: { base: '{colors.tertiary}', _dark: '{colors.light}' },
+        },
+        // button: {
+        //   value: { base: '{colors.dark}', _dark: '{colors.light}' },
+        // },
       },
     },
   },
-};
-
-export const system = createSystem(defaultBaseConfig, customConfig);
+});

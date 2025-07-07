@@ -14,7 +14,7 @@ const PatternText = ({ text }) => {
       <ReactMarkdown>
         {showMore ? text : `${text.substring(0, 100)}...`}
       </ReactMarkdown>
-      <Link color="teal.500" onClick={toggleShowMore} ml={2}>
+      <Link color="blue.500" onClick={toggleShowMore} ml={2}>
         {showMore ? 'Show Less' : 'Show More'}
       </Link>
     </Box>
