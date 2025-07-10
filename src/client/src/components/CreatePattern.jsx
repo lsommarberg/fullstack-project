@@ -47,7 +47,7 @@ const PatternForm = () => {
   };
 
   const handleCancel = () => {
-    navigate(`/users/${id}`);
+    navigate(-1);
   };
 
   return (
@@ -70,6 +70,7 @@ const PatternForm = () => {
                   onChange={(e) => setName(e.target.value)}
                   width="100%"
                   bg={'secondaryBox'}
+                  color={'secondaryBoxText'}
                 />
               </Field>
               <Field label="Text" required>
@@ -80,6 +81,7 @@ const PatternForm = () => {
                   width="100%"
                   minHeight={200}
                   bg={'secondaryBox'}
+                  color={'secondaryBoxText'}
                 />
               </Field>
               <Field
@@ -92,6 +94,7 @@ const PatternForm = () => {
                   onChange={(e) => setLink(e.target.value)}
                   width="100%"
                   bg={'secondaryBox'}
+                  color={'secondaryBoxText'}
                 />
               </Field>
               <Field
@@ -104,6 +107,7 @@ const PatternForm = () => {
                   onChange={(e) => setTagsString(e.target.value)}
                   width="100%"
                   bg={'secondaryBox'}
+                  color={'secondaryBoxText'}
                 />
               </Field>
               <Field label="Notes">
@@ -113,15 +117,16 @@ const PatternForm = () => {
                   onChange={(e) => setNotes(e.target.value)}
                   width="100%"
                   bg={'secondaryBox'}
+                  color={'secondaryBoxText'}
                 />
               </Field>
             </Fieldset.Content>
-            <HStack>
-              <Button colorScheme="gray" onClick={handleCancel}>
-                Cancel
-              </Button>
-              <Button type="submit" colorScheme="teal" name="Create Pattern">
+            <HStack spacing={4}>
+              <Button type="submit" name="Create Pattern">
                 Create Pattern
+              </Button>
+              <Button bg="cancelButton" onClick={handleCancel}>
+                Cancel
               </Button>
             </HStack>
           </Fieldset.Root>

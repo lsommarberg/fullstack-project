@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Stack, Text, Flex, Card } from '@chakra-ui/react';
+import { Stack, Text, Flex, Card, Input, Button } from '@chakra-ui/react';
 import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 import patternService from '../services/pattern';
 import { Tag } from '@/components/ui/tag';
@@ -27,6 +27,15 @@ const PatternList = () => {
 
   return (
     <SidebarLayout userId={id}>
+      <Text fontSize="2xl" fontWeight="bold" mb={4}>
+        My Patterns
+      </Text>
+      <Flex mb={4} justify="space-between" align="center">
+        <Input placeholder="Search patterns..." size="md" width="60%" />
+        <Button onClick={() => navigate(`/patterns/${id}/create`)}>
+          Create New
+        </Button>
+      </Flex>
       <Stack spacing={4}>
         {patterns.length === 0 ? (
           <Text>No patterns yet</Text>
@@ -44,7 +53,12 @@ const PatternList = () => {
                     </Text>
                     <Flex>
                       {pattern.tags.map((tag, tagIndex) => (
-                        <Tag key={tagIndex} colorScheme="blue" mr={2}>
+                        <Tag
+                          key={tagIndex}
+                          color="secondaryBoxText"
+                          bg="secondaryBox"
+                          mr={2}
+                        >
                           {tag}
                         </Tag>
                       ))}

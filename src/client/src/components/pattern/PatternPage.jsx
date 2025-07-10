@@ -132,7 +132,7 @@ const Pattern = () => {
               <Button size="sm" onClick={toggleIsEditing}>
                 Edit Pattern
               </Button>
-              <Button size="sm" onClick={handleDelete}>
+              <Button size="sm" color="deleteButton" onClick={handleDelete}>
                 Delete Pattern
               </Button>
             </HStack>

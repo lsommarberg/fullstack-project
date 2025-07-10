@@ -26,7 +26,7 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
         mb={4}
         placeholder="Name"
         bg={'secondaryBox'}
-        borderColor={'gray.200'}
+        color={'secondaryBoxText'}
       />
       <Textarea
         value={editableText}
@@ -36,7 +36,7 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
         mb={4}
         placeholder="Text"
         bg={'secondaryBox'}
-        borderColor={'gray.200'}
+        color={'secondaryBoxText'}
       />
       <Input
         value={editableLink}
@@ -44,7 +44,7 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
         mb={4}
         placeholder="Link"
         bg={'secondaryBox'}
-        borderColor={'gray.200'}
+        color={'secondaryBoxText'}
       />
       <Input
         value={editableTags}
@@ -52,7 +52,7 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
         mb={4}
         placeholder="Tags (comma separated)"
         bg={'secondaryBox'}
-        borderColor={'gray.200'}
+        color={'secondaryBoxText'}
       />
       <Textarea
         value={editableNotes}
@@ -62,12 +62,14 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
         mb={4}
         placeholder="Notes"
         bg={'secondaryBox'}
-        borderColor={'gray.200'}
+        color={'secondaryBoxText'}
       />
       <Button onClick={handleSave} mr={2}>
         Save
       </Button>
-      <Button onClick={onCancel}>Cancel</Button>
+      <Button bg="cancelButton" onClick={onCancel}>
+        Cancel
+      </Button>
     </Box>
   );
 };

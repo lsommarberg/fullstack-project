@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Button, Spacer } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { useColorMode } from '@/components/ui/color-mode';
+import { useColorMode, ColorModeButton } from '@/components/ui/color-mode';
 
 const Navigation = ({ user, setUser }) => {
   const navigate = useNavigate();
@@ -19,10 +19,7 @@ const Navigation = ({ user, setUser }) => {
         <Button onClick={() => navigate('/')} mr={4}>
           Home
         </Button>
-        <Button variant="outline" onClick={toggleColorMode}>
-          Toggle Mode
-        </Button>
-
+        <ColorModeButton bg="tertiary" color="secondaryBoxText" />
         <Spacer />
         {user ? (
           <Button onClick={logout}>Logout</Button>

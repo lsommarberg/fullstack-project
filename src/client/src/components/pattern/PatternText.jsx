@@ -9,12 +9,20 @@ const PatternText = ({ text }) => {
     setShowMore(!showMore);
   };
 
+  const preprocessText = (inputText) => {
+    return inputText.replace(/^- /gm, '\\- ').replace(/\n/g, '  \n');
+  };
+
   return (
-    <Box mb={4} ml={4}>
-      <ReactMarkdown>
-        {showMore ? text : `${text.substring(0, 100)}...`}
-      </ReactMarkdown>
-      <Link color="blue.500" onClick={toggleShowMore} ml={2}>
+    <Box mb={4} bg="secondaryBox" color="secondaryBoxText">
+      <Box mx={4} my={4}>
+        <ReactMarkdown>
+          {showMore
+            ? preprocessText(text)
+            : preprocessText(text.substring(0, 100)) + '...'}
+        </ReactMarkdown>
+      </Box>
+      <Link color="link" onClick={toggleShowMore} ml={2}>
         {showMore ? 'Show Less' : 'Show More'}
       </Link>
     </Box>

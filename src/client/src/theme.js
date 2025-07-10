@@ -27,9 +27,18 @@ export const config = defineConfig({
         secondaryBox: {
           value: { base: '{colors.tertiary}', _dark: '{colors.light}' },
         },
-        // button: {
-        //   value: { base: '{colors.dark}', _dark: '{colors.light}' },
-        // },
+        secondaryBoxText: {
+          value: { base: '{colors.dark}', _dark: '{colors.dark}' },
+        },
+        deleteButton: {
+          value: { base: '#ff6b6b', _dark: '#B30000' },
+        },
+        cancelButton: {
+          value: { base: '#4a5568', _dark: '#a0aec0' },
+        },
+        link: {
+          value: { base: '#1A4670', _dark: '#3182ce' },
+        },
       },
     },
   },
