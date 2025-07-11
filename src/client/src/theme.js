@@ -1,21 +1,45 @@
-import { createSystem, defaultBaseConfig } from '@chakra-ui/react';
+import { defineConfig } from '@chakra-ui/react';
 
-const customConfig = {
-  styles: {
-    global: {
-      body: {
-        bg: 'gray.50',
-        color: 'gray.800',
+export const config = defineConfig({
+  theme: {
+    tokens: {
+      colors: {
+        primary: { value: '#a5bcf8' },
+        secondary: { value: '#e9d5ff' },
+        tertiary: { value: '#f3e8ff' },
+        // tertiary: { value: '#bbf7d0' },
+
+        dark: { value: '#000000' },
+        light: { value: '#ffffff' },
       },
-      '.container': {
-        bg: 'gray.100',
-        border: '1px solid',
-        borderColor: 'gray.300',
-        borderRadius: 'md',
-        padding: 4,
+    },
+    semanticTokens: {
+      colors: {
+        nav: {
+          value: { base: '{colors.primary}', _dark: '{colors.dark}' },
+        },
+        text: {
+          value: { base: '{colors.dark}', _dark: '{colors.light}' },
+        },
+        box: {
+          value: { base: '{colors.secondary}', _dark: '{colors.dark}' },
+        },
+        secondaryBox: {
+          value: { base: '{colors.tertiary}', _dark: '{colors.light}' },
+        },
+        secondaryBoxText: {
+          value: { base: '{colors.dark}', _dark: '{colors.dark}' },
+        },
+        deleteButton: {
+          value: { base: '#ff6b6b', _dark: '#B30000' },
+        },
+        cancelButton: {
+          value: { base: '#4a5568', _dark: '#a0aec0' },
+        },
+        link: {
+          value: { base: '#1A4670', _dark: '#3182ce' },
+        },
       },
     },
   },
-};
-
-export const system = createSystem(defaultBaseConfig, customConfig);
+});

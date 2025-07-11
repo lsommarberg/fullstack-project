@@ -47,12 +47,12 @@ const PatternForm = () => {
   };
 
   const handleCancel = () => {
-    navigate(`/users/${id}`);
+    navigate(-1);
   };
 
   return (
     <SidebarLayout userId={id}>
-      <Box size="lg" maxW="lg">
+      <Box p={5} shadow="md" borderWidth="1px" bg="box">
         <form onSubmit={handleSubmit}>
           <Fieldset.Root>
             <Stack spacing={4}>
@@ -69,6 +69,8 @@ const PatternForm = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   width="100%"
+                  bg={'secondaryBox'}
+                  color={'secondaryBoxText'}
                 />
               </Field>
               <Field label="Text" required>
@@ -78,6 +80,8 @@ const PatternForm = () => {
                   onChange={(e) => setText(e.target.value)}
                   width="100%"
                   minHeight={200}
+                  bg={'secondaryBox'}
+                  color={'secondaryBoxText'}
                 />
               </Field>
               <Field
@@ -89,6 +93,8 @@ const PatternForm = () => {
                   value={link}
                   onChange={(e) => setLink(e.target.value)}
                   width="100%"
+                  bg={'secondaryBox'}
+                  color={'secondaryBoxText'}
                 />
               </Field>
               <Field
@@ -100,6 +106,8 @@ const PatternForm = () => {
                   value={tagsString}
                   onChange={(e) => setTagsString(e.target.value)}
                   width="100%"
+                  bg={'secondaryBox'}
+                  color={'secondaryBoxText'}
                 />
               </Field>
               <Field label="Notes">
@@ -108,15 +116,17 @@ const PatternForm = () => {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   width="100%"
+                  bg={'secondaryBox'}
+                  color={'secondaryBoxText'}
                 />
               </Field>
             </Fieldset.Content>
-            <HStack>
-              <Button colorScheme="gray" onClick={handleCancel}>
-                Cancel
-              </Button>
-              <Button type="submit" colorScheme="teal" name="Create Pattern">
+            <HStack spacing={4}>
+              <Button type="submit" name="Create Pattern">
                 Create Pattern
+              </Button>
+              <Button bg="cancelButton" onClick={handleCancel}>
+                Cancel
               </Button>
             </HStack>
           </Fieldset.Root>

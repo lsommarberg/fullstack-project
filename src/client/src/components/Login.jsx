@@ -54,7 +54,10 @@ const Login = ({ setUser }) => {
         mt={10}
         p={6}
         borderRadius="md"
+        borderWidth={1}
+        borderColor={'gray.100'}
         shadow="md"
+        bg="box"
       >
         <Stack>
           <Fieldset.Legend>Login</Fieldset.Legend>
@@ -68,6 +71,8 @@ const Login = ({ setUser }) => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
+              borderColor={'gray.400'}
+              bg={'secondaryBox'}
             />
           </Field>
 
@@ -78,11 +83,13 @@ const Login = ({ setUser }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              borderColor={'gray.400'}
+              bg={'secondaryBox'}
             />
           </Field>
         </Fieldset.Content>
 
-        <Button type="submit" colorScheme="teal" width="full">
+        <Button type="submit" width="full">
           Login
         </Button>
       </Fieldset.Root>

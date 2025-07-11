@@ -3,9 +3,15 @@ import { Box } from '@chakra-ui/react';
 import ReactMarkdown from 'react-markdown';
 
 const Notes = ({ notes }) => {
+  const preprocessText = (inputText) => {
+    return inputText.replace(/^- /gm, '\\- ').replace(/\n/g, '  \n');
+  };
+
   return (
-    <Box mb={4} ml={4}>
-      <ReactMarkdown>{notes}</ReactMarkdown>
+    <Box mb={4} bg="secondaryBox" color="secondaryBoxText">
+      <Box mx={4} my={4}>
+        <ReactMarkdown>{preprocessText(notes)}</ReactMarkdown>
+      </Box>
     </Box>
   );
 };

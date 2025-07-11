@@ -107,7 +107,7 @@ describe('PatternForm', () => {
   test('navigates to the correct page on cancel', () => {
     render(<PatternForm />);
     fireEvent.click(screen.getByText(/Cancel/i));
-    expect(mockNavigate).toHaveBeenCalledWith('/users/1');
+    expect(mockNavigate).toHaveBeenCalledWith(-1);
   });
 
   test('displays helper text correctly', () => {
