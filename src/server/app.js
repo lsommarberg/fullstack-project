@@ -41,6 +41,11 @@ app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/patterns', patternRouter);
 
+if (process.env.NODE_ENV === 'test') {
+  const testUtilsRouter = require('./controllers/reset');
+  app.use('/api/testing', testUtilsRouter);
+}
+
 app.use(errorHandler);
 
 module.exports = app;
