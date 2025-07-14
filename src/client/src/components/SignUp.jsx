@@ -76,6 +76,7 @@ const SignupForm = () => {
             <Input
               name="username"
               placeholder="Username"
+              data-testid="username_signup"
               {...register('username')}
             />
             {errors.username && (
@@ -88,6 +89,7 @@ const SignupForm = () => {
               name="password"
               type="password"
               placeholder="Password"
+              data-testid="password_signup"
               {...register('password')}
             />
             {errors.password && (
@@ -99,6 +101,7 @@ const SignupForm = () => {
             <Input
               name="passwordConfirm"
               type="password"
+              data-testid="password_signup_confirmation"
               placeholder="Confirm Password"
               {...register('passwordConfirm')}
             />
@@ -108,7 +111,12 @@ const SignupForm = () => {
           </Field>
         </Fieldset.Content>
 
-        <Button type="submit" colorScheme="teal" width="full">
+        <Button
+          type="submit"
+          data-testid="signup_submit"
+          colorScheme="teal"
+          width="full"
+        >
           Sign Up
         </Button>
       </Fieldset.Root>

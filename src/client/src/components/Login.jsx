@@ -68,6 +68,7 @@ const Login = ({ setUser }) => {
           <Field label="Username">
             <Input
               name="username"
+              data-testid="username_login"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -80,6 +81,7 @@ const Login = ({ setUser }) => {
             <Input
               name="password"
               type="password"
+              data-testid="password_login"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
