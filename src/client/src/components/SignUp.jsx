@@ -1,4 +1,3 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -65,7 +64,11 @@ const SignupForm = () => {
         mt={10}
         p={6}
         borderRadius="md"
+        borderWidth={1}
+        borderColor="card.border"
         shadow="md"
+        bg="card.bg"
+        color="fg.default"
       >
         <Stack>
           <Fieldset.Legend>Sign Up</Fieldset.Legend>
@@ -77,6 +80,9 @@ const SignupForm = () => {
               name="username"
               placeholder="Username"
               {...register('username')}
+              borderColor="input.border"
+              bg="input.bg"
+              color="fg.default"
             />
             {errors.username && (
               <Text color="red.500">{errors.username.message}</Text>
@@ -89,6 +95,9 @@ const SignupForm = () => {
               type="password"
               placeholder="Password"
               {...register('password')}
+              borderColor="input.border"
+              bg="input.bg"
+              color="fg.default"
             />
             {errors.password && (
               <Text color="red.500">{errors.password.message}</Text>
@@ -101,6 +110,9 @@ const SignupForm = () => {
               type="password"
               placeholder="Confirm Password"
               {...register('passwordConfirm')}
+              borderColor="input.border"
+              bg="input.bg"
+              color="fg.default"
             />
             {errors.passwordConfirm && (
               <Text color="red.500">{errors.passwordConfirm.message}</Text>
@@ -108,7 +120,7 @@ const SignupForm = () => {
           </Field>
         </Fieldset.Content>
 
-        <Button type="submit" colorScheme="teal" width="full">
+        <Button type="submit" width="full">
           Sign Up
         </Button>
       </Fieldset.Root>

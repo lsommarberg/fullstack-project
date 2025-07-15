@@ -41,7 +41,12 @@ const PatternList = () => {
           <Text>No patterns yet</Text>
         ) : (
           patterns.map((pattern, index) => (
-            <Card.Root key={index} variant="outline" bg="box">
+            <Card.Root
+              key={index}
+              variant="outline"
+              bg="card.bg"
+              color="fg.default"
+            >
               <RouterLink
                 to={`/patterns/${id}/${pattern.id}`}
                 style={{ textDecoration: 'none' }}
@@ -55,8 +60,8 @@ const PatternList = () => {
                       {pattern.tags.map((tag, tagIndex) => (
                         <Tag
                           key={tagIndex}
-                          color="secondaryBoxText"
-                          bg="secondaryBox"
+                          color="fg.default"
+                          bg="input.bg"
                           mr={2}
                         >
                           {tag}
