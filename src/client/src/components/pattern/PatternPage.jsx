@@ -103,7 +103,13 @@ const Pattern = () => {
           onCancel={handleCancel}
         />
       ) : (
-        <Box p={5} shadow="md" borderWidth="1px" bg="box">
+        <Box
+          p={5}
+          shadow="md"
+          borderWidth="1px"
+          bg="card.bg"
+          color="fg.default"
+        >
           <Text fontSize="2xl" mb={4}>
             {name}
           </Text>

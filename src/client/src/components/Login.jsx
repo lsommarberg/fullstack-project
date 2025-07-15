@@ -55,9 +55,10 @@ const Login = ({ setUser }) => {
         p={6}
         borderRadius="md"
         borderWidth={1}
-        borderColor={'gray.100'}
+        borderColor="card.border"
         shadow="md"
-        bg="box"
+        bg="card.bg"
+        color="fg.default"
       >
         <Stack>
           <Fieldset.Legend>Login</Fieldset.Legend>
@@ -71,8 +72,9 @@ const Login = ({ setUser }) => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              borderColor={'gray.400'}
-              bg={'secondaryBox'}
+              borderColor="input.border"
+              bg="input.bg"
+              color="fg.default"
             />
           </Field>
 
@@ -83,8 +85,9 @@ const Login = ({ setUser }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              borderColor={'gray.400'}
-              bg={'secondaryBox'}
+              borderColor="input.border"
+              bg="input.bg"
+              color="fg.default"
             />
           </Field>
         </Fieldset.Content>

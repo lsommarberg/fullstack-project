@@ -62,7 +62,7 @@ describe('PatternForm', () => {
       target: { value: 'Some notes' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /Create Pattern/i }));
+    fireEvent.click(screen.getByTestId('create-pattern-button'));
 
     await waitFor(() => {
       expect(patternService.createPattern).toHaveBeenCalledWith({
@@ -94,7 +94,7 @@ describe('PatternForm', () => {
       target: { value: 'This is a test pattern.' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /Create Pattern/i }));
+    fireEvent.click(screen.getByTestId('create-pattern-button'));
 
     await waitFor(() => {
       expect(toaster.error).toHaveBeenCalledWith({
@@ -122,7 +122,7 @@ describe('PatternForm', () => {
 
   test('shows validation errors for required fields', async () => {
     render(<PatternForm />);
-    fireEvent.click(screen.getByRole('button', { name: /Create Pattern/i }));
+    fireEvent.click(screen.getByTestId('create-pattern-button'));
 
     await waitFor(() => {
       const nameInput = screen.getByLabelText(/Name/i);

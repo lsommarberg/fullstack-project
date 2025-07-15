@@ -14,12 +14,19 @@ const Navigation = ({ user, setUser }) => {
   };
 
   return (
-    <Box as="nav" borderWidth="1px" p={4} boxShadow="md" bg="nav">
+    <Box
+      as="nav"
+      borderWidth="1px"
+      p={4}
+      boxShadow="md"
+      bg="nav.bg"
+      color="fg.default"
+    >
       <Flex align="center">
         <Button onClick={() => navigate('/')} mr={4}>
           Home
         </Button>
-        <ColorModeButton bg="tertiary" color="secondaryBoxText" />
+        <ColorModeButton bg="input.bg" color="fg.default" />
         <Spacer />
         {user ? (
           <Button onClick={logout}>Logout</Button>

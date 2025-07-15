@@ -15,21 +15,29 @@ export const config = defineConfig({
     },
     semanticTokens: {
       colors: {
-        nav: {
+        'nav.bg': {
           value: { base: '{colors.primary}', _dark: '{colors.dark}' },
         },
-        text: {
+        'card.bg': {
+          value: { base: '{colors.secondary}', _dark: 'gray.800' },
+        },
+        'card.border': {
+          value: { base: 'gray.200', _dark: 'gray.600' },
+        },
+        'input.bg': {
+          value: { base: '{colors.tertiary}', _dark: 'gray.700' },
+        },
+        'input.border': {
+          value: { base: 'gray.300', _dark: 'gray.500' },
+        },
+
+        'fg.default': {
           value: { base: '{colors.dark}', _dark: '{colors.light}' },
         },
-        box: {
-          value: { base: '{colors.secondary}', _dark: '{colors.dark}' },
+        'fg.muted': {
+          value: { base: 'gray.600', _dark: 'gray.400' },
         },
-        secondaryBox: {
-          value: { base: '{colors.tertiary}', _dark: '{colors.light}' },
-        },
-        secondaryBoxText: {
-          value: { base: '{colors.dark}', _dark: '{colors.dark}' },
-        },
+
         deleteButton: {
           value: { base: '#ff6b6b', _dark: '#B30000' },
         },
@@ -37,7 +45,10 @@ export const config = defineConfig({
           value: { base: '#4a5568', _dark: '#a0aec0' },
         },
         link: {
-          value: { base: '#1A4670', _dark: '#3182ce' },
+          value: { base: '#1A4670', _dark: '#1A4670' },
+        },
+        linkText: {
+          value: { base: '#1A4670', _dark: 'colors.primary' },
         },
       },
     },
