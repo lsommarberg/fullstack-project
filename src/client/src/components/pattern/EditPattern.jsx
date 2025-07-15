@@ -19,14 +19,15 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
   };
 
   return (
-    <Box p={5} shadow="md" borderWidth="1px" bg="box">
+    <Box p={5} shadow="md" borderWidth="1px" bg="card.bg" color="fg.default">
       <Input
         value={editableName}
         onChange={(e) => setEditableName(e.target.value)}
         mb={4}
         placeholder="Name"
-        bg={'secondaryBox'}
-        color={'secondaryBoxText'}
+        bg="input.bg"
+        color="fg.default"
+        borderColor="input.border"
       />
       <Textarea
         value={editableText}
@@ -35,24 +36,27 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
         cols={50}
         mb={4}
         placeholder="Text"
-        bg={'secondaryBox'}
-        color={'secondaryBoxText'}
+        bg="input.bg"
+        color="fg.default"
+        borderColor="input.border"
       />
       <Input
         value={editableLink}
         onChange={(e) => setEditableLink(e.target.value)}
         mb={4}
         placeholder="Link"
-        bg={'secondaryBox'}
-        color={'secondaryBoxText'}
+        bg="input.bg"
+        color="fg.default"
+        borderColor="input.border"
       />
       <Input
         value={editableTags}
         onChange={(e) => setEditableTags(e.target.value)}
         mb={4}
         placeholder="Tags (comma separated)"
-        bg={'secondaryBox'}
-        color={'secondaryBoxText'}
+        bg="input.bg"
+        color="fg.default"
+        borderColor="input.border"
       />
       <Textarea
         value={editableNotes}
@@ -61,8 +65,9 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
         cols={50}
         mb={4}
         placeholder="Notes"
-        bg={'secondaryBox'}
-        color={'secondaryBoxText'}
+        bg="input.bg"
+        color="fg.default"
+        borderColor="input.border"
       />
       <Button onClick={handleSave} mr={2}>
         Save

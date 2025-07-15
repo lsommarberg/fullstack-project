@@ -14,7 +14,7 @@ const PatternText = ({ text }) => {
   };
 
   return (
-    <Box mb={4} bg="secondaryBox" color="secondaryBoxText">
+    <Box mb={4} bg="input.bg" color="fg.default">
       <Box mx={4} my={4}>
         <ReactMarkdown>
           {showMore
