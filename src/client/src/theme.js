@@ -37,7 +37,6 @@ export const config = defineConfig({
         'fg.muted': {
           value: { base: 'gray.600', _dark: 'gray.400' },
         },
-
         deleteButton: {
           value: { base: '#ff6b6b', _dark: '#B30000' },
         },

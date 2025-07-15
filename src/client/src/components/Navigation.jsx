@@ -27,6 +27,7 @@ const Navigation = ({ user, setUser }) => {
           Home
         </Button>
         <ColorModeButton bg="input.bg" color="fg.default" />
+
         <Spacer />
         {user ? (
           <Button onClick={logout}>Logout</Button>
