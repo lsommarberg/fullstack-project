@@ -123,7 +123,7 @@ const SignupForm = () => {
           </Field>
         </Fieldset.Content>
 
-        <Button type="submit" width="full">
+        <Button type="submit" data-testid="signup_submit" width="full">
           Sign Up
         </Button>
       </Fieldset.Root>
