@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   Text,
@@ -18,12 +17,15 @@ import TagList from './TagList';
 import PatternText from './PatternText';
 import EditPattern from './EditPattern';
 import { toaster } from '../ui/toaster';
+import ConfirmDialog from '../ConfirmDialog';
 
 const Pattern = () => {
   const { id, patternId } = useParams();
   const [patternData, setPatternData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const navigate = useNavigate();
 
@@ -46,17 +48,26 @@ const Pattern = () => {
   const { name, text, link, notes, tags } = patternData;
 
   const handleDelete = async () => {
+    setShowDeleteDialog(true);
+  };
+
+  const confirmDelete = async () => {
     try {
-      if (window.confirm('Are you sure you want to delete this pattern?')) {
-        await patternService.deletePattern(id, patternId);
-        navigate(`/patterns/${id}`);
-      }
+      setIsDeleting(true);
+      await patternService.deletePattern(id, patternId);
+      toaster.success({
+        description: 'Pattern deleted successfully',
+        duration: 5000,
+      });
+      navigate(`/patterns/${id}`);
     } catch (error) {
       console.error('Error deleting pattern:', error);
       toaster.error({
         description: 'An error occurred while deleting the pattern.',
         duration: 5000,
       });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -143,6 +154,18 @@ const Pattern = () => {
               </Button>
             </HStack>
           </Flex>
+
+          <ConfirmDialog
+            isOpen={showDeleteDialog}
+            onClose={() => setShowDeleteDialog(false)}
+            onConfirm={confirmDelete}
+            title="Confirm Deletion"
+            message="Are you sure you want to delete this pattern?"
+            confirmText="Delete"
+            cancelText="Cancel"
+            confirmColorScheme="red"
+            isLoading={isDeleting}
+          />
         </Box>
       )}
     </SidebarLayout>

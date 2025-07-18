@@ -79,6 +79,7 @@ const SignupForm = () => {
             <Input
               name="username"
               placeholder="Username"
+              data-testid="username_signup"
               {...register('username')}
               borderColor="input.border"
               bg="input.bg"
@@ -94,6 +95,7 @@ const SignupForm = () => {
               name="password"
               type="password"
               placeholder="Password"
+              data-testid="password_signup"
               {...register('password')}
               borderColor="input.border"
               bg="input.bg"
@@ -108,6 +110,7 @@ const SignupForm = () => {
             <Input
               name="passwordConfirm"
               type="password"
+              data-testid="password_signup_confirmation"
               placeholder="Confirm Password"
               {...register('passwordConfirm')}
               borderColor="input.border"
@@ -120,7 +123,7 @@ const SignupForm = () => {
           </Field>
         </Fieldset.Content>
 
-        <Button type="submit" width="full">
+        <Button type="submit" data-testid="signup_submit" width="full">
           Sign Up
         </Button>
       </Fieldset.Root>

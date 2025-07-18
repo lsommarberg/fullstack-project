@@ -4,6 +4,7 @@ import PatternPage from '../components/pattern/PatternPage';
 import patternService from '../services/pattern';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toaster } from '@/components/ui/toaster';
+import { expect } from '@playwright/test';
 
 jest.mock('../services/pattern');
 jest.mock('react-router-dom', () => ({
@@ -74,8 +75,6 @@ describe('PatternPage', () => {
     patternService.getPatternById.mockResolvedValue(getMockPattern());
     patternService.deletePattern.mockResolvedValue({});
 
-    window.confirm = jest.fn().mockImplementation(() => true);
-
     render(<PatternPage />);
 
     await waitFor(() => {
@@ -85,7 +84,16 @@ describe('PatternPage', () => {
     fireEvent.click(screen.getByText('Delete Pattern'));
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/patterns/1');
+      expect(screen.getByText('Confirm Deletion')).toBeInTheDocument();
+      expect(
+        screen.getByText('Are you sure you want to delete this pattern?'),
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Delete'));
+
+    await waitFor(() => {
+      expect(patternService.deletePattern).toHaveBeenCalledWith('1', '1');
     });
   });
 
@@ -194,6 +202,15 @@ describe('PatternPage', () => {
     });
 
     fireEvent.click(screen.getByText('Delete Pattern'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Confirm Deletion')).toBeInTheDocument();
+      expect(
+        screen.getByText('Are you sure you want to delete this pattern?'),
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Delete'));
 
     await waitFor(() => {
       expect(toaster.error).toHaveBeenCalledWith({

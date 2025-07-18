@@ -5,6 +5,10 @@ module.exports = {
   },
   moduleFileExtensions: ['js', 'jsx'],
   testEnvironment: 'jsdom',
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/src/e2e/', // Ignore E2E tests
+  ],
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{js,jsx}',
