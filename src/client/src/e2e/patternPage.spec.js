@@ -54,4 +54,25 @@ describe('Pattern Page', () => {
     await expect(page).toHaveURL(/\/patterns\/\d+/);
     await expect(page.getByText('Pattern deleted successfully')).toBeVisible();
   });
+
+  test('User can edit a pattern', async ({ page }) => {
+    await addPattern(page, 'To Edit');
+    await expect(page).toHaveURL(/\/users\/\d+/);
+
+    await page.getByRole('link', { name: 'My Patterns' }).click();
+
+    await expect(page.getByText('To Edit')).toBeVisible();
+    await page.getByText('To Edit').click();
+
+    await page.getByRole('button', { name: 'Edit Pattern' }).click();
+
+    await page.getByTestId('pattern-name-input').fill('Edited Pattern');
+    await page.getByTestId('pattern-textarea').fill('Edited description');
+
+    await page.getByTestId('save-button').click();
+
+    await expect(page).toHaveURL(/\/patterns\/\d+/);
+    await expect(page.getByText('Pattern updated successfully')).toBeVisible();
+    await expect(page.getByText('Edited Pattern')).toBeVisible();
+  });
 });

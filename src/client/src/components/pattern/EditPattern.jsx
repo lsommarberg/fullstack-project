@@ -28,6 +28,7 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
         bg="input.bg"
         color="fg.default"
         borderColor="input.border"
+        data-testid="pattern-name-input"
       />
       <Textarea
         value={editableText}
@@ -39,6 +40,7 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
         bg="input.bg"
         color="fg.default"
         borderColor="input.border"
+        data-testid="pattern-textarea"
       />
       <Input
         value={editableLink}
@@ -69,7 +71,7 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
         color="fg.default"
         borderColor="input.border"
       />
-      <Button onClick={handleSave} mr={2}>
+      <Button onClick={handleSave} data-testid="save-button" mr={2}>
         Save
       </Button>
       <Button bg="cancelButton" onClick={onCancel}>
