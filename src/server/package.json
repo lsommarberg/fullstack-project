@@ -12,6 +12,12 @@
     "lint:fix": "eslint . --fix",
     "start:test": "NODE_ENV=test PORT=3001 node index.js"
   },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/controllers/reset.js"
+    ]
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
