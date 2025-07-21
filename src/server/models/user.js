@@ -15,6 +15,12 @@ const userSchema = mongoose.Schema({
       ref: 'Pattern',
     },
   ],
+  projects: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Project',
+    },
+  ],
 });
 
 userSchema.set('toJSON', {

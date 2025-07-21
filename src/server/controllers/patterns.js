@@ -13,10 +13,6 @@ router.get('/:id', userExtractor, async (req, res) => {
 router.post('/', userExtractor, async (req, res) => {
   const user = req.user;
 
-  if (!user) {
-    return res.status(401).json({ error: 'unauthorized' });
-  }
-
   const pattern = new Pattern({
     ...req.body,
     user: user._id,
