@@ -24,7 +24,7 @@ describe('PatternList', () => {
 
   test('renders without crashing', () => {
     render(<PatternList />);
-    expect(screen.getByText(/No patterns yet/i)).toBeInTheDocument();
+    expect(screen.getByText('My Patterns:')).toBeInTheDocument();
   });
 
   test('fetches and displays patterns', async () => {

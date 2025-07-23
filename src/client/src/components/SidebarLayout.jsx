@@ -49,7 +49,7 @@ const SidebarLayout = ({ children, userId }) => {
                 pl={0}
                 fontSize="sm"
                 color="text"
-                _hover={{ color: 'linkText', bg: 'secondaryBox' }}
+                _hover={{ color: 'linkText' }}
               >
                 Create Pattern
               </Button>
@@ -68,7 +68,20 @@ const SidebarLayout = ({ children, userId }) => {
               Projects
             </Text>
             <VStack align="start" spacing={2} pl={2}>
-              <Link fontSize="sm" color="text" _hover={{ color: 'linkText' }}>
+              <Link
+                as={RouterLink}
+                to={`/projects/${userId}`}
+                fontWeight={
+                  isActive(`/projects/${userId}`) ? 'medium' : 'normal'
+                }
+                justifyContent="flex-start"
+                variant="ghost"
+                size="sm"
+                pl={0}
+                color={isActive(`/projects/${userId}`) ? 'linkText' : 'text'}
+                fontSize="sm"
+                _hover={{ color: 'linkText' }}
+              >
                 My Projects
               </Link>
               <Button
@@ -78,7 +91,8 @@ const SidebarLayout = ({ children, userId }) => {
                 pl={0}
                 fontSize="sm"
                 color="text"
-                _hover={{ color: 'linkText', bg: 'secondaryBox' }}
+                _hover={{ color: 'linkText' }}
+                onClick={() => navigate(`/projects/${userId}/create`)}
               >
                 Start New
               </Button>

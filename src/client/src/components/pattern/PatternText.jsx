@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Link } from '@chakra-ui/react';
 import ReactMarkdown from 'react-markdown';
 
@@ -22,7 +22,7 @@ const PatternText = ({ text }) => {
             : preprocessText(text.substring(0, 100)) + '...'}
         </ReactMarkdown>
       </Box>
-      <Link color="link" onClick={toggleShowMore} ml={2}>
+      <Link color="blue.500" onClick={toggleShowMore} ml={2}>
         {showMore ? 'Show Less' : 'Show More'}
       </Link>
     </Box>

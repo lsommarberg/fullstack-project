@@ -7,6 +7,9 @@ import UserPage from './components/UserPage';
 import PatternList from './components/PatternsList';
 import PatternPage from './components/pattern/PatternPage';
 import PatternForm from './components/CreatePattern';
+import ProjectsList from './components/ProjectsList';
+import ProjectPage from './components/project/ProjectPage';
+import ProjectForm from './components/StartProjectForm';
 import { Toaster } from './components/ui/toaster';
 
 const App = () => {
@@ -54,6 +57,9 @@ const App = () => {
         <Route path="/patterns/:id" element={<PatternList />} />
         <Route path="/patterns/:id/:patternId" element={<PatternPage />} />
         <Route path="/patterns/:id/create" element={<PatternForm />} />
+        <Route path="/projects/:id" element={<ProjectsList />} />
+        <Route path="/projects/:id/:projectId" element={<ProjectPage />} />
+        <Route path="/projects/:id/create" element={<ProjectForm />} />
       </Routes>
     </div>
   );
