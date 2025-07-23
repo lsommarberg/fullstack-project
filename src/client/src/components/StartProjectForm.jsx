@@ -36,6 +36,7 @@ const ProjectForm = () => {
           );
           setPattern(patternData);
           setNotes(patternData.notes || '');
+          setName(patternData.name || '');
         } catch (error) {
           console.error('Error fetching pattern:', error);
           toaster.error({

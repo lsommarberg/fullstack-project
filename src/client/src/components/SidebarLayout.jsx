@@ -1,11 +1,28 @@
 import { Box, Flex, VStack, Button, Link, Text } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import PatternSelectionDialog from './PatternSelectionDialog';
 
 const SidebarLayout = ({ children, userId }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [showPatternDialog, setShowPatternDialog] = useState(false);
 
   const isActive = (path) => location.pathname === path;
+
+  const handleStartNewProject = () => {
+    setShowPatternDialog(true);
+  };
+
+  const handlePatternSelection = (patternId) => {
+    setShowPatternDialog(false);
+
+    if (patternId) {
+      navigate(`/projects/${userId}/create`, { state: { patternId } });
+    } else {
+      navigate(`/projects/${userId}/create`);
+    }
+  };
 
   return (
     <Flex height="100vh">
@@ -92,7 +109,7 @@ const SidebarLayout = ({ children, userId }) => {
                 fontSize="sm"
                 color="text"
                 _hover={{ color: 'linkText' }}
-                onClick={() => navigate(`/projects/${userId}/create`)}
+                onClick={handleStartNewProject}
               >
                 Start New
               </Button>
@@ -122,6 +139,13 @@ const SidebarLayout = ({ children, userId }) => {
       <Box flex="1" p={4} overflow="auto">
         {children}
       </Box>
+
+      <PatternSelectionDialog
+        isOpen={showPatternDialog}
+        onClose={() => setShowPatternDialog(false)}
+        onConfirm={handlePatternSelection}
+        userId={userId}
+      />
     </Flex>
   );
 };
