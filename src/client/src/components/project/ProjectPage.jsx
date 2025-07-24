@@ -6,6 +6,7 @@ import SidebarLayout from '../SidebarLayout';
 import Notes from '../pattern/Notes';
 import { toaster } from '../ui/toaster';
 import ConfirmDialog from '../ConfirmDialog';
+import { RowTracker } from './RowTracker';
 
 const ProjectPage = () => {
   const { id, projectId } = useParams();
@@ -29,10 +30,45 @@ const ProjectPage = () => {
   if (!projectData) {
     return <Text>Loading...</Text>;
   }
-  const { name, startedAt, pattern, notes } = projectData;
+  const { name, startedAt, pattern, notes, rowTrackers } = projectData;
+
   const formattedDate = new Date(startedAt).toLocaleDateString();
 
   const handleDelete = () => setShowDeleteDialog(true);
+
+  const onCurrentRowChange = async (index, value) => {
+    const newRowTrackers = [...rowTrackers];
+    newRowTrackers[index].currentRow = parseInt(value) || 0;
+
+    const updatedProject = { ...projectData, rowTrackers: newRowTrackers };
+    setProjectData(updatedProject);
+
+    try {
+      await projectService.updateProject(id, projectId, {
+        rowTrackers: newRowTrackers,
+      });
+    } catch (error) {
+      console.error('Error updating row tracker:', error);
+      toaster.error({ description: 'Failed to update row tracker' });
+    }
+  };
+
+  const onTotalRowsChange = async (index, value) => {
+    const newRowTrackers = [...rowTrackers];
+    newRowTrackers[index].totalRows = parseInt(value) || 0;
+
+    const updatedProject = { ...projectData, rowTrackers: newRowTrackers };
+    setProjectData(updatedProject);
+
+    try {
+      await projectService.updateProject(id, projectId, {
+        rowTrackers: newRowTrackers,
+      });
+    } catch (error) {
+      console.error('Error updating row tracker:', error);
+      toaster.error({ description: 'Failed to update row tracker' });
+    }
+  };
 
   const confirmDelete = async () => {
     try {
@@ -89,6 +125,20 @@ const ProjectPage = () => {
                 </Link>
               </Text>
             )}
+            <Box mb={4}>
+              <Text fontWeight="bold">Row Trackers:</Text>
+              {rowTrackers.map((tracker, index) => (
+                <RowTracker
+                  key={index}
+                  index={index}
+                  section={tracker.section}
+                  currentRow={tracker.currentRow}
+                  totalRows={tracker.totalRows}
+                  onCurrentRowChange={onCurrentRowChange}
+                  onTotalRowsChange={onTotalRowsChange}
+                />
+              ))}
+            </Box>
             <Box mb={4}>
               <Text fontWeight="bold">Notes:</Text>
               {notes && <Notes notes={notes} />}
