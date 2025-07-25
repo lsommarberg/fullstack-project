@@ -8,12 +8,10 @@ import {
   Textarea,
   Box,
   HStack,
-  VStack,
-  Text,
-  IconButton,
 } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
 import SidebarLayout from './SidebarLayout';
+import RowTrackersSection from './RowTrackersSection';
 import projectService from '../services/project';
 import patternService from '../services/pattern';
 import { toaster } from './ui/toaster';
@@ -140,75 +138,13 @@ const ProjectForm = () => {
                 />
               </Field>
 
-              <Box>
-                <HStack justify="space-between" align="center" mb={3}>
-                  <Text fontWeight="semibold">Row Trackers (optional)</Text>
-                  <Button size="sm" onClick={addRowTracker}>
-                    Add Section
-                  </Button>
-                </HStack>
-
-                <VStack spacing={3} align="stretch">
-                  {rowTrackers.map((tracker, index) => (
-                    <Box
-                      key={index}
-                      p={3}
-                      border="1px solid"
-                      borderColor="input.border"
-                      borderRadius="md"
-                      bg="input.bg"
-                    >
-                      <HStack spacing={3} align="end">
-                        <Field label="Section Name" flex="1">
-                          <Input
-                            value={tracker.section}
-                            onChange={(e) =>
-                              updateRowTracker(index, 'section', e.target.value)
-                            }
-                            placeholder="e.g., Body, Sleeves, etc."
-                            bg="card.bg"
-                            color="fg.default"
-                            borderColor="input.border"
-                            size="sm"
-                          />
-                        </Field>
-
-                        <Field label="Total Rows" width="120px">
-                          <Input
-                            type="number"
-                            value={tracker.totalRows}
-                            onChange={(e) =>
-                              updateRowTracker(
-                                index,
-                                'totalRows',
-                                e.target.value,
-                              )
-                            }
-                            placeholder="0"
-                            bg="card.bg"
-                            color="fg.default"
-                            borderColor="input.border"
-                            size="sm"
-                            min="0"
-                          />
-                        </Field>
-
-                        {rowTrackers.length > 1 && (
-                          <IconButton
-                            size="sm"
-                            onClick={() => removeRowTracker(index)}
-                            bg="deleteButton"
-                            color="white"
-                            _hover={{ opacity: 0.8 }}
-                          >
-                            ×
-                          </IconButton>
-                        )}
-                      </HStack>
-                    </Box>
-                  ))}
-                </VStack>
-              </Box>
+              <RowTrackersSection
+                rowTrackers={rowTrackers}
+                onAddTracker={addRowTracker}
+                onRemoveTracker={removeRowTracker}
+                onUpdateTracker={updateRowTracker}
+                isEditable={true}
+              />
 
               <Field label="Notes (optional)">
                 <Textarea

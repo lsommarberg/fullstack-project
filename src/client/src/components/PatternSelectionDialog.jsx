@@ -10,6 +10,46 @@ import {
 } from '@chakra-ui/react';
 import patternService from '../services/pattern';
 
+export const PatternMenu = ({
+  onPatternSelect,
+  patterns,
+  selectedPatternName,
+}) => {
+  return (
+    <Menu.Root>
+      <Menu.Trigger asChild>
+        <Button
+          bg="input.bg"
+          width="100%"
+          borderRadius="md"
+          p={4}
+          border="1px solid"
+          borderColor="input.border"
+          color="fg.default"
+        >
+          {selectedPatternName || 'Select a pattern'}
+        </Button>
+      </Menu.Trigger>
+      <Menu.Positioner>
+        <Menu.Content>
+          <Menu.Item onClick={() => onPatternSelect('', '')} value="">
+            No pattern
+          </Menu.Item>
+          {patterns.map((pattern) => (
+            <Menu.Item
+              key={pattern.id}
+              onClick={() => onPatternSelect(pattern.id, pattern.name)}
+              value={pattern.id}
+            >
+              {pattern.name}
+            </Menu.Item>
+          ))}
+        </Menu.Content>
+      </Menu.Positioner>
+    </Menu.Root>
+  );
+};
+
 const PatternSelectionDialog = ({ isOpen, onClose, onConfirm, userId }) => {
   const [patterns, setPatterns] = useState([]);
   const [selectedPattern, setSelectedPattern] = useState('');
@@ -75,34 +115,11 @@ const PatternSelectionDialog = ({ isOpen, onClose, onConfirm, userId }) => {
                 {isLoading ? (
                   <Text>Loading patterns...</Text>
                 ) : patterns.length > 0 ? (
-                  <Menu.Root>
-                    <Menu.Trigger asChild>
-                      <Button bg="input.bg" color="fg.default" width="100%">
-                        {selectedPatternName || 'Select a pattern (optional)'}
-                      </Button>
-                    </Menu.Trigger>
-                    <Menu.Positioner>
-                      <Menu.Content>
-                        <Menu.Item
-                          onClick={() => handlePatternSelect('', '')}
-                          value=""
-                        >
-                          No pattern
-                        </Menu.Item>
-                        {patterns.map((pattern) => (
-                          <Menu.Item
-                            key={pattern.id}
-                            onClick={() =>
-                              handlePatternSelect(pattern.id, pattern.name)
-                            }
-                            value={pattern.id}
-                          >
-                            {pattern.name}
-                          </Menu.Item>
-                        ))}
-                      </Menu.Content>
-                    </Menu.Positioner>
-                  </Menu.Root>
+                  <PatternMenu
+                    onPatternSelect={handlePatternSelect}
+                    patterns={patterns}
+                    selectedPatternName={selectedPatternName}
+                  />
                 ) : (
                   <Text fontSize="sm" color="gray.500">
                     No patterns available. You can create one first or start

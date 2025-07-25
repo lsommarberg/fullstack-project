@@ -7,12 +7,14 @@ import Notes from '../pattern/Notes';
 import { toaster } from '../ui/toaster';
 import ConfirmDialog from '../ConfirmDialog';
 import { RowTracker } from './RowTracker';
+import EditProject from './EditProject';
 
 const ProjectPage = () => {
   const { id, projectId } = useParams();
   const [projectData, setProjectData] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,6 +86,39 @@ const ProjectPage = () => {
     }
   };
 
+  const updateProject = (updatedData) => {
+    setProjectData((prevData) => ({
+      ...prevData,
+      ...updatedData,
+    }));
+    projectService.updateProject(id, projectId, {
+      name: updatedData.name,
+      notes: updatedData.notes,
+      rowTrackers: updatedData.rowTrackers,
+      pattern: updatedData.pattern ? updatedData.pattern.id : pattern.id,
+    });
+    setIsEditing(false);
+    toaster.success({ description: 'Project updated successfully' });
+  };
+
+  if (isEditing) {
+    return (
+      <SidebarLayout userId={id}>
+        {projectData && (
+          <EditProject
+            name={name}
+            notes={notes}
+            rowTrackers={rowTrackers}
+            pattern={pattern}
+            onSave={updateProject}
+            onCancel={() => setIsEditing(false)}
+            userId={id}
+          />
+        )}
+      </SidebarLayout>
+    );
+  }
+
   return (
     <SidebarLayout userId={id}>
       {projectData ? (
@@ -100,7 +135,7 @@ const ProjectPage = () => {
                 {name}
               </Text>
               <HStack spacing={4}>
-                <Button>Edit Project</Button>
+                <Button onClick={() => setIsEditing(true)}>Edit Project</Button>
                 <Button>Finish project</Button>
                 <Button
                   color="deleteButton"
