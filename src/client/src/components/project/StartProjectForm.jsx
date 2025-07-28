@@ -159,7 +159,9 @@ const ProjectForm = () => {
             </Stack>
 
             <HStack mt={4} spacing={4}>
-              <Button type="submit">Create Project</Button>
+              <Button data-testid="create-project-button" type="submit">
+                Create Project
+              </Button>
               <Button onClick={() => navigate(-1)} bg="cancelButton">
                 Cancel
               </Button>

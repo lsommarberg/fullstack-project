@@ -186,7 +186,7 @@ const ProjectPage = () => {
               confirmText={'Delete Project'}
               cancelText="Cancel"
               title="Delete Project"
-              description="Are you sure you want to delete this project?"
+              message="Are you sure you want to delete this project?"
             />
           </Box>
         </>
