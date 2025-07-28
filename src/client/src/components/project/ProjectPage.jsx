@@ -91,11 +91,16 @@ const ProjectPage = () => {
       ...prevData,
       ...updatedData,
     }));
+
+    if (updatedData.pattern) {
+      updatedData.pattern = updatedData.pattern.id;
+    }
+
     projectService.updateProject(id, projectId, {
       name: updatedData.name,
       notes: updatedData.notes,
       rowTrackers: updatedData.rowTrackers,
-      pattern: updatedData.pattern ? updatedData.pattern.id : pattern.id,
+      pattern: updatedData.pattern,
     });
     setIsEditing(false);
     toaster.success({ description: 'Project updated successfully' });
