@@ -1,7 +1,7 @@
 import { Box, Flex, VStack, Button, Link, Text } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import PatternSelectionDialog from './PatternSelectionDialog';
+import PatternSelectionDialog from '../PatternSelectionDialog';
 
 const SidebarLayout = ({ children, userId }) => {
   const navigate = useNavigate();

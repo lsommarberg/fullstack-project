@@ -8,7 +8,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import RowTrackersSection from '../RowTrackersSection';
+import RowTrackersSection from './RowTrackersSection';
 import { Field } from '@/components/ui/field';
 import { PatternMenu } from '../PatternSelectionDialog';
 import patternService from '../../services/pattern';

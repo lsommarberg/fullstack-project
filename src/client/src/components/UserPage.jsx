@@ -1,6 +1,5 @@
-import React from 'react';
 import { Text } from '@chakra-ui/react';
-import SidebarLayout from './SidebarLayout';
+import SidebarLayout from './layout/SidebarLayout';
 
 const UserPage = ({ user }) => {
   if (!user) {

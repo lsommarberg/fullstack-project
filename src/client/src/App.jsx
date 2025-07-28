@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Navigation from './components/Navigation';
 import UserPage from './components/UserPage';
-import PatternList from './components/PatternsList';
+import PatternList from './components/pattern/PatternsList';
 import PatternPage from './components/pattern/PatternPage';
-import PatternForm from './components/CreatePattern';
-import ProjectsList from './components/ProjectsList';
+import PatternForm from './components/pattern/CreatePattern';
+import ProjectsList from './components/project/ProjectsList';
 import ProjectPage from './components/project/ProjectPage';
-import ProjectForm from './components/StartProjectForm';
+import ProjectForm from './components/project/StartProjectForm';
 import { Toaster } from './components/ui/toaster';
 
 const App = () => {

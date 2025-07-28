@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 import { Text, Link, Box, Flex, HStack, Button } from '@chakra-ui/react';
 import projectService from '../../services/project';
-import SidebarLayout from '../SidebarLayout';
+import SidebarLayout from '../layout/SidebarLayout';
 import Notes from '../pattern/Notes';
 import { toaster } from '../ui/toaster';
 import ConfirmDialog from '../ConfirmDialog';

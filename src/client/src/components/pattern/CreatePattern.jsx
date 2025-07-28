@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -10,9 +10,9 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
-import SidebarLayout from './SidebarLayout';
-import patternService from '../services/pattern';
-import { toaster } from './ui/toaster';
+import SidebarLayout from '../layout/SidebarLayout';
+import patternService from '../../services/pattern';
+import { toaster } from '../ui/toaster';
 
 const PatternForm = () => {
   const { id } = useParams();

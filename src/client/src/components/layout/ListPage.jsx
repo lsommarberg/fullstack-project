@@ -1,6 +1,6 @@
 import { Stack, Text, Flex, Card, Input, Button } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
-import SidebarLayout from '../SidebarLayout';
+import SidebarLayout from './SidebarLayout';
 
 const ListPage = ({
   userId,

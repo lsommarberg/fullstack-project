@@ -10,11 +10,11 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
-import SidebarLayout from './SidebarLayout';
+import SidebarLayout from '../layout/SidebarLayout';
 import RowTrackersSection from './RowTrackersSection';
-import projectService from '../services/project';
-import patternService from '../services/pattern';
-import { toaster } from './ui/toaster';
+import projectService from '../../services/project';
+import patternService from '../../services/pattern';
+import { toaster } from '../ui/toaster';
 
 const ProjectForm = () => {
   const { id } = useParams();

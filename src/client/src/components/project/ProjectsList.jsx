@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Text, Flex } from '@chakra-ui/react';
 import { useParams, useNavigate } from 'react-router-dom';
-import projectService from '../services/project';
-import ListPage from './layout/ListPage';
+import projectService from '../../services/project';
+import ListPage from '../layout/ListPage';
 
 const ProjectsList = () => {
   const { id } = useParams();

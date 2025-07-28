@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import patternService from '../../services/pattern';
-import SidebarLayout from '../SidebarLayout';
+import SidebarLayout from '../layout/SidebarLayout';
 import Notes from './Notes';
 import TagList from './TagList';
 import PatternText from './PatternText';

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Text, Flex } from '@chakra-ui/react';
 import { useParams, useNavigate } from 'react-router-dom';
-import patternService from '../services/pattern';
+import patternService from '../../services/pattern';
 import { Tag } from '@/components/ui/tag';
-import ListPage from './layout/ListPage';
+import ListPage from '../layout/ListPage';
 
 const PatternList = () => {
   const { id } = useParams();

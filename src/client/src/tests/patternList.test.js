@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from './test-utils';
-import PatternList from '../components/PatternsList';
+import PatternList from '../components/pattern/PatternsList';
 import patternService from '../services/pattern';
 import { useNavigate, useParams } from 'react-router-dom';
 
