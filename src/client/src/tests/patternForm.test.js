@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from './test-utils';
-import PatternForm from '../components/CreatePattern';
+import PatternForm from '../components/pattern/CreatePattern';
 import patternService from '../services/pattern';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toaster } from '@/components/ui/toaster';

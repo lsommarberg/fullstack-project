@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from './test-utils';
-import PatternList from '../components/PatternsList';
+import PatternList from '../components/pattern/PatternsList';
 import patternService from '../services/pattern';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -24,7 +24,7 @@ describe('PatternList', () => {
 
   test('renders without crashing', () => {
     render(<PatternList />);
-    expect(screen.getByText(/No patterns yet/i)).toBeInTheDocument();
+    expect(screen.getByText('My Patterns:')).toBeInTheDocument();
   });
 
   test('fetches and displays patterns', async () => {

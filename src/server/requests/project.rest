@@ -1,0 +1,38 @@
+
+POST http://localhost:3001/api/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzUzMDg0MjQ3LCJleHAiOjE3NTMwODc4NDd9.QocoSXRWvFblreG8AmzohOahK9P66AP32Jz-UfsaR_Q
+Content-Type: application/json
+
+{
+  "name": "My Knitting Project",
+  "pattern": "687df3208a2fb4e9f00782b4",
+  "notes": "Starting my first scarf project with this pattern."
+}
+
+
+###
+GET http://localhost:3001/api/projects/679b8cec2656a4ebb2a3c70b
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzUzMDg0MjQ3LCJleHAiOjE3NTMwODc4NDd9.QocoSXRWvFblreG8AmzohOahK9P66AP32Jz-UfsaR_Q
+Accept: application/json
+
+###
+GET http://localhost:3001/api/projects/679b8cec2656a4ebb2a3c70b/687df46bd4053a7a678bb62c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzUzMDg0MjQ3LCJleHAiOjE3NTMwODc4NDd9.QocoSXRWvFblreG8AmzohOahK9P66AP32Jz-UfsaR_Q
+Accept: application/json
+
+###
+PUT http://localhost:3001/api/projects/679b8cec2656a4ebb2a3c70b/687df46bd4053a7a678bb62c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzUzMDg0MjQ3LCJleHAiOjE3NTMwODc4NDd9.QocoSXRWvFblreG8AmzohOahK9P66AP32Jz-UfsaR_Q
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Updated Project Name",
+  "notes": "Updated notes for this project.",
+  "finishedAt": "2025-01-21T10:00:00.000Z"
+}
+
+###
+DELETE http://localhost:3001/api/projects/679b8cec2656a4ebb2a3c70b/687df3ada134f3cdf8c0bf31
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjc5YjhjZWMyNjU2YTRlYmIyYTNjNzBiIiwiaWF0IjoxNzUzMDg0MjQ3LCJleHAiOjE3NTMwODc4NDd9.QocoSXRWvFblreG8AmzohOahK9P66AP32Jz-UfsaR_Q
+Accept: application/json

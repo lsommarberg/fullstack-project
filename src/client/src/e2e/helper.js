@@ -19,4 +19,19 @@ const addPattern = async (page, name) => {
   await page.getByTestId('create-pattern-button').click();
 };
 
-export { loginWith, addPattern };
+const addProject = async (page, name) => {
+  await page.getByRole('button', { name: 'Start New' }).click();
+
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByLabel('Project Name').fill(name || 'Test Project');
+
+  await page.getByLabel('Started At').fill('2023-10-01');
+  await page.getByLabel('Section Name').fill('Main Section');
+  await page.getByLabel('Total Rows').fill('100');
+
+  await page.getByLabel('Notes').fill('Test notes for this project');
+
+  await page.getByTestId('create-project-button').click();
+};
+
+export { loginWith, addPattern, addProject };

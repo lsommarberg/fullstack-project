@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import patternService from '../../services/pattern';
-import SidebarLayout from '../SidebarLayout';
+import SidebarLayout from '../layout/SidebarLayout';
 import Notes from './Notes';
 import TagList from './TagList';
 import PatternText from './PatternText';
@@ -121,9 +121,28 @@ const Pattern = () => {
           bg="card.bg"
           color="fg.default"
         >
-          <Text fontSize="2xl" mb={4}>
-            {name}
-          </Text>
+          <Spacer />
+          <Flex justify="space-between" align="center" mb={6}>
+            <Text fontSize="2xl" fontWeight="bold">
+              {name}
+            </Text>
+            <HStack spacing={4}>
+              <Button
+                size="sm"
+                onClick={() =>
+                  navigate(`/projects/${id}/create`, { state: { patternId } })
+                }
+              >
+                Start Project
+              </Button>
+              <Button size="sm" onClick={toggleIsEditing}>
+                Edit Pattern
+              </Button>
+              <Button size="sm" color="deleteButton" onClick={handleDelete}>
+                Delete Pattern
+              </Button>
+            </HStack>
+          </Flex>
 
           <PatternText text={text} />
 
@@ -140,20 +159,6 @@ const Pattern = () => {
           </Box>
 
           <TagList tags={tags} />
-
-          <Flex mt={4} align="center">
-            <Button size="sm">Start Project</Button>
-            <Spacer />
-
-            <HStack spacing={4}>
-              <Button size="sm" onClick={toggleIsEditing}>
-                Edit Pattern
-              </Button>
-              <Button size="sm" color="deleteButton" onClick={handleDelete}>
-                Delete Pattern
-              </Button>
-            </HStack>
-          </Flex>
 
           <ConfirmDialog
             isOpen={showDeleteDialog}
