@@ -22,6 +22,7 @@ jest.mock('@/components/ui/toaster', () => ({
 const getMockProject = () => ({
   name: 'Test Project',
   startedAt: '2023-10-01T00:00:00.000Z',
+  finishedAt: null,
   pattern: {
     id: '1',
     name: 'Test Pattern',
@@ -51,6 +52,7 @@ describe('ProjectPage', () => {
   const mockProjectData = {
     name: 'Test Scarf Project',
     startedAt: '2024-01-15T00:00:00.000Z',
+    finishedAt: null,
     pattern: {
       id: 'pattern123',
       name: 'Basic Scarf Pattern',
