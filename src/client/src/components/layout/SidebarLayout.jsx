@@ -128,7 +128,13 @@ const SidebarLayout = ({ children, userId }) => {
               Archive
             </Text>
             <VStack align="start" spacing={2} pl={2}>
-              <Link fontSize="sm" color="text" _hover={{ color: 'linkText' }}>
+              <Link
+                as={RouterLink}
+                to={`/projects/${userId}/finished`}
+                fontSize="sm"
+                color="text"
+                _hover={{ color: 'linkText' }}
+              >
                 Finished Projects
               </Link>
             </VStack>

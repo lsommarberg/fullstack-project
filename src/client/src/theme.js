@@ -19,7 +19,7 @@ export const config = defineConfig({
           value: { base: '{colors.primary}', _dark: '{colors.dark}' },
         },
         'card.bg': {
-          value: { base: '{colors.secondary}', _dark: 'gray.800' },
+          value: { base: '{colors.secondary}', _dark: '{colors.dark}' },
         },
         'card.border': {
           value: { base: 'gray.200', _dark: 'gray.600' },

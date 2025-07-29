@@ -19,7 +19,9 @@ import { toaster } from '../ui/toaster';
 const ProjectForm = () => {
   const { id } = useParams();
   const [name, setName] = useState('');
-  const [startedAt, setStartedAt] = useState('');
+  const [startedAt, setStartedAt] = useState(
+    new Date().toISOString().split('T')[0],
+  );
   const [notes, setNotes] = useState('');
   const navigate = useNavigate();
   const [rowTrackers, setRowTrackers] = useState([

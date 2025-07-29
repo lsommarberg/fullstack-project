@@ -65,4 +65,27 @@ describe('Project Page', () => {
     await expect(page.getByText('Edited Project')).toBeVisible();
     await expect(page.getByText('Edited notes for this project')).toBeVisible();
   });
+
+  test('user can finish a project', async ({ page }) => {
+    await addProject(page, 'To Finish');
+
+    await expect(page).toHaveURL(/\/projects\/\d+/);
+    await expect(page.getByText('To Finish')).toBeVisible();
+    await page.getByText('To Finish').click();
+
+    await page.getByRole('button', { name: 'Finish Project' }).click();
+
+    await page.getByTestId('confirm-button').click();
+
+    await expect(
+      page.getByText('Project finished successfully!'),
+    ).toBeVisible();
+    await expect(page).toHaveURL(/\/projects\/\d+/);
+    await expect(page.getByText('Finished on: 7/29/2025')).toBeVisible();
+    await expect(page.getByText('Row Trackers')).not.toBeVisible();
+    await page.getByText('My Projects').click();
+    await expect(page.getByText('To Finish')).not.toBeVisible();
+    await page.getByText('Finished Projects').click();
+    await expect(page.getByText('To Finish')).toBeVisible();
+  });
 });

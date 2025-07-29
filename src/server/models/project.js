@@ -17,10 +17,10 @@ const projectSchema = new mongoose.Schema({
   },
   startedAt: {
     type: Date,
-    default: Date.now,
   },
   finishedAt: {
     type: Date,
+    default: null,
   },
   notes: {
     type: String,

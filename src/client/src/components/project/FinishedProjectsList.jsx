@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import projectService from '../../services/project';
 import ListPage from '../layout/ListPage';
 
-const ProjectsList = () => {
+const FinishedProjectsList = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
@@ -15,10 +15,11 @@ const ProjectsList = () => {
       try {
         setIsLoading(true);
         const projects = await projectService.getProjects(id);
-        const ongoingProjects = projects.filter(
-          (project) => project.finishedAt === null,
+        const finishedProjects = projects.filter(
+          (project) => project.finishedAt !== null,
         );
-        setProjects(ongoingProjects);
+
+        setProjects(finishedProjects);
       } catch (error) {
         if (error.response && error.response.status === 401) {
           navigate('/');
@@ -41,17 +42,17 @@ const ProjectsList = () => {
   return (
     <ListPage
       userId={id}
-      title="My Projects"
+      title="Finished Projects"
       items={projects}
-      searchPlaceholder="Search projects..."
+      searchPlaceholder="Search finished projects..."
       createButtonText="Start New"
       createPath={`/projects/${id}/create`}
       renderItem={renderProjectItem}
       getItemPath={(project) => `/projects/${id}/${project.id}`}
       isLoading={isLoading}
-      emptyStateText="No projects yet"
+      emptyStateText="No finished projects yet"
     />
   );
 };
 
-export default ProjectsList;
+export default FinishedProjectsList;

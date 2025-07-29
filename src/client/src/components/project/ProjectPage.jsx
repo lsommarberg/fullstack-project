@@ -8,6 +8,7 @@ import { toaster } from '../ui/toaster';
 import ConfirmDialog from '../ConfirmDialog';
 import { RowTracker } from './RowTracker';
 import EditProject from './EditProject';
+import FinishProjectDialog from './FinishProjectDialog';
 
 const ProjectPage = () => {
   const { id, projectId } = useParams();
@@ -16,6 +17,9 @@ const ProjectPage = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
+  const [isFinishing, setIsFinishing] = useState(false);
+  const [finishDialogOpen, setFinishDialogOpen] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
     const getProjectData = async () => {
@@ -32,7 +36,8 @@ const ProjectPage = () => {
   if (!projectData) {
     return <Text>Loading...</Text>;
   }
-  const { name, startedAt, pattern, notes, rowTrackers } = projectData;
+  const { name, startedAt, pattern, notes, rowTrackers, finishedAt } =
+    projectData;
 
   const formattedDate = new Date(startedAt).toLocaleDateString();
 
@@ -103,7 +108,36 @@ const ProjectPage = () => {
       pattern: updatedData.pattern,
     });
     setIsEditing(false);
+
     toaster.success({ description: 'Project updated successfully' });
+  };
+
+  const handleFinishProject = async (finishData) => {
+    try {
+      setIsFinishing(true);
+
+      await projectService.updateProject(id, projectId, {
+        ...finishData,
+      });
+
+      toaster.success({
+        description: 'Project finished successfully!',
+        duration: 5000,
+      });
+
+      const updatedProject = await projectService.getProjectById(id, projectId);
+      setProjectData(updatedProject);
+      setIsFinished(true);
+      setFinishDialogOpen(false);
+    } catch (error) {
+      console.error('Error finishing project:', error);
+      toaster.error({
+        description: 'Failed to finish project',
+        duration: 5000,
+      });
+    } finally {
+      setIsFinishing(false);
+    }
   };
 
   if (isEditing) {
@@ -124,76 +158,134 @@ const ProjectPage = () => {
     );
   }
 
+  const renderFinishedProject = () => (
+    <Box p={5} shadow="md" borderWidth="1px" bg="card.bg" color="fg.default">
+      <Flex justify="space-between" align="center" mb={4}>
+        <Text fontSize="2xl" fontWeight="bold" color="green.500">
+          ✓ {name} (Completed)
+        </Text>
+        <Button
+          color="deleteButton"
+          onClick={handleDelete}
+          isLoading={isDeleting}
+        >
+          Delete Project
+        </Button>
+      </Flex>
+
+      <Text mb={4}>Started on: {formattedDate}</Text>
+
+      {projectData.finishedAt && (
+        <Text mb={4}>
+          Finished on: {new Date(projectData.finishedAt).toLocaleDateString()}
+        </Text>
+      )}
+
+      <Box mb={4}>
+        <Text fontWeight="bold">Notes:</Text>
+        {notes && <Notes notes={notes} />}
+      </Box>
+
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+        onConfirm={confirmDelete}
+        isLoading={isDeleting}
+        confirmText={'Delete Project'}
+        cancelText="Cancel"
+        title="Delete Project"
+        message="Are you sure you want to delete this project?"
+      />
+    </Box>
+  );
+
   return (
     <SidebarLayout userId={id}>
       {projectData ? (
         <>
-          <Box
-            p={5}
-            shadow="md"
-            borderWidth="1px"
-            bg="card.bg"
-            color="fg.default"
-          >
-            <Flex justify="space-between" align="center" mb={4}>
-              <Text fontSize="2xl" fontWeight="bold" mb={4}>
-                {name}
-              </Text>
-              <HStack spacing={4}>
-                <Button onClick={() => setIsEditing(true)}>Edit Project</Button>
-                <Button>Finish project</Button>
-                <Button
-                  color="deleteButton"
-                  onClick={handleDelete}
+          {isFinished || finishedAt !== null ? (
+            renderFinishedProject()
+          ) : (
+            <>
+              <Box
+                p={5}
+                shadow="md"
+                borderWidth="1px"
+                bg="card.bg"
+                color="fg.default"
+              >
+                <Flex justify="space-between" align="center" mb={4}>
+                  <Text fontSize="2xl" fontWeight="bold" mb={4}>
+                    {name}
+                  </Text>
+                  <HStack spacing={4}>
+                    <Button onClick={() => setIsEditing(true)}>
+                      Edit Project
+                    </Button>
+                    <Button onClick={() => setFinishDialogOpen(true)}>
+                      Finish project
+                    </Button>
+                    <Button
+                      color="deleteButton"
+                      onClick={handleDelete}
+                      isLoading={isDeleting}
+                    >
+                      Delete Project
+                    </Button>
+                  </HStack>
+                </Flex>
+                <Text mb={4}>Started on: {formattedDate}</Text>
+                {pattern && (
+                  <Text mb={4}>
+                    Pattern:{' '}
+                    <Link
+                      as={RouterLink}
+                      to={`/patterns/${id}/${pattern.id}`}
+                      color="blue.500"
+                      textDecoration="underline"
+                    >
+                      {pattern.name}
+                    </Link>
+                  </Text>
+                )}
+                <Box mb={4}>
+                  <Text fontWeight="bold">Row Trackers:</Text>
+                  {rowTrackers.map((tracker, index) => (
+                    <RowTracker
+                      key={index}
+                      index={index}
+                      section={tracker.section}
+                      currentRow={tracker.currentRow}
+                      totalRows={tracker.totalRows}
+                      onCurrentRowChange={onCurrentRowChange}
+                      onTotalRowsChange={onTotalRowsChange}
+                    />
+                  ))}
+                </Box>
+                <Box mb={4}>
+                  <Text fontWeight="bold">Notes:</Text>
+                  {notes && <Notes notes={notes} />}
+                </Box>
+                <ConfirmDialog
+                  isOpen={showDeleteDialog}
+                  onClose={() => setShowDeleteDialog(false)}
+                  onConfirm={confirmDelete}
                   isLoading={isDeleting}
-                >
-                  Delete Project
-                </Button>
-              </HStack>
-            </Flex>
-            <Text mb={4}>Started on: {formattedDate}</Text>
-            {pattern && (
-              <Text mb={4}>
-                Pattern:{' '}
-                <Link
-                  as={RouterLink}
-                  to={`/patterns/${id}/${pattern.id}`}
-                  color="blue.500"
-                  textDecoration="underline"
-                >
-                  {pattern.name}
-                </Link>
-              </Text>
-            )}
-            <Box mb={4}>
-              <Text fontWeight="bold">Row Trackers:</Text>
-              {rowTrackers.map((tracker, index) => (
-                <RowTracker
-                  key={index}
-                  index={index}
-                  section={tracker.section}
-                  currentRow={tracker.currentRow}
-                  totalRows={tracker.totalRows}
-                  onCurrentRowChange={onCurrentRowChange}
-                  onTotalRowsChange={onTotalRowsChange}
+                  confirmText={'Delete Project'}
+                  cancelText="Cancel"
+                  title="Delete Project"
+                  message="Are you sure you want to delete this project?"
                 />
-              ))}
-            </Box>
-            <Box mb={4}>
-              <Text fontWeight="bold">Notes:</Text>
-              {notes && <Notes notes={notes} />}
-            </Box>
-            <ConfirmDialog
-              isOpen={showDeleteDialog}
-              onClose={() => setShowDeleteDialog(false)}
-              onConfirm={confirmDelete}
-              isLoading={isDeleting}
-              confirmText={'Delete Project'}
-              cancelText="Cancel"
-              title="Delete Project"
-              message="Are you sure you want to delete this project?"
-            />
-          </Box>
+                <FinishProjectDialog
+                  isOpen={finishDialogOpen}
+                  onClose={() => setFinishDialogOpen(false)}
+                  onConfirm={handleFinishProject}
+                  isLoading={isFinishing}
+                  currentProjectName={name}
+                />
+              </Box>
+            </>
+          )}
         </>
       ) : (
         <Text>Loading...</Text>

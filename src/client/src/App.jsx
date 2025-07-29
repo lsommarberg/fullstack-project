@@ -10,6 +10,7 @@ import PatternForm from './components/pattern/CreatePattern';
 import ProjectsList from './components/project/ProjectsList';
 import ProjectPage from './components/project/ProjectPage';
 import ProjectForm from './components/project/StartProjectForm';
+import FinishedProjectsList from './components/project/FinishedProjectsList';
 import { Toaster } from './components/ui/toaster';
 
 const App = () => {
@@ -60,6 +61,10 @@ const App = () => {
         <Route path="/projects/:id" element={<ProjectsList />} />
         <Route path="/projects/:id/:projectId" element={<ProjectPage />} />
         <Route path="/projects/:id/create" element={<ProjectForm />} />
+        <Route
+          path="/projects/:id/finished"
+          element={<FinishedProjectsList />}
+        />
       </Routes>
     </div>
   );
