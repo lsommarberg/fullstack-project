@@ -25,7 +25,14 @@ const projectsRouter = require('./controllers/projects');
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin:
+    process.env.NODE_ENV === 'production'
+      ? [process.env.CLIENT_URL]
+      : ['http://localhost:3000', process.env.CLIENT_URL],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(tokenExtractor);
 

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import getToken from '../utils/auth';
+import API_BASE_URL from '../config/api';
 
-const baseUrl = '/api/projects';
+const baseUrl = `${API_BASE_URL}/api/projects`;
 
 const getConfig = () => {
   const token = getToken();

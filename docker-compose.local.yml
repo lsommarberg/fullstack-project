@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  server:
+    build: ./src/server
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=${MONGODB_URI}
+      - SECRET=${SECRET}
+      - CLIENT_URL=http://localhost:3000
+    
+  client:
+    build: ./src/client
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_URL=http://localhost:3001
+    depends_on:
+      - server
