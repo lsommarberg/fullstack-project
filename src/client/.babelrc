@@ -1,12 +1,6 @@
 {
   "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "targets": { "node": "current" },
-        "modules": "auto"
-      }
-    ],
+    "@babel/preset-env",
     ["@babel/preset-react", { "runtime": "automatic" }]
   ]
 }

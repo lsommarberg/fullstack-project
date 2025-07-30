@@ -21,13 +21,4 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(axios|@chakra-ui|framer-motion)/)',
-  ],
-  extensionsToTreatAsEsm: ['.jsx'],
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
-  },
 };

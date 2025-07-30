@@ -1,6 +1,8 @@
 import '@testing-library/jest-dom';
 const { TextEncoder, TextDecoder } = require('util');
 
+jest.mock('./src/config/api', () => 'http://localhost:3001');
+
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
