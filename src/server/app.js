@@ -25,8 +25,6 @@ const projectsRouter = require('./controllers/projects');
 
 const app = express();
 
-const allowedOrigins = process.env.CLIENT_URL ? [process.env.CLIENT_URL] : [];
-
 app.use(
   cors({
     origin:
