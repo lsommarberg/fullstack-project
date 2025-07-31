@@ -29,9 +29,10 @@ const allowedOrigins = process.env.CLIENT_URL ? [process.env.CLIENT_URL] : [];
 
 app.use(
   cors({
-    origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? [process.env.CLIENT_URL]
+        : ['http://localhost:3000', process.env.CLIENT_URL],
     credentials: true,
   }),
 );
