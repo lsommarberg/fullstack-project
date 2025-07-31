@@ -25,14 +25,17 @@ const projectsRouter = require('./controllers/projects');
 
 const app = express();
 
-const corsOptions = {
-  origin:
-    process.env.NODE_ENV === 'production'
-      ? [process.env.CLIENT_URL]
-      : ['http://localhost:3000', process.env.CLIENT_URL],
-};
+const allowedOrigins = process.env.CLIENT_URL ? [process.env.CLIENT_URL] : [];
 
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 app.use(tokenExtractor);
 
