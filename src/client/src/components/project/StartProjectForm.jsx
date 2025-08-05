@@ -14,6 +14,7 @@ import SidebarLayout from '../layout/SidebarLayout';
 import RowTrackersSection from './RowTrackersSection';
 import projectService from '../../services/project';
 import patternService from '../../services/pattern';
+import UploadImage from '../UploadImage';
 import { toaster } from '../ui/toaster';
 
 const ProjectForm = () => {
@@ -27,7 +28,7 @@ const ProjectForm = () => {
   const [rowTrackers, setRowTrackers] = useState([
     { section: '', currentRow: 0, totalRows: '' },
   ]);
-
+  const [imageUrl, setImageUrl] = useState('');
   const location = useLocation();
   const patternFromState = location.state?.patternId;
 
@@ -93,6 +94,7 @@ const ProjectForm = () => {
         rowTrackers: validRowTrackers,
         pattern: patternFromState || null,
         notes,
+        files: imageUrl ? [imageUrl] : [],
       });
       toaster.success({
         description: 'Project created successfully',
@@ -103,6 +105,23 @@ const ProjectForm = () => {
       console.error('Error creating project:', error);
       toaster.error({ description: 'Error creating project', duration: 5000 });
     }
+  };
+
+  const handleImageUpload = (uploadedImageUrl) => {
+    console.log('Image upload success callback called:', uploadedImageUrl);
+    setImageUrl(uploadedImageUrl);
+    toaster.success({
+      description: 'Image uploaded successfully',
+      duration: 3000,
+    });
+  };
+
+  const handleImageError = (error) => {
+    console.error('Image upload failed:', error);
+    toaster.error({
+      description: `Image upload failed: ${error}`,
+      duration: 5000,
+    });
   };
 
   return (
@@ -147,7 +166,13 @@ const ProjectForm = () => {
                 onUpdateTracker={updateRowTracker}
                 isEditable={true}
               />
-
+              <Field label="Image Upload">
+                <UploadImage
+                  onUploadSuccess={handleImageUpload}
+                  onUploadError={handleImageError}
+                  imageUrl={imageUrl}
+                />
+              </Field>
               <Field label="Notes (optional)">
                 <Textarea
                   value={notes}

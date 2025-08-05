@@ -18,6 +18,7 @@ import PatternText from './PatternText';
 import EditPattern from './EditPattern';
 import { toaster } from '../ui/toaster';
 import ConfirmDialog from '../ConfirmDialog';
+import { ImageDisplay } from '../ImageDisplay';
 
 const Pattern = () => {
   const { id, patternId } = useParams();
@@ -45,7 +46,7 @@ const Pattern = () => {
   if (!patternData) {
     return <Text> Loading... </Text>;
   }
-  const { name, text, link, notes, tags } = patternData;
+  const { name, text, link, notes, tags, files } = patternData;
 
   const handleDelete = async () => {
     setShowDeleteDialog(true);
@@ -146,10 +147,16 @@ const Pattern = () => {
 
           <PatternText text={text} />
 
+          {files && files.length > 0 && (
+            <ImageDisplay files={files} headerText="Pattern Images" />
+          )}
+
           {link && (
-            <Link href={link} color="blue.500" isExternal>
-              Link to pattern
-            </Link>
+            <Box mt={4}>
+              <Link href={link} color="blue.500" isExternal>
+                Link to pattern
+              </Link>
+            </Box>
           )}
           <Box mt={4}>
             <Text fontSize="lg" mb={4}>

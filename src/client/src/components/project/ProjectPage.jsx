@@ -9,6 +9,7 @@ import ConfirmDialog from '../ConfirmDialog';
 import { RowTracker } from './RowTracker';
 import EditProject from './EditProject';
 import FinishProjectDialog from './FinishProjectDialog';
+import { ImageDisplay } from '../ImageDisplay';
 
 const ProjectPage = () => {
   const { id, projectId } = useParams();
@@ -36,7 +37,7 @@ const ProjectPage = () => {
   if (!projectData) {
     return <Text>Loading...</Text>;
   }
-  const { name, startedAt, pattern, notes, rowTrackers, finishedAt } =
+  const { name, startedAt, pattern, notes, rowTrackers, finishedAt, files } =
     projectData;
 
   const formattedDate = new Date(startedAt).toLocaleDateString();
@@ -250,21 +251,29 @@ const ProjectPage = () => {
                 )}
                 <Box mb={4}>
                   <Text fontWeight="bold">Row Trackers:</Text>
-                  {rowTrackers.map((tracker, index) => (
-                    <RowTracker
-                      key={index}
-                      index={index}
-                      section={tracker.section}
-                      currentRow={tracker.currentRow}
-                      totalRows={tracker.totalRows}
-                      onCurrentRowChange={onCurrentRowChange}
-                      onTotalRowsChange={onTotalRowsChange}
-                    />
-                  ))}
+                  {rowTrackers.length === 0 ? (
+                    <Text>No row trackers available</Text>
+                  ) : (
+                    rowTrackers.map((tracker, index) => (
+                      <RowTracker
+                        key={index}
+                        index={index}
+                        section={tracker.section}
+                        currentRow={tracker.currentRow}
+                        totalRows={tracker.totalRows}
+                        onCurrentRowChange={onCurrentRowChange}
+                        onTotalRowsChange={onTotalRowsChange}
+                      />
+                    ))
+                  )}
                 </Box>
+
+                {files && files.length > 0 && (
+                  <ImageDisplay files={files} headerText="Project Images" />
+                )}
                 <Box mb={4}>
                   <Text fontWeight="bold">Notes:</Text>
-                  {notes && <Notes notes={notes} />}
+                  {<Notes notes={notes} />}
                 </Box>
                 <ConfirmDialog
                   isOpen={showDeleteDialog}
