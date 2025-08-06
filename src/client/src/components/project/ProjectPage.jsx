@@ -9,7 +9,9 @@ import ConfirmDialog from '../ConfirmDialog';
 import { RowTracker } from './RowTracker';
 import EditProject from './EditProject';
 import FinishProjectDialog from './FinishProjectDialog';
-import { ImageDisplay } from '../ImageDisplay';
+import FinishedProject from './FinishedProject';
+import ImageDisplay from '../ImageDisplay';
+import useImageUpload from '../../hooks/useImageManagement';
 
 const ProjectPage = () => {
   const { id, projectId } = useParams();
@@ -21,6 +23,7 @@ const ProjectPage = () => {
   const [isFinishing, setIsFinishing] = useState(false);
   const [finishDialogOpen, setFinishDialogOpen] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+  const { deleteImage } = useImageUpload();
 
   useEffect(() => {
     const getProjectData = async () => {
@@ -117,9 +120,26 @@ const ProjectPage = () => {
     try {
       setIsFinishing(true);
 
-      await projectService.updateProject(id, projectId, {
-        ...finishData,
-      });
+      if (finishData.deleteExistingImages && files && files.length > 0) {
+        const uploadService = await import('../../services/upload');
+
+        for (const image of files) {
+          try {
+            await uploadService.deleteImage(image.publicId);
+          } catch (error) {
+            console.error('Failed to delete image:', error);
+          }
+        }
+      }
+
+      const updateData = {
+        name: finishData.name,
+        finishedAt: finishData.finishedAt,
+        notes: finishData.notes,
+        files: finishData.images,
+      };
+
+      await projectService.updateProject(id, projectId, updateData);
 
       toaster.success({
         description: 'Project finished successfully!',
@@ -138,6 +158,23 @@ const ProjectPage = () => {
       });
     } finally {
       setIsFinishing(false);
+    }
+  };
+
+  const handleImageDelete = async (publicId) => {
+    if (!window.confirm('Are you sure you want to delete this image?')) {
+      return;
+    }
+    try {
+      await deleteImage(publicId);
+      setProjectData((prevData) => ({
+        ...prevData,
+        files: prevData.files.filter((file) => file.publicId !== publicId),
+      }));
+      toaster.success({ description: 'Image deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      toaster.error({ description: 'Failed to delete image' });
     }
   };
 
@@ -160,44 +197,16 @@ const ProjectPage = () => {
   }
 
   const renderFinishedProject = () => (
-    <Box p={5} shadow="md" borderWidth="1px" bg="card.bg" color="fg.default">
-      <Flex justify="space-between" align="center" mb={4}>
-        <Text fontSize="2xl" fontWeight="bold" color="green.500">
-          ✓ {name} (Completed)
-        </Text>
-        <Button
-          color="deleteButton"
-          onClick={handleDelete}
-          isLoading={isDeleting}
-        >
-          Delete Project
-        </Button>
-      </Flex>
-
-      <Text mb={4}>Started on: {formattedDate}</Text>
-
-      {projectData.finishedAt && (
-        <Text mb={4}>
-          Finished on: {new Date(projectData.finishedAt).toLocaleDateString()}
-        </Text>
-      )}
-
-      <Box mb={4}>
-        <Text fontWeight="bold">Notes:</Text>
-        {notes && <Notes notes={notes} />}
-      </Box>
-
-      <ConfirmDialog
-        isOpen={showDeleteDialog}
-        onClose={() => setShowDeleteDialog(false)}
-        onConfirm={confirmDelete}
-        isLoading={isDeleting}
-        confirmText={'Delete Project'}
-        cancelText="Cancel"
-        title="Delete Project"
-        message="Are you sure you want to delete this project?"
-      />
-    </Box>
+    <FinishedProject
+      projectData={projectData}
+      formattedDate={formattedDate}
+      handleDelete={handleDelete}
+      handleImageDelete={handleImageDelete}
+      showDeleteDialog={showDeleteDialog}
+      setShowDeleteDialog={setShowDeleteDialog}
+      confirmDelete={confirmDelete}
+      isDeleting={isDeleting}
+    />
   );
 
   return (
@@ -269,7 +278,11 @@ const ProjectPage = () => {
                 </Box>
 
                 {files && files.length > 0 && (
-                  <ImageDisplay files={files} headerText="Project Images" />
+                  <ImageDisplay
+                    files={files}
+                    headerText="Project Images"
+                    onImageDelete={handleImageDelete}
+                  />
                 )}
                 <Box mb={4}>
                   <Text fontWeight="bold">Notes:</Text>
@@ -291,6 +304,7 @@ const ProjectPage = () => {
                   onConfirm={handleFinishProject}
                   isLoading={isFinishing}
                   currentProjectName={name}
+                  currentImages={files}
                 />
               </Box>
             </>

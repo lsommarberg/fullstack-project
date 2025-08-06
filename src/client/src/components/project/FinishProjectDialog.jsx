@@ -7,8 +7,14 @@ import {
   Input,
   Textarea,
   VStack,
+  Checkbox,
+  Text,
+  Box,
+  HStack,
 } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
+import UploadImage from '../UploadImage';
+import ImageDisplay from '../ImageDisplay';
 
 const FinishProjectDialog = ({
   isOpen,
@@ -19,24 +25,58 @@ const FinishProjectDialog = ({
   confirmText = 'Finish Project',
   isLoading = false,
   currentProjectName = '',
+  currentImages = [],
 }) => {
   const [projectName, setProjectName] = useState('');
   const [finishDate, setFinishDate] = useState('');
   const [notes, setNotes] = useState('');
+  const [newImages, setNewImages] = useState([]);
+  const [keepExistingImages, setKeepExistingImages] = useState(true);
+  const [deleteExistingImages, setDeleteExistingImages] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setProjectName(currentProjectName);
       setFinishDate(new Date().toISOString().split('T')[0]);
       setNotes('');
+      setNewImages([]);
+      setKeepExistingImages(true);
+      setDeleteExistingImages(false);
     }
   }, [isOpen, currentProjectName]);
 
+  const handleImageUpload = (uploadedImageUrl, fullResult) => {
+    if (uploadedImageUrl === null) {
+      setNewImages((prev) =>
+        prev.filter((img) => img.publicId !== fullResult?.publicId),
+      );
+      return;
+    }
+
+    const imageObject = {
+      url: uploadedImageUrl,
+      publicId: fullResult.publicId,
+      size: fullResult.size,
+    };
+
+    setNewImages((prev) => [...prev, imageObject]);
+  };
+
   const handleConfirm = async () => {
+    let finalImages = [];
+
+    if (keepExistingImages) {
+      finalImages = [...currentImages];
+    }
+
+    finalImages = [...finalImages, ...newImages];
+
     const finishData = {
       name: projectName,
       finishedAt: finishDate,
       notes: notes.trim() || undefined,
+      images: finalImages,
+      deleteExistingImages: deleteExistingImages && !keepExistingImages,
     };
 
     await onConfirm(finishData);
@@ -46,6 +86,9 @@ const FinishProjectDialog = ({
     setProjectName(currentProjectName);
     setFinishDate(new Date().toISOString().split('T')[0]);
     setNotes('');
+    setNewImages([]);
+    setKeepExistingImages(true);
+    setDeleteExistingImages(false);
     onClose();
   };
 
@@ -54,7 +97,7 @@ const FinishProjectDialog = ({
       placement="center"
       open={isOpen}
       onOpenChange={onClose}
-      size="md"
+      size="lg"
     >
       <Portal>
         <Dialog.Backdrop />
@@ -90,6 +133,85 @@ const FinishProjectDialog = ({
                   />
                 </Field>
 
+                {currentImages && currentImages.length > 0 && (
+                  <Box>
+                    <Text fontWeight="bold" mb={2}>
+                      Current Project Images
+                    </Text>
+                    <ImageDisplay
+                      files={currentImages}
+                      headerText=""
+                      showDeleteButton={false}
+                    />
+
+                    <VStack align="start" spacing={2} mt={3}>
+                      <Checkbox.Root
+                        variant={'solid'}
+                        checked={keepExistingImages}
+                        onCheckedChange={(details) => {
+                          setKeepExistingImages(details.checked);
+                          if (details.checked) {
+                            setDeleteExistingImages(false);
+                          }
+                        }}
+                      >
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <Checkbox.Label>
+                          Keep existing images in finished project
+                        </Checkbox.Label>
+                      </Checkbox.Root>
+                      {!keepExistingImages && (
+                        <Checkbox.Root
+                          checked={deleteExistingImages}
+                          onCheckedChange={(details) =>
+                            setDeleteExistingImages(details.checked)
+                          }
+                          colorScheme="red"
+                        >
+                          <Checkbox.HiddenInput />
+                          <Checkbox.Control>
+                            <Checkbox.Indicator />
+                          </Checkbox.Control>
+                          <Checkbox.Label>
+                            Delete existing images from storage (this cannot be
+                            undone)
+                          </Checkbox.Label>
+                        </Checkbox.Root>
+                      )}
+                    </VStack>
+                  </Box>
+                )}
+
+                <Field
+                  label="Add Final Images"
+                  helperText="Upload any final images for this finished project (optional)"
+                >
+                  <UploadImage
+                    type="projects"
+                    onUploadSuccess={handleImageUpload}
+                    onUploadError={(error) =>
+                      console.error('Image upload error:', error)
+                    }
+                    showPreview={true}
+                  />
+                </Field>
+
+                {newImages.length > 0 && (
+                  <Box>
+                    <Text fontWeight="bold" mb={2}>
+                      Newly Added Images
+                    </Text>
+                    <ImageDisplay
+                      files={newImages}
+                      headerText=""
+                      showDeleteButton={false}
+                    />
+                  </Box>
+                )}
+
                 <Field label="Notes (optional)">
                   <Textarea
                     value={notes}
@@ -105,24 +227,26 @@ const FinishProjectDialog = ({
             </Dialog.Body>
 
             <Dialog.Footer>
-              <Dialog.ActionTrigger asChild>
+              <HStack spacing={2}>
+                <Dialog.ActionTrigger asChild>
+                  <Button
+                    variant="outline"
+                    onClick={handleCancel}
+                    bg="cancelButton"
+                  >
+                    {cancelText}
+                  </Button>
+                </Dialog.ActionTrigger>
                 <Button
-                  variant="outline"
-                  onClick={handleCancel}
-                  bg="cancelButton"
+                  data-testid="confirm-button"
+                  onClick={handleConfirm}
+                  isLoading={isLoading}
+                  disabled={!projectName.trim() || !finishDate}
+                  colorScheme="green"
                 >
-                  {cancelText}
+                  {confirmText}
                 </Button>
-              </Dialog.ActionTrigger>
-              <Button
-                data-testid="confirm-button"
-                onClick={handleConfirm}
-                isLoading={isLoading}
-                disabled={!projectName.trim() || !finishDate}
-                colorScheme="green"
-              >
-                {confirmText}
-              </Button>
+              </HStack>
             </Dialog.Footer>
 
             <Dialog.CloseTrigger asChild>

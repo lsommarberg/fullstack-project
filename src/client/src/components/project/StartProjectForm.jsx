@@ -29,6 +29,7 @@ const ProjectForm = () => {
     { section: '', currentRow: 0, totalRows: '' },
   ]);
   const [imageUrl, setImageUrl] = useState('');
+  const [publicId, setPublicId] = useState('');
   const location = useLocation();
   const patternFromState = location.state?.patternId;
 
@@ -94,7 +95,9 @@ const ProjectForm = () => {
         rowTrackers: validRowTrackers,
         pattern: patternFromState || null,
         notes,
-        files: imageUrl ? [imageUrl] : [],
+        files: imageUrl
+          ? [{ url: imageUrl, publicId, uploadedAt: new Date() }]
+          : [],
       });
       toaster.success({
         description: 'Project created successfully',
@@ -107,9 +110,14 @@ const ProjectForm = () => {
     }
   };
 
-  const handleImageUpload = (uploadedImageUrl) => {
-    console.log('Image upload success callback called:', uploadedImageUrl);
+  const handleImageUpload = (uploadedImageUrl, fullResult) => {
+    if (uploadedImageUrl === null) {
+      setImageUrl('');
+      setPublicId('');
+      return;
+    }
     setImageUrl(uploadedImageUrl);
+    setPublicId(fullResult.publicId);
     toaster.success({
       description: 'Image uploaded successfully',
       duration: 3000,
@@ -171,6 +179,7 @@ const ProjectForm = () => {
                   onUploadSuccess={handleImageUpload}
                   onUploadError={handleImageError}
                   imageUrl={imageUrl}
+                  type="project"
                 />
               </Field>
               <Field label="Notes (optional)">

@@ -1,5 +1,6 @@
 const express = require('express');
 const upload = require('../middleware/upload');
+const cloudinary = require('../config/cloudinary');
 const { userExtractor } = require('../utils/middleware');
 const router = express.Router();
 
@@ -23,18 +24,24 @@ router.post('/', upload.single('image'), async (req, res) => {
   });
 });
 
-router.delete('/:publicId', userExtractor, async (req, res) => {
-  const { publicId } = req.params;
+router.delete('/', userExtractor, async (req, res) => {
+  const { publicId } = req.body;
 
-  const imageInfo = await cloudinary.api.resource(publicId);
-
-  if (!imageInfo) {
+  if (!publicId) {
     return res.status(404).json({
       success: false,
       message: 'Image not found',
     });
   }
 
+  const imageInfo = await cloudinary.api.resource(publicId);
+
+  if (!imageInfo) {
+    return res.status(404).json({
+      success: false,
+      message: 'Image not found in storage',
+    });
+  }
   const result = await cloudinary.uploader.destroy(publicId);
 
   if (result.result !== 'ok') {
@@ -43,17 +50,6 @@ router.delete('/:publicId', userExtractor, async (req, res) => {
       message: 'Failed to delete image from storage',
     });
   }
-
-  const updatedUser = await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      $inc: {
-        'uploadStats.totalFiles': -1,
-        'uploadStats.totalSizeBytes': -imageInfo.bytes,
-      },
-    },
-    { new: true },
-  );
 
   res.json({
     success: true,

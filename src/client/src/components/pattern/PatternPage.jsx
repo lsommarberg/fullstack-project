@@ -18,7 +18,8 @@ import PatternText from './PatternText';
 import EditPattern from './EditPattern';
 import { toaster } from '../ui/toaster';
 import ConfirmDialog from '../ConfirmDialog';
-import { ImageDisplay } from '../ImageDisplay';
+import ImageDisplay from '../ImageDisplay';
+import useImageUpload from '../../hooks/useImageManagement';
 
 const Pattern = () => {
   const { id, patternId } = useParams();
@@ -27,6 +28,7 @@ const Pattern = () => {
   const [error, setError] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { deleteImage } = useImageUpload();
 
   const navigate = useNavigate();
 
@@ -98,6 +100,29 @@ const Pattern = () => {
     setIsEditing(false);
   };
 
+  const handleImageDelete = async (publicId) => {
+    if (!window.confirm('Are you sure you want to delete this image?')) {
+      return;
+    }
+    try {
+      await deleteImage(publicId);
+      const updatedFiles = files.filter((file) => file.publicId !== publicId);
+      setPatternData((prevData) => ({
+        ...prevData,
+        files: updatedFiles,
+      }));
+      await patternService.updatePattern(id, patternId, {
+        files: updatedFiles,
+      });
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      toaster.error({
+        description: `Failed to delete image: ${error.message}`,
+        duration: 5000,
+      });
+    }
+  };
+
   return (
     <SidebarLayout userId={id}>
       {!patternData ? (
@@ -148,7 +173,11 @@ const Pattern = () => {
           <PatternText text={text} />
 
           {files && files.length > 0 && (
-            <ImageDisplay files={files} headerText="Pattern Images" />
+            <ImageDisplay
+              files={files}
+              headerText="Pattern Images"
+              onImageDelete={handleImageDelete}
+            />
           )}
 
           {link && (

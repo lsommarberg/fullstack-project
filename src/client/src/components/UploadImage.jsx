@@ -1,99 +1,131 @@
 import { useState } from 'react';
-import { Button, FileUpload, Text, VStack } from '@chakra-ui/react';
+import { Button, FileUpload, Text, VStack, Box, Image } from '@chakra-ui/react';
 import { HiUpload } from 'react-icons/hi';
-import { uploadImage } from '../services/upload';
+import useImageUpload from '../hooks/useImageManagement';
 
 const UploadImage = ({
-  type = 'patterns',
+  type,
   onUploadSuccess,
   onUploadError,
   showPreview = true,
   buttonText = 'Upload Image',
   buttonSize = 'sm',
 }) => {
-  const [uploading, setUploading] = useState(false);
   const [uploadResult, setUploadResult] = useState(null);
-  const [error, setError] = useState(null);
+  const [localError, setLocalError] = useState(null);
+  const { uploadImage, deleteImage, loading, error } = useImageUpload(type);
+
+  // Combine hook error with local error
+  const displayError = error || localError;
 
   const handleFileChange = async (details) => {
-    console.log('handleFileChange called with details:', details);
-
     const files = details.acceptedFiles || details.files;
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    console.log('Selected file:', file);
 
     if (!file.type.startsWith('image/')) {
-      setError('Please select an image file');
+      setLocalError('Please select an image file');
+      if (onUploadError) {
+        onUploadError('Please select an image file');
+      }
+      return;
+    }
+
+    setLocalError(null);
+
+    try {
+      await uploadImage(file, (url, result) => {
+        setUploadResult(result);
+        if (onUploadSuccess) {
+          onUploadSuccess(url, result);
+        }
+      });
+    } catch (err) {
+      if (onUploadError) {
+        onUploadError(err.message || 'Upload failed');
+      }
+    }
+  };
+
+  const handleRemoveImage = async () => {
+    if (!uploadResult || !uploadResult.publicId) return;
+
+    if (!window.confirm('Are you sure you want to remove this image?')) {
       return;
     }
 
     try {
-      setUploading(true);
-      setError(null);
-
-      const result = await uploadImage(file, type);
-
-      setUploadResult(result);
-
-      if (onUploadSuccess) {
-        onUploadSuccess(result.url || result.secure_url, result);
-      }
+      await deleteImage(uploadResult.publicId, () => {
+        setUploadResult(null);
+        if (onUploadSuccess) {
+          onUploadSuccess(null, null);
+        }
+      });
     } catch (err) {
-      setError(err.message);
-      console.error('Upload failed:', err);
-
       if (onUploadError) {
-        onUploadError(err.message);
+        onUploadError(err.message || 'Delete failed');
       }
-    } finally {
-      setUploading(false);
     }
   };
 
   return (
     <VStack spacing={4} align="start">
-      <FileUpload.Root
-        accept="image/*"
-        maxFiles={1}
-        onFileChange={handleFileChange}
-      >
-        <FileUpload.HiddenInput />
-        <FileUpload.Trigger asChild>
-          <Button
-            variant="outline"
-            size={buttonSize}
-            isLoading={uploading}
-            loadingText="Uploading..."
-          >
-            <HiUpload /> {buttonText}
-          </Button>
-        </FileUpload.Trigger>
-        <FileUpload.List />
-      </FileUpload.Root>
+      {!uploadResult && (
+        <FileUpload.Root
+          accept="image/*"
+          maxFiles={1}
+          onFileChange={handleFileChange}
+        >
+          <FileUpload.HiddenInput />
+          <FileUpload.Trigger asChild>
+            <Button
+              size={buttonSize}
+              isLoading={loading}
+              loadingText="Uploading..."
+            >
+              <HiUpload /> {buttonText}
+            </Button>
+          </FileUpload.Trigger>
+          <FileUpload.List />
+        </FileUpload.Root>
+      )}
 
-      {error && (
+      {displayError && (
         <Text color="red.500" fontSize="sm">
-          {error}
+          {displayError}
         </Text>
       )}
 
       {uploadResult && showPreview && (
-        <VStack align="start" spacing={2}>
+        <VStack align="start" spacing={3}>
           <Text color="green.500" fontSize="sm">
             Upload successful!
           </Text>
+
+          <Box position="relative" borderRadius="md" overflow="hidden">
+            <Image
+              src={uploadResult.url || uploadResult.secure_url}
+              alt="Uploaded"
+              maxWidth="200px"
+              maxHeight="200px"
+              objectFit="cover"
+              borderRadius="md"
+            />
+          </Box>
+
+          <Button
+            size="sm"
+            onClick={handleRemoveImage}
+            isLoading={loading}
+            loadingText="Removing..."
+          >
+            Remove Image
+          </Button>
+
           <Text fontSize="xs" color="gray.600">
             URL: {uploadResult.url || uploadResult.secure_url}
           </Text>
-          {uploadResult.url && (
-            <img
-              src={uploadResult.url || uploadResult.secure_url}
-              alt="Uploaded"
-              style={{ maxWidth: '200px', maxHeight: '200px' }}
-            />
-          )}
         </VStack>
       )}
     </VStack>

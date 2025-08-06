@@ -23,11 +23,17 @@ const PatternForm = () => {
   const [tagsString, setTagsString] = useState('');
   const [notes, setNotes] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [publicId, setPublicId] = useState('');
   const navigate = useNavigate();
 
   const handleImageUpload = (uploadedImageUrl, fullResult) => {
-    console.log('Image upload success callback called:', uploadedImageUrl);
+    if (uploadedImageUrl === null) {
+      setImageUrl('');
+      setPublicId('');
+      return;
+    }
     setImageUrl(uploadedImageUrl);
+    setPublicId(fullResult.publicId);
     toaster.success({
       description: 'Image uploaded successfully',
       duration: 3000,
@@ -45,9 +51,6 @@ const PatternForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log('Submit called with imageUrl:', imageUrl);
-    console.log('Files array will be:', imageUrl ? [imageUrl] : []);
-
     const tagsArray = tagsString.split(',').map((item) => item.trim());
     try {
       await patternService.createPattern({
@@ -56,7 +59,9 @@ const PatternForm = () => {
         link,
         tags: tagsArray,
         notes,
-        files: imageUrl ? [imageUrl] : [],
+        files: imageUrl
+          ? [{ url: imageUrl, publicId, uploadedAt: new Date() }]
+          : [],
       });
       toaster.success({
         description: 'Pattern created successfully',
@@ -149,7 +154,7 @@ const PatternForm = () => {
                 />
               </Field>
               <Field
-                label="Pattern Image"
+                label="Image Upload"
                 helperText="Upload an image for your pattern (optional)"
               >
                 <UploadImage
@@ -157,7 +162,6 @@ const PatternForm = () => {
                   onUploadSuccess={handleImageUpload}
                   onUploadError={handleImageError}
                   showPreview={true}
-                  buttonText="Add Pattern Image"
                 />
               </Field>
             </Fieldset.Content>
