@@ -57,6 +57,16 @@ const Pattern = () => {
   const confirmDelete = async () => {
     try {
       setIsDeleting(true);
+
+      if (files && files.length > 0) {
+        for (const file of files) {
+          try {
+            await deleteImage(file.publicId);
+          } catch (imageError) {
+            console.error(`Error deleting image ${file.publicId}:`, imageError);
+          }
+        }
+      }
       await patternService.deletePattern(id, patternId);
       toaster.success({
         description: 'Pattern deleted successfully',
@@ -201,7 +211,7 @@ const Pattern = () => {
             onClose={() => setShowDeleteDialog(false)}
             onConfirm={confirmDelete}
             title="Confirm Deletion"
-            message="Are you sure you want to delete this pattern?"
+            message="Are you sure you want to delete this pattern and all associated images? This action cannot be undone."
             confirmText="Delete"
             cancelText="Cancel"
             confirmColorScheme="red"

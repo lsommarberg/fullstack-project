@@ -84,6 +84,15 @@ const ProjectPage = () => {
   const confirmDelete = async () => {
     try {
       setIsDeleting(true);
+      if (files && files.length > 0) {
+        for (const file of files) {
+          try {
+            await deleteImage(file.publicId);
+          } catch (imageError) {
+            console.error(`Error deleting image ${file.publicId}:`, imageError);
+          }
+        }
+      }
       await projectService.deleteProject(id, projectId);
       toaster.success({ description: 'Project deleted successfully' });
       navigate(`/projects/${id}`);
@@ -296,7 +305,7 @@ const ProjectPage = () => {
                   confirmText={'Delete Project'}
                   cancelText="Cancel"
                   title="Delete Project"
-                  message="Are you sure you want to delete this project?"
+                  message="Are you sure you want to delete this project and all associated images? This action cannot be undone."
                 />
                 <FinishProjectDialog
                   isOpen={finishDialogOpen}
