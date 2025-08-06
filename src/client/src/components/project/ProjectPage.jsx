@@ -10,8 +10,8 @@ import { RowTracker } from './RowTracker';
 import EditProject from './EditProject';
 import FinishProjectDialog from './FinishProjectDialog';
 import FinishedProject from './FinishedProject';
-import ImageDisplay from '../ImageDisplay';
 import useImageUpload from '../../hooks/useImageManagement';
+import ImageManager from '../ImageManager';
 
 const ProjectPage = () => {
   const { id, projectId } = useParams();
@@ -119,6 +119,7 @@ const ProjectPage = () => {
       notes: updatedData.notes,
       rowTrackers: updatedData.rowTrackers,
       pattern: updatedData.pattern,
+      files: updatedData.files,
     });
     setIsEditing(false);
 
@@ -199,6 +200,8 @@ const ProjectPage = () => {
             onSave={updateProject}
             onCancel={() => setIsEditing(false)}
             userId={id}
+            handleImageDelete={handleImageDelete}
+            files={files}
           />
         )}
       </SidebarLayout>
@@ -286,13 +289,14 @@ const ProjectPage = () => {
                   )}
                 </Box>
 
-                {files && files.length > 0 && (
-                  <ImageDisplay
-                    files={files}
-                    headerText="Project Images"
-                    onImageDelete={handleImageDelete}
-                  />
-                )}
+                <ImageManager
+                  files={files || []}
+                  headerText="Project Images"
+                  showUpload={false}
+                  showDelete={false}
+                  itemType="project"
+                />
+
                 <Box mb={4}>
                   <Text fontWeight="bold">Notes:</Text>
                   {<Notes notes={notes} />}

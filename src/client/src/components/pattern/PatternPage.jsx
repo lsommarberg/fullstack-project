@@ -18,7 +18,7 @@ import PatternText from './PatternText';
 import EditPattern from './EditPattern';
 import { toaster } from '../ui/toaster';
 import ConfirmDialog from '../ConfirmDialog';
-import ImageDisplay from '../ImageDisplay';
+import ImageManager from '../ImageManager';
 import useImageUpload from '../../hooks/useImageManagement';
 
 const Pattern = () => {
@@ -146,6 +146,7 @@ const Pattern = () => {
           link={link}
           tags={tags}
           notes={notes}
+          files={files}
           onSave={handleSave}
           onCancel={handleCancel}
         />
@@ -182,13 +183,13 @@ const Pattern = () => {
 
           <PatternText text={text} />
 
-          {files && files.length > 0 && (
-            <ImageDisplay
-              files={files}
-              headerText="Pattern Images"
-              onImageDelete={handleImageDelete}
-            />
-          )}
+          <ImageManager
+            files={files || []}
+            headerText="Pattern Images"
+            showUpload={false}
+            showDelete={false}
+            itemType="pattern"
+          />
 
           {link && (
             <Box mt={4}>

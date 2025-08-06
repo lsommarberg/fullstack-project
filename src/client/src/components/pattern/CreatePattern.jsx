@@ -13,7 +13,7 @@ import { Field } from '@/components/ui/field';
 import SidebarLayout from '../layout/SidebarLayout';
 import patternService from '../../services/pattern';
 import { toaster } from '../ui/toaster';
-import UploadImage from '../UploadImage';
+import ImageManager from '../ImageManager';
 
 const PatternForm = () => {
   const { id } = useParams();
@@ -22,22 +22,27 @@ const PatternForm = () => {
   const [link, setLink] = useState('');
   const [tagsString, setTagsString] = useState('');
   const [notes, setNotes] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [publicId, setPublicId] = useState('');
+  const [files, setFiles] = useState([]);
   const navigate = useNavigate();
 
   const handleImageUpload = (uploadedImageUrl, fullResult) => {
     if (uploadedImageUrl === null) {
-      setImageUrl('');
-      setPublicId('');
       return;
     }
-    setImageUrl(uploadedImageUrl);
-    setPublicId(fullResult.publicId);
+    const newFile = {
+      url: uploadedImageUrl,
+      publicId: fullResult.publicId,
+      uploadedAt: new Date(),
+    };
+    setFiles((prev) => [...prev, newFile]);
     toaster.success({
       description: 'Image uploaded successfully',
       duration: 3000,
     });
+  };
+
+  const handleImageDelete = (publicId) => {
+    setFiles((prev) => prev.filter((file) => file.publicId !== publicId));
   };
 
   const handleImageError = (error) => {
@@ -59,9 +64,7 @@ const PatternForm = () => {
         link,
         tags: tagsArray,
         notes,
-        files: imageUrl
-          ? [{ url: imageUrl, publicId, uploadedAt: new Date() }]
-          : [],
+        files: files,
       });
       toaster.success({
         description: 'Pattern created successfully',
@@ -155,13 +158,18 @@ const PatternForm = () => {
               </Field>
               <Field
                 label="Image Upload"
-                helperText="Upload an image for your pattern (optional)"
+                helperText="Upload images for your pattern (optional)"
               >
-                <UploadImage
+                <ImageManager
+                  files={files}
+                  headerText="Pattern Images"
+                  showUpload={true}
+                  showDelete={true}
                   type="patterns"
-                  onUploadSuccess={handleImageUpload}
+                  onImageUpload={handleImageUpload}
+                  onImageDelete={handleImageDelete}
                   onUploadError={handleImageError}
-                  showPreview={true}
+                  buttonText="Upload Pattern Image"
                 />
               </Field>
             </Fieldset.Content>

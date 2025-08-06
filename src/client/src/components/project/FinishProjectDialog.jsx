@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Button,
   CloseButton,
@@ -8,13 +8,11 @@ import {
   Textarea,
   VStack,
   Checkbox,
-  Text,
   Box,
   HStack,
 } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
-import UploadImage from '../UploadImage';
-import ImageDisplay from '../ImageDisplay';
+import ImageManager from '../ImageManager';
 
 const FinishProjectDialog = ({
   isOpen,
@@ -47,9 +45,6 @@ const FinishProjectDialog = ({
 
   const handleImageUpload = (uploadedImageUrl, fullResult) => {
     if (uploadedImageUrl === null) {
-      setNewImages((prev) =>
-        prev.filter((img) => img.publicId !== fullResult?.publicId),
-      );
       return;
     }
 
@@ -60,6 +55,10 @@ const FinishProjectDialog = ({
     };
 
     setNewImages((prev) => [...prev, imageObject]);
+  };
+
+  const handleImageDelete = (publicId) => {
+    setNewImages((prev) => prev.filter((img) => img.publicId !== publicId));
   };
 
   const handleConfirm = async () => {
@@ -135,13 +134,12 @@ const FinishProjectDialog = ({
 
                 {currentImages && currentImages.length > 0 && (
                   <Box>
-                    <Text fontWeight="bold" mb={2}>
-                      Current Project Images
-                    </Text>
-                    <ImageDisplay
+                    <ImageManager
                       files={currentImages}
-                      headerText=""
-                      showDeleteButton={false}
+                      headerText="Current Project Images"
+                      showUpload={false}
+                      showDelete={false}
+                      itemType="project"
                     />
 
                     <VStack align="start" spacing={2} mt={3}>
@@ -189,28 +187,21 @@ const FinishProjectDialog = ({
                   label="Add Final Images"
                   helperText="Upload any final images for this finished project (optional)"
                 >
-                  <UploadImage
+                  <ImageManager
+                    files={newImages}
+                    headerText="Final Project Images"
+                    showUpload={true}
+                    showDelete={true}
                     type="projects"
-                    onUploadSuccess={handleImageUpload}
+                    onImageUpload={handleImageUpload}
+                    onImageDelete={handleImageDelete}
                     onUploadError={(error) =>
                       console.error('Image upload error:', error)
                     }
-                    showPreview={true}
+                    buttonText="Add Final Image"
+                    itemType="project"
                   />
                 </Field>
-
-                {newImages.length > 0 && (
-                  <Box>
-                    <Text fontWeight="bold" mb={2}>
-                      Newly Added Images
-                    </Text>
-                    <ImageDisplay
-                      files={newImages}
-                      headerText=""
-                      showDeleteButton={false}
-                    />
-                  </Box>
-                )}
 
                 <Field label="Notes (optional)">
                   <Textarea

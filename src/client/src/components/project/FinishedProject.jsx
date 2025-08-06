@@ -1,6 +1,6 @@
 import { Box, Text, Flex, Button } from '@chakra-ui/react';
 import Notes from '../pattern/Notes';
-import ImageDisplay from '../ImageDisplay';
+import ImageManager from '../ImageManager';
 import ConfirmDialog from '../ConfirmDialog';
 
 const FinishedProject = ({
@@ -38,14 +38,13 @@ const FinishedProject = ({
         </Text>
       )}
 
-      {files && files.length > 0 && (
-        <ImageDisplay
-          files={files}
-          headerText="Final Project Images:"
-          showDeleteButton={true}
-          onImageDelete={handleImageDelete}
-        />
-      )}
+      <ImageManager
+        files={files || []}
+        headerText="Final Project Images"
+        showUpload={false}
+        showDelete={false}
+        itemType="project"
+      />
 
       <Box mb={4}>
         <Text fontWeight="bold">Final Notes:</Text>

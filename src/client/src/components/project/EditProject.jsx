@@ -12,19 +12,23 @@ import RowTrackersSection from './RowTrackersSection';
 import { Field } from '@/components/ui/field';
 import { PatternMenu } from '../PatternSelectionDialog';
 import patternService from '../../services/pattern';
+import ImageManager from '../ImageManager';
 
 const EditProject = ({
   name,
   notes,
   pattern,
+  files,
   rowTrackers,
   onSave,
   userId,
   onCancel,
+  handleImageDelete,
 }) => {
   const [projectName, setProjectName] = useState(name);
   const [projectNotes, setProjectNotes] = useState(notes);
   const [rowTrackersState, setRowTrackersState] = useState(rowTrackers);
+  const [projectFiles, setProjectFiles] = useState(files || []);
   const [patterns, setPatterns] = useState([]);
   const [selectedPattern, setSelectedPattern] = useState(pattern);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +56,34 @@ const EditProject = ({
       notes: projectNotes,
       rowTrackers: rowTrackersState,
       pattern: selectedPattern,
+      files: projectFiles,
     });
+  };
+
+  const handleImageUpload = (uploadedImageUrl, fullResult) => {
+    if (uploadedImageUrl === null) {
+      return;
+    }
+
+    const newFile = {
+      url: uploadedImageUrl,
+      publicId: fullResult.publicId,
+      uploadedAt: new Date(),
+    };
+
+    setProjectFiles((prev) => [...prev, newFile]);
+  };
+
+  const handleImageDeleteLocal = (publicId) => {
+    // Remove from local state
+    setProjectFiles((prev) =>
+      prev.filter((file) => file.publicId !== publicId),
+    );
+
+    // Also call the parent's delete handler to remove from server/database
+    if (handleImageDelete) {
+      handleImageDelete(publicId);
+    }
   };
 
   const addRowTracker = () => {
@@ -117,7 +148,20 @@ const EditProject = ({
                 </Text>
               )}
             </Field>
-
+            <Field label="Images">
+              <ImageManager
+                files={projectFiles}
+                headerText="Project Images"
+                showUpload={true}
+                showDelete={true}
+                type="projects"
+                onImageUpload={handleImageUpload}
+                onImageDelete={handleImageDeleteLocal}
+                onUploadError={(error) => console.error('Upload error:', error)}
+                buttonText="Add Project Image"
+                itemType="project"
+              />
+            </Field>
             <RowTrackersSection
               rowTrackers={rowTrackersState}
               onAddTracker={addRowTracker}
