@@ -12,6 +12,7 @@ import FinishProjectDialog from './FinishProjectDialog';
 import FinishedProject from './FinishedProject';
 import useImageUpload from '../../hooks/useImageManagement';
 import ImageManager from '../ImageManager';
+import uploadService from '../../services/upload';
 
 const ProjectPage = () => {
   const { id, projectId } = useParams();
@@ -105,6 +106,12 @@ const ProjectPage = () => {
   };
 
   const updateProject = (updatedData) => {
+    if (updatedData.files) {
+      updatedData.files = updatedData.files.map((file) => ({
+        ...file,
+        uploadedAt: new Date(file.uploadedAt),
+      }));
+    }
     setProjectData((prevData) => ({
       ...prevData,
       ...updatedData,
@@ -131,8 +138,6 @@ const ProjectPage = () => {
       setIsFinishing(true);
 
       if (finishData.deleteExistingImages && files && files.length > 0) {
-        const uploadService = await import('../../services/upload');
-
         for (const image of files) {
           try {
             await uploadService.deleteImage(image.publicId);
@@ -172,9 +177,6 @@ const ProjectPage = () => {
   };
 
   const handleImageDelete = async (publicId) => {
-    if (!window.confirm('Are you sure you want to delete this image?')) {
-      return;
-    }
     try {
       await deleteImage(publicId);
       setProjectData((prevData) => ({

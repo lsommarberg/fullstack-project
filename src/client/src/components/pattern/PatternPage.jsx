@@ -110,29 +110,6 @@ const Pattern = () => {
     setIsEditing(false);
   };
 
-  const handleImageDelete = async (publicId) => {
-    if (!window.confirm('Are you sure you want to delete this image?')) {
-      return;
-    }
-    try {
-      await deleteImage(publicId);
-      const updatedFiles = files.filter((file) => file.publicId !== publicId);
-      setPatternData((prevData) => ({
-        ...prevData,
-        files: updatedFiles,
-      }));
-      await patternService.updatePattern(id, patternId, {
-        files: updatedFiles,
-      });
-    } catch (error) {
-      console.error('Error deleting image:', error);
-      toaster.error({
-        description: `Failed to delete image: ${error.message}`,
-        duration: 5000,
-      });
-    }
-  };
-
   return (
     <SidebarLayout userId={id}>
       {!patternData ? (

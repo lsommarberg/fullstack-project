@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Box, Textarea, Input, Button } from '@chakra-ui/react';
 import ImageManager from '../ImageManager';
-import useImageUpload from '../../hooks/useImageManagement';
 
 const EditPattern = ({
   name,

@@ -74,18 +74,6 @@ const EditProject = ({
     setProjectFiles((prev) => [...prev, newFile]);
   };
 
-  const handleImageDeleteLocal = (publicId) => {
-    // Remove from local state
-    setProjectFiles((prev) =>
-      prev.filter((file) => file.publicId !== publicId),
-    );
-
-    // Also call the parent's delete handler to remove from server/database
-    if (handleImageDelete) {
-      handleImageDelete(publicId);
-    }
-  };
-
   const addRowTracker = () => {
     setRowTrackersState([
       ...rowTrackersState,
@@ -107,6 +95,13 @@ const EditProject = ({
   const handlePatternSelect = (id) => {
     const selectedPattern = patterns.find((p) => p.id === id);
     setSelectedPattern(selectedPattern);
+  };
+
+  const handleImageDeleteLocal = (publicId) => {
+    setProjectFiles((prevFiles) =>
+      prevFiles.filter((file) => file.publicId !== publicId),
+    );
+    handleImageDelete(publicId);
   };
 
   return (
