@@ -5,6 +5,7 @@ const cloudinary = require('../config/cloudinary');
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
+    // eslint-disable-next-line no-unused-vars
     folder: (req, file) => `craft-patterns/${req.body.type || 'general'}`,
     allowed_formats: ['jpg', 'png', 'jpeg'],
   },
