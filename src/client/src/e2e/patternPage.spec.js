@@ -47,7 +47,9 @@ describe('Pattern Page', () => {
     await page.getByRole('button', { name: 'Delete Pattern' }).click();
 
     await expect(
-      page.getByText('Are you sure you want to delete this pattern?'),
+      page.getByText(
+        'Are you sure you want to delete this pattern and all associated images? This action cannot be undone.',
+      ),
     ).toBeVisible();
     await page.getByRole('button', { name: 'Delete' }).click();
 
