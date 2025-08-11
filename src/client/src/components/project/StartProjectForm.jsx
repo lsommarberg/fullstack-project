@@ -15,6 +15,7 @@ import RowTrackersSection from './RowTrackersSection';
 import projectService from '../../services/project';
 import patternService from '../../services/pattern';
 import { toaster } from '../ui/toaster';
+import ImageManager from '../ImageManager';
 
 const ProjectForm = () => {
   const { id } = useParams();
@@ -27,7 +28,7 @@ const ProjectForm = () => {
   const [rowTrackers, setRowTrackers] = useState([
     { section: '', currentRow: 0, totalRows: '' },
   ]);
-
+  const [files, setFiles] = useState([]);
   const location = useLocation();
   const patternFromState = location.state?.patternId;
 
@@ -93,6 +94,7 @@ const ProjectForm = () => {
         rowTrackers: validRowTrackers,
         pattern: patternFromState || null,
         notes,
+        files: files,
       });
       toaster.success({
         description: 'Project created successfully',
@@ -103,6 +105,36 @@ const ProjectForm = () => {
       console.error('Error creating project:', error);
       toaster.error({ description: 'Error creating project', duration: 5000 });
     }
+  };
+
+  const handleImageUpload = (uploadedImageUrl, fullResult) => {
+    if (uploadedImageUrl === null) {
+      return;
+    }
+
+    const newFile = {
+      url: uploadedImageUrl,
+      publicId: fullResult.publicId,
+      uploadedAt: new Date(),
+    };
+
+    setFiles((prev) => [...prev, newFile]);
+    toaster.success({
+      description: 'Image uploaded successfully',
+      duration: 3000,
+    });
+  };
+
+  const handleImageDelete = (publicId) => {
+    setFiles((prev) => prev.filter((file) => file.publicId !== publicId));
+  };
+
+  const handleImageError = (error) => {
+    console.error('Image upload failed:', error);
+    toaster.error({
+      description: `Image upload failed: ${error}`,
+      duration: 5000,
+    });
   };
 
   return (
@@ -147,7 +179,24 @@ const ProjectForm = () => {
                 onUpdateTracker={updateRowTracker}
                 isEditable={true}
               />
-
+              <Field
+                label="Project Images"
+                helperText="Upload images for your project (optional)"
+              >
+                <ImageManager
+                  files={files}
+                  headerText="Project Images"
+                  showUpload={true}
+                  showDelete={true}
+                  type="projects"
+                  onImageUpload={handleImageUpload}
+                  onImageDelete={handleImageDelete}
+                  onUploadError={handleImageError}
+                  buttonText="Upload Project Image"
+                  itemType="project"
+                  userId={id}
+                />
+              </Field>
               <Field label="Notes (optional)">
                 <Textarea
                   value={notes}

@@ -25,9 +25,14 @@ const projectSchema = new mongoose.Schema({
   notes: {
     type: String,
   },
-  files: {
-    type: [String],
-  },
+  files: [
+    {
+      url: { type: String, required: true },
+      publicId: { type: String, required: true },
+      uploadedAt: { type: Date, default: Date.now },
+      size: { type: Number },
+    },
+  ],
   rowTrackers: [
     {
       section: String,

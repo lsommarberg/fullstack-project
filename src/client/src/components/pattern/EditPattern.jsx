@@ -1,12 +1,24 @@
 import { useState } from 'react';
 import { Box, Textarea, Input, Button } from '@chakra-ui/react';
+import ImageManager from '../ImageManager';
 
-const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
+const EditPattern = ({
+  name,
+  text,
+  link,
+  tags,
+  notes,
+  files = [],
+  onSave,
+  onCancel,
+  userId,
+}) => {
   const [editableName, setEditableName] = useState(name);
   const [editableText, setEditableText] = useState(text);
   const [editableLink, setEditableLink] = useState(link);
   const [editableTags, setEditableTags] = useState(tags.join(', '));
   const [editableNotes, setEditableNotes] = useState(notes);
+  const [patternFiles, setPatternFiles] = useState(files || []);
 
   const handleSave = () => {
     onSave({
@@ -15,7 +27,28 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
       link: editableLink,
       tags: editableTags.split(',').map((tag) => tag.trim()),
       notes: editableNotes,
+      files: patternFiles,
     });
+  };
+
+  const handleImageUpload = (uploadedImageUrl, fullResult) => {
+    if (uploadedImageUrl === null) {
+      return;
+    }
+
+    const newFile = {
+      url: uploadedImageUrl,
+      publicId: fullResult.publicId,
+      uploadedAt: new Date(),
+    };
+
+    setPatternFiles((prev) => [...prev, newFile]);
+  };
+
+  const handleImageDelete = (publicId) => {
+    setPatternFiles((prev) =>
+      prev.filter((file) => file.publicId !== publicId),
+    );
   };
 
   return (
@@ -71,6 +104,23 @@ const EditPattern = ({ name, text, link, tags, notes, onSave, onCancel }) => {
         color="fg.default"
         borderColor="input.border"
       />
+
+      <Box mb={4}>
+        <ImageManager
+          files={patternFiles}
+          headerText="Pattern Images"
+          showUpload={true}
+          showDelete={true}
+          type="patterns"
+          onImageUpload={handleImageUpload}
+          onImageDelete={handleImageDelete}
+          onUploadError={(error) => console.error('Upload error:', error)}
+          buttonText="Add Pattern Image"
+          itemType="pattern"
+          userId={userId}
+        />
+      </Box>
+
       <Button onClick={handleSave} data-testid="save-button" mr={2}>
         Save
       </Button>

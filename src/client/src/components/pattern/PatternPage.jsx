@@ -18,6 +18,8 @@ import PatternText from './PatternText';
 import EditPattern from './EditPattern';
 import { toaster } from '../ui/toaster';
 import ConfirmDialog from '../ConfirmDialog';
+import ImageManager from '../ImageManager';
+import useImageUpload from '../../hooks/useImageManagement';
 
 const Pattern = () => {
   const { id, patternId } = useParams();
@@ -26,6 +28,7 @@ const Pattern = () => {
   const [error, setError] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { deleteImage } = useImageUpload();
 
   const navigate = useNavigate();
 
@@ -45,7 +48,7 @@ const Pattern = () => {
   if (!patternData) {
     return <Text> Loading... </Text>;
   }
-  const { name, text, link, notes, tags } = patternData;
+  const { name, text, link, notes, tags, files } = patternData;
 
   const handleDelete = async () => {
     setShowDeleteDialog(true);
@@ -54,6 +57,16 @@ const Pattern = () => {
   const confirmDelete = async () => {
     try {
       setIsDeleting(true);
+
+      if (files && files.length > 0) {
+        for (const file of files) {
+          try {
+            await deleteImage(file.publicId);
+          } catch (imageError) {
+            console.error(`Error deleting image ${file.publicId}:`, imageError);
+          }
+        }
+      }
       await patternService.deletePattern(id, patternId);
       toaster.success({
         description: 'Pattern deleted successfully',
@@ -110,8 +123,10 @@ const Pattern = () => {
           link={link}
           tags={tags}
           notes={notes}
+          files={files}
           onSave={handleSave}
           onCancel={handleCancel}
+          userId={id}
         />
       ) : (
         <Box
@@ -146,10 +161,21 @@ const Pattern = () => {
 
           <PatternText text={text} />
 
+          <ImageManager
+            files={files || []}
+            headerText="Pattern Images"
+            showUpload={false}
+            showDelete={false}
+            itemType="pattern"
+            userId={id}
+          />
+
           {link && (
-            <Link href={link} color="blue.500" isExternal>
-              Link to pattern
-            </Link>
+            <Box mt={4}>
+              <Link href={link} color="blue.500" isExternal>
+                Link to pattern
+              </Link>
+            </Box>
           )}
           <Box mt={4}>
             <Text fontSize="lg" mb={4}>
@@ -165,7 +191,7 @@ const Pattern = () => {
             onClose={() => setShowDeleteDialog(false)}
             onConfirm={confirmDelete}
             title="Confirm Deletion"
-            message="Are you sure you want to delete this pattern?"
+            message="Are you sure you want to delete this pattern and all associated images? This action cannot be undone."
             confirmText="Delete"
             cancelText="Cancel"
             confirmColorScheme="red"

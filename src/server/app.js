@@ -22,6 +22,7 @@ const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
 const patternRouter = require('./controllers/patterns');
 const projectsRouter = require('./controllers/projects');
+const uploadRouter = require('./controllers/upload');
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/patterns', patternRouter);
 app.use('/api/projects', projectsRouter);
+app.use('/api/upload', uploadRouter);
 
 if (process.env.NODE_ENV === 'test') {
   const testUtilsRouter = require('./controllers/reset');

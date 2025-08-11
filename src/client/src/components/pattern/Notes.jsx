@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 
 const Notes = ({ notes }) => {
   const preprocessText = (inputText) => {
+    if (!inputText) return 'No notes yet';
     return inputText.replace(/^- /gm, '\\- ').replace(/\n/g, '  \n');
   };
 

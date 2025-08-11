@@ -63,6 +63,7 @@ describe('ProjectForm', () => {
         notes: 'This is a test project.',
         pattern: null,
         rowTrackers: [],
+        files: [],
       });
       expect(mockNavigate).toHaveBeenCalledWith('/projects/1');
       expect(toaster.success).toHaveBeenCalledWith({

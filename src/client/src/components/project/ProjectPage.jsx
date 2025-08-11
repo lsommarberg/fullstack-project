@@ -9,6 +9,10 @@ import ConfirmDialog from '../ConfirmDialog';
 import { RowTracker } from './RowTracker';
 import EditProject from './EditProject';
 import FinishProjectDialog from './FinishProjectDialog';
+import FinishedProject from './FinishedProject';
+import useImageUpload from '../../hooks/useImageManagement';
+import ImageManager from '../ImageManager';
+import uploadService from '../../services/upload';
 
 const ProjectPage = () => {
   const { id, projectId } = useParams();
@@ -20,6 +24,7 @@ const ProjectPage = () => {
   const [isFinishing, setIsFinishing] = useState(false);
   const [finishDialogOpen, setFinishDialogOpen] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+  const { deleteImage } = useImageUpload();
 
   useEffect(() => {
     const getProjectData = async () => {
@@ -36,7 +41,7 @@ const ProjectPage = () => {
   if (!projectData) {
     return <Text>Loading...</Text>;
   }
-  const { name, startedAt, pattern, notes, rowTrackers, finishedAt } =
+  const { name, startedAt, pattern, notes, rowTrackers, finishedAt, files } =
     projectData;
 
   const formattedDate = new Date(startedAt).toLocaleDateString();
@@ -80,6 +85,15 @@ const ProjectPage = () => {
   const confirmDelete = async () => {
     try {
       setIsDeleting(true);
+      if (files && files.length > 0) {
+        for (const file of files) {
+          try {
+            await deleteImage(file.publicId);
+          } catch (imageError) {
+            console.error(`Error deleting image ${file.publicId}:`, imageError);
+          }
+        }
+      }
       await projectService.deleteProject(id, projectId);
       toaster.success({ description: 'Project deleted successfully' });
       navigate(`/projects/${id}`);
@@ -92,6 +106,12 @@ const ProjectPage = () => {
   };
 
   const updateProject = (updatedData) => {
+    if (updatedData.files) {
+      updatedData.files = updatedData.files.map((file) => ({
+        ...file,
+        uploadedAt: new Date(file.uploadedAt),
+      }));
+    }
     setProjectData((prevData) => ({
       ...prevData,
       ...updatedData,
@@ -106,6 +126,7 @@ const ProjectPage = () => {
       notes: updatedData.notes,
       rowTrackers: updatedData.rowTrackers,
       pattern: updatedData.pattern,
+      files: updatedData.files,
     });
     setIsEditing(false);
 
@@ -116,9 +137,24 @@ const ProjectPage = () => {
     try {
       setIsFinishing(true);
 
-      await projectService.updateProject(id, projectId, {
-        ...finishData,
-      });
+      if (finishData.deleteExistingImages && files && files.length > 0) {
+        for (const image of files) {
+          try {
+            await uploadService.deleteImage(id, image.publicId);
+          } catch (error) {
+            console.error('Failed to delete image:', error);
+          }
+        }
+      }
+
+      const updateData = {
+        name: finishData.name,
+        finishedAt: finishData.finishedAt,
+        notes: finishData.notes,
+        files: finishData.images,
+      };
+
+      await projectService.updateProject(id, projectId, updateData);
 
       toaster.success({
         description: 'Project finished successfully!',
@@ -140,6 +176,20 @@ const ProjectPage = () => {
     }
   };
 
+  const handleImageDelete = async (publicId) => {
+    try {
+      await deleteImage(publicId);
+      setProjectData((prevData) => ({
+        ...prevData,
+        files: prevData.files.filter((file) => file.publicId !== publicId),
+      }));
+      toaster.success({ description: 'Image deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      toaster.error({ description: 'Failed to delete image' });
+    }
+  };
+
   if (isEditing) {
     return (
       <SidebarLayout userId={id}>
@@ -152,6 +202,8 @@ const ProjectPage = () => {
             onSave={updateProject}
             onCancel={() => setIsEditing(false)}
             userId={id}
+            handleImageDelete={handleImageDelete}
+            files={files}
           />
         )}
       </SidebarLayout>
@@ -159,44 +211,17 @@ const ProjectPage = () => {
   }
 
   const renderFinishedProject = () => (
-    <Box p={5} shadow="md" borderWidth="1px" bg="card.bg" color="fg.default">
-      <Flex justify="space-between" align="center" mb={4}>
-        <Text fontSize="2xl" fontWeight="bold" color="green.500">
-          ✓ {name} (Completed)
-        </Text>
-        <Button
-          color="deleteButton"
-          onClick={handleDelete}
-          isLoading={isDeleting}
-        >
-          Delete Project
-        </Button>
-      </Flex>
-
-      <Text mb={4}>Started on: {formattedDate}</Text>
-
-      {projectData.finishedAt && (
-        <Text mb={4}>
-          Finished on: {new Date(projectData.finishedAt).toLocaleDateString()}
-        </Text>
-      )}
-
-      <Box mb={4}>
-        <Text fontWeight="bold">Notes:</Text>
-        {notes && <Notes notes={notes} />}
-      </Box>
-
-      <ConfirmDialog
-        isOpen={showDeleteDialog}
-        onClose={() => setShowDeleteDialog(false)}
-        onConfirm={confirmDelete}
-        isLoading={isDeleting}
-        confirmText={'Delete Project'}
-        cancelText="Cancel"
-        title="Delete Project"
-        message="Are you sure you want to delete this project?"
-      />
-    </Box>
+    <FinishedProject
+      projectData={projectData}
+      formattedDate={formattedDate}
+      handleDelete={handleDelete}
+      handleImageDelete={handleImageDelete}
+      showDeleteDialog={showDeleteDialog}
+      setShowDeleteDialog={setShowDeleteDialog}
+      confirmDelete={confirmDelete}
+      isDeleting={isDeleting}
+      userId={id}
+    />
   );
 
   return (
@@ -250,21 +275,35 @@ const ProjectPage = () => {
                 )}
                 <Box mb={4}>
                   <Text fontWeight="bold">Row Trackers:</Text>
-                  {rowTrackers.map((tracker, index) => (
-                    <RowTracker
-                      key={index}
-                      index={index}
-                      section={tracker.section}
-                      currentRow={tracker.currentRow}
-                      totalRows={tracker.totalRows}
-                      onCurrentRowChange={onCurrentRowChange}
-                      onTotalRowsChange={onTotalRowsChange}
-                    />
-                  ))}
+                  {rowTrackers.length === 0 ? (
+                    <Text>No row trackers available</Text>
+                  ) : (
+                    rowTrackers.map((tracker, index) => (
+                      <RowTracker
+                        key={index}
+                        index={index}
+                        section={tracker.section}
+                        currentRow={tracker.currentRow}
+                        totalRows={tracker.totalRows}
+                        onCurrentRowChange={onCurrentRowChange}
+                        onTotalRowsChange={onTotalRowsChange}
+                      />
+                    ))
+                  )}
                 </Box>
+
+                <ImageManager
+                  files={files || []}
+                  headerText="Project Images"
+                  showUpload={false}
+                  showDelete={false}
+                  itemType="project"
+                  userId={id}
+                />
+
                 <Box mb={4}>
                   <Text fontWeight="bold">Notes:</Text>
-                  {notes && <Notes notes={notes} />}
+                  {<Notes notes={notes} />}
                 </Box>
                 <ConfirmDialog
                   isOpen={showDeleteDialog}
@@ -274,7 +313,7 @@ const ProjectPage = () => {
                   confirmText={'Delete Project'}
                   cancelText="Cancel"
                   title="Delete Project"
-                  message="Are you sure you want to delete this project?"
+                  message="Are you sure you want to delete this project and all associated images? This action cannot be undone."
                 />
                 <FinishProjectDialog
                   isOpen={finishDialogOpen}
@@ -282,6 +321,8 @@ const ProjectPage = () => {
                   onConfirm={handleFinishProject}
                   isLoading={isFinishing}
                   currentProjectName={name}
+                  currentImages={files}
+                  userId={id}
                 />
               </Box>
             </>

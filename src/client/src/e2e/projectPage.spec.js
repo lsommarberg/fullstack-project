@@ -37,7 +37,9 @@ describe('Project Page', () => {
     await page.getByRole('button', { name: 'Delete Project' }).click();
 
     await expect(
-      page.getByText('Are you sure you want to delete this project?'),
+      page.getByText(
+        'Are you sure you want to delete this project and all associated images? This action cannot be undone.',
+      ),
     ).toBeVisible();
     await page.getByRole('button', { name: 'Delete' }).click();
 
@@ -81,7 +83,8 @@ describe('Project Page', () => {
       page.getByText('Project finished successfully!'),
     ).toBeVisible();
     await expect(page).toHaveURL(/\/projects\/\d+/);
-    await expect(page.getByText('Finished on: 7/29/2025')).toBeVisible();
+    const currentDate = new Date().toLocaleDateString();
+    await expect(page.getByText(`Finished on: ${currentDate}`)).toBeVisible();
     await expect(page.getByText('Row Trackers')).not.toBeVisible();
     await page.getByText('My Projects').click();
     await expect(page.getByText('To Finish')).not.toBeVisible();

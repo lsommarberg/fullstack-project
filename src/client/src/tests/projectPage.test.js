@@ -32,6 +32,7 @@ const getMockProject = () => ({
     { section: 'Body', currentRow: 10, totalRows: 50 },
     { section: 'Sleeve', currentRow: 5, totalRows: 20 },
   ],
+  files: [],
 });
 
 jest.mock('react-markdown', () => (props) => <div {...props} />);
@@ -58,6 +59,7 @@ describe('ProjectPage', () => {
       name: 'Basic Scarf Pattern',
     },
     notes: 'This is a test project',
+    files: [],
     rowTrackers: [{ section: 'Body', currentRow: 25, totalRows: 100 }],
   };
 
@@ -88,7 +90,9 @@ describe('ProjectPage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Are you sure you want to delete this project?'),
+        screen.getByText(
+          'Are you sure you want to delete this project and all associated images? This action cannot be undone.',
+        ),
       ).toBeInTheDocument();
     });
 
