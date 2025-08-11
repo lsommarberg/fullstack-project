@@ -9,6 +9,11 @@ const userSchema = mongoose.Schema({
   },
   name: String,
   passwordHash: String,
+  uploadStats: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
   patterns: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -28,7 +33,6 @@ userSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
-    // the passwordHash should not be revealed
     delete returnedObject.passwordHash;
   },
 });

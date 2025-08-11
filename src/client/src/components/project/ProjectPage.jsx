@@ -140,7 +140,7 @@ const ProjectPage = () => {
       if (finishData.deleteExistingImages && files && files.length > 0) {
         for (const image of files) {
           try {
-            await uploadService.deleteImage(image.publicId);
+            await uploadService.deleteImage(id, image.publicId);
           } catch (error) {
             console.error('Failed to delete image:', error);
           }
@@ -220,6 +220,7 @@ const ProjectPage = () => {
       setShowDeleteDialog={setShowDeleteDialog}
       confirmDelete={confirmDelete}
       isDeleting={isDeleting}
+      userId={id}
     />
   );
 
@@ -297,6 +298,7 @@ const ProjectPage = () => {
                   showUpload={false}
                   showDelete={false}
                   itemType="project"
+                  userId={id}
                 />
 
                 <Box mb={4}>
@@ -320,6 +322,7 @@ const ProjectPage = () => {
                   isLoading={isFinishing}
                   currentProjectName={name}
                   currentImages={files}
+                  userId={id}
                 />
               </Box>
             </>

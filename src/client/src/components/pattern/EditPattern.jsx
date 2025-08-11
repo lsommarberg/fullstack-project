@@ -11,6 +11,7 @@ const EditPattern = ({
   files = [],
   onSave,
   onCancel,
+  userId,
 }) => {
   const [editableName, setEditableName] = useState(name);
   const [editableText, setEditableText] = useState(text);
@@ -116,6 +117,7 @@ const EditPattern = ({
           onUploadError={(error) => console.error('Upload error:', error)}
           buttonText="Add Pattern Image"
           itemType="pattern"
+          userId={userId}
         />
       </Box>
 

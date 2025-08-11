@@ -194,6 +194,7 @@ const ProjectForm = () => {
                   onUploadError={handleImageError}
                   buttonText="Upload Project Image"
                   itemType="project"
+                  userId={id}
                 />
               </Field>
               <Field label="Notes (optional)">

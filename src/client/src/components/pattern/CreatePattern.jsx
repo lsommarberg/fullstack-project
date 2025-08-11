@@ -170,6 +170,7 @@ const PatternForm = () => {
                   onImageDelete={handleImageDelete}
                   onUploadError={handleImageError}
                   buttonText="Upload Pattern Image"
+                  userId={id}
                 />
               </Field>
             </Fieldset.Content>

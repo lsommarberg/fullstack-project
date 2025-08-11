@@ -11,15 +11,19 @@ const getConfig = () => {
   };
 };
 
-const uploadImage = async (file, type = 'general') => {
+const uploadImage = async (userId, file, type) => {
   try {
+    const config = getConfig();
     const formData = new FormData();
     formData.append('image', file);
-    formData.append('type', type);
+    if (type) {
+      formData.append('type', type);
+    }
 
-    const response = await axios.post(baseUrl, formData, {
+    const response = await axios.post(`${baseUrl}/${userId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        ...config.headers,
       },
     });
 
@@ -30,10 +34,11 @@ const uploadImage = async (file, type = 'general') => {
   }
 };
 
-const deleteImage = async (publicId) => {
+const deleteImage = async (userId, publicId) => {
   try {
-    const response = await axios.delete(baseUrl, {
-      ...getConfig(),
+    const config = getConfig();
+    const response = await axios.delete(`${baseUrl}/${userId}`, {
+      ...config,
       data: { publicId },
     });
     return response.data;

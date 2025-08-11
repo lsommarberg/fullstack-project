@@ -155,6 +155,7 @@ const EditProject = ({
                 onUploadError={(error) => console.error('Upload error:', error)}
                 buttonText="Add Project Image"
                 itemType="project"
+                userId={userId}
               />
             </Field>
             <RowTrackersSection

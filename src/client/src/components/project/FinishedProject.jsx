@@ -12,6 +12,7 @@ const FinishedProject = ({
   setShowDeleteDialog,
   confirmDelete,
   isDeleting,
+  userId,
 }) => {
   const { name, notes, files, finishedAt } = projectData;
 
@@ -44,6 +45,7 @@ const FinishedProject = ({
         showUpload={false}
         showDelete={false}
         itemType="project"
+        userId={userId}
       />
 
       <Box mb={4}>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import uploadService from '../services/upload';
 
-const useImageUpload = (type) => {
+const useImageUpload = (id, type) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -9,7 +9,7 @@ const useImageUpload = (type) => {
     setLoading(true);
     setError(null);
     try {
-      const result = await uploadService.uploadImage(file, type);
+      const result = await uploadService.uploadImage(id, file, type);
 
       if (!result) throw new Error('Upload failed');
 
@@ -32,7 +32,7 @@ const useImageUpload = (type) => {
     setLoading(true);
     setError(null);
     try {
-      const result = await uploadService.deleteImage(publicId);
+      const result = await uploadService.deleteImage(id, publicId);
 
       if (!result || result.error) {
         const errMsg = result?.error || 'Delete failed';

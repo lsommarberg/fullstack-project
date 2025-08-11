@@ -1,11 +1,9 @@
-import React from 'react';
 import { Box, Flex, Button, Spacer } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { useColorMode, ColorModeButton } from '@/components/ui/color-mode';
+import { ColorModeButton } from '@/components/ui/color-mode';
 
 const Navigation = ({ user, setUser }) => {
   const navigate = useNavigate();
-  const { toggleColorMode } = useColorMode();
 
   const logout = () => {
     setUser(null);

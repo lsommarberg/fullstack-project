@@ -126,6 +126,7 @@ const Pattern = () => {
           files={files}
           onSave={handleSave}
           onCancel={handleCancel}
+          userId={id}
         />
       ) : (
         <Box
@@ -166,6 +167,7 @@ const Pattern = () => {
             showUpload={false}
             showDelete={false}
             itemType="pattern"
+            userId={id}
           />
 
           {link && (

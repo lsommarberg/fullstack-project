@@ -16,10 +16,14 @@ const ImageManager = ({
   itemType = 'pattern',
   buttonText = 'Upload Image',
   buttonSize = 'sm',
+  userId,
 }) => {
   const [deletingId, setDeletingId] = useState(null);
   const [localError, setLocalError] = useState(null);
-  const { uploadImage, deleteImage, loading, error } = useImageUpload(type);
+  const { uploadImage, deleteImage, loading, error } = useImageUpload(
+    userId,
+    type,
+  );
 
   const displayError = error || localError;
 

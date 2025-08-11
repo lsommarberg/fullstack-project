@@ -24,6 +24,7 @@ const FinishProjectDialog = ({
   isLoading = false,
   currentProjectName = '',
   currentImages = [],
+  userId,
 }) => {
   const [projectName, setProjectName] = useState('');
   const [finishDate, setFinishDate] = useState('');
@@ -140,6 +141,7 @@ const FinishProjectDialog = ({
                       showUpload={false}
                       showDelete={false}
                       itemType="project"
+                      userId={userId}
                     />
 
                     <VStack align="start" spacing={2} mt={3}>
@@ -200,6 +202,7 @@ const FinishProjectDialog = ({
                     }
                     buttonText="Add Final Image"
                     itemType="project"
+                    userId={userId}
                   />
                 </Field>
 
