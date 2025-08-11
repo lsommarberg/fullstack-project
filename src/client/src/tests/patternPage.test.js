@@ -28,6 +28,7 @@ const getMockPattern = () => ({
   link: 'http://example.com',
   notes: 'Note',
   tags: ['Tag 1', 'Tag 2'],
+  files: [],
 });
 
 describe('PatternPage', () => {
@@ -86,7 +87,9 @@ describe('PatternPage', () => {
     await waitFor(() => {
       expect(screen.getByText('Confirm Deletion')).toBeInTheDocument();
       expect(
-        screen.getByText('Are you sure you want to delete this pattern?'),
+        screen.getByText(
+          'Are you sure you want to delete this pattern and all associated images? This action cannot be undone.',
+        ),
       ).toBeInTheDocument();
     });
 
@@ -206,7 +209,9 @@ describe('PatternPage', () => {
     await waitFor(() => {
       expect(screen.getByText('Confirm Deletion')).toBeInTheDocument();
       expect(
-        screen.getByText('Are you sure you want to delete this pattern?'),
+        screen.getByText(
+          'Are you sure you want to delete this pattern and all associated images? This action cannot be undone.',
+        ),
       ).toBeInTheDocument();
     });
 

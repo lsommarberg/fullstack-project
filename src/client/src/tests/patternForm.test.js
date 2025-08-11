@@ -71,6 +71,7 @@ describe('PatternForm', () => {
         link: 'http://example.com',
         tags: ['tag1', 'tag2'],
         notes: 'Some notes',
+        files: [],
       });
       expect(toaster.success).toHaveBeenCalledWith({
         description: 'Pattern created successfully',
