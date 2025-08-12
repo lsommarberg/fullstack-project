@@ -33,7 +33,7 @@ describe('ProjectForm', () => {
 
   test('renders without crashing', () => {
     render(<ProjectForm />);
-    expect(screen.getByText(/Create a Project/i)).toBeInTheDocument();
+    expect(screen.getByText(/Create a New Project/i)).toBeInTheDocument();
     expect(screen.getByText(/Project Name/i)).toBeInTheDocument();
     expect(screen.getByText(/Started At/i)).toBeInTheDocument();
     expect(screen.getByText(/Notes/i)).toBeInTheDocument();

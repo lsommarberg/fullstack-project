@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, waitFor, fireEvent } from './test-utils';
 import PatternPage from '../components/pattern/PatternPage';
 import patternService from '../services/pattern';
@@ -65,7 +64,7 @@ describe('PatternPage', () => {
           content.includes('This is a test pattern.'),
         ),
       ).toBeInTheDocument();
-      expect(screen.getByText('Link to pattern')).toBeInTheDocument();
+      expect(screen.getByText('Pattern Source')).toBeInTheDocument();
       expect(screen.getByText('Note')).toBeInTheDocument();
       expect(screen.getByText('Tag 1')).toBeInTheDocument();
       expect(screen.getByText('Tag 2')).toBeInTheDocument();
@@ -131,7 +130,7 @@ describe('PatternPage', () => {
       expect(screen.getByText('Cancel')).toBeInTheDocument();
     });
 
-    fireEvent.change(screen.getByPlaceholderText('Name'), {
+    fireEvent.change(screen.getByTestId('pattern-name-input'), {
       target: { value: 'Updated Pattern' },
     });
 

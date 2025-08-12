@@ -1,37 +1,23 @@
 import { Box, Flex, VStack, Button, Link, Text } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
-import { useState } from 'react';
-import PatternSelectionDialog from '../PatternSelectionDialog';
 
 const SidebarLayout = ({ children, userId }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [showPatternDialog, setShowPatternDialog] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
-  const handleStartNewProject = () => {
-    setShowPatternDialog(true);
-  };
-
-  const handlePatternSelection = (patternId) => {
-    setShowPatternDialog(false);
-
-    if (patternId) {
-      navigate(`/projects/${userId}/create`, { state: { patternId } });
-    } else {
-      navigate(`/projects/${userId}/create`);
-    }
-  };
-
   return (
-    <Flex height="100vh">
+    <Flex height="calc(100vh - 80px)" overflow="hidden">
       <Box
-        width="250px"
+        width="200px"
         p={4}
         ml={4}
         borderRight="1px"
         borderColor={{ base: 'gray.200', _dark: 'gray.700' }}
+        overflowY="auto"
+        flexShrink={0}
+        style={{ overscrollBehavior: 'auto' }}
       >
         <VStack align="start" spacing={6}>
           <Box width="100%">
@@ -49,11 +35,11 @@ const SidebarLayout = ({ children, userId }) => {
               <Link
                 as={RouterLink}
                 to={`/patterns/${userId}`}
-                color={isActive(`/patterns/${userId}`) ? 'linkText' : 'text'}
+                color={isActive(`/patterns/${userId}`) ? 'blue.500' : 'text'}
                 fontWeight={
                   isActive(`/patterns/${userId}`) ? 'medium' : 'normal'
                 }
-                _hover={{ color: 'linkText' }}
+                _hover={{ color: 'blue.500' }}
                 fontSize="sm"
               >
                 My Patterns
@@ -66,7 +52,7 @@ const SidebarLayout = ({ children, userId }) => {
                 pl={0}
                 fontSize="sm"
                 color="text"
-                _hover={{ color: 'linkText' }}
+                _hover={{ color: 'blue.500' }}
               >
                 Create Pattern
               </Button>
@@ -95,9 +81,9 @@ const SidebarLayout = ({ children, userId }) => {
                 variant="ghost"
                 size="sm"
                 pl={0}
-                color={isActive(`/projects/${userId}`) ? 'linkText' : 'text'}
+                color={isActive(`/projects/${userId}`) ? 'blue.500' : 'text'}
                 fontSize="sm"
-                _hover={{ color: 'linkText' }}
+                _hover={{ color: 'blue.500' }}
               >
                 My Projects
               </Link>
@@ -108,8 +94,8 @@ const SidebarLayout = ({ children, userId }) => {
                 pl={0}
                 fontSize="sm"
                 color="text"
-                _hover={{ color: 'linkText' }}
-                onClick={handleStartNewProject}
+                _hover={{ color: 'blue.500' }}
+                onClick={() => navigate(`/projects/${userId}/create`)}
               >
                 Start New
               </Button>
@@ -133,7 +119,7 @@ const SidebarLayout = ({ children, userId }) => {
                 to={`/projects/${userId}/finished`}
                 fontSize="sm"
                 color="text"
-                _hover={{ color: 'linkText' }}
+                _hover={{ color: 'blue.500' }}
               >
                 Finished Projects
               </Link>
@@ -145,13 +131,6 @@ const SidebarLayout = ({ children, userId }) => {
       <Box flex="1" p={4} overflow="auto">
         {children}
       </Box>
-
-      <PatternSelectionDialog
-        isOpen={showPatternDialog}
-        onClose={() => setShowPatternDialog(false)}
-        onConfirm={handlePatternSelection}
-        userId={userId}
-      />
     </Flex>
   );
 };

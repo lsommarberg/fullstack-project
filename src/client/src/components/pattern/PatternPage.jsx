@@ -5,7 +5,7 @@ import {
   Button,
   HStack,
   Flex,
-  Spacer,
+  VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -130,61 +130,148 @@ const Pattern = () => {
         />
       ) : (
         <Box
-          p={5}
-          shadow="md"
+          p={8}
+          shadow="lg"
           borderWidth="1px"
+          borderRadius="xl"
           bg="card.bg"
           color="fg.default"
         >
-          <Spacer />
-          <Flex justify="space-between" align="center" mb={6}>
-            <Text fontSize="2xl" fontWeight="bold">
-              {name}
-            </Text>
-            <HStack spacing={4}>
-              <Button
-                size="sm"
-                onClick={() =>
-                  navigate(`/projects/${id}/create`, { state: { patternId } })
-                }
-              >
-                Start Project
-              </Button>
-              <Button size="sm" onClick={toggleIsEditing}>
-                Edit Pattern
-              </Button>
-              <Button size="sm" color="deleteButton" onClick={handleDelete}>
-                Delete Pattern
-              </Button>
-            </HStack>
-          </Flex>
+          <VStack spacing={6} align="stretch">
+            <Flex justify="space-between" align="center">
+              <Text fontSize="2xl" fontWeight="bold" color="fg.default">
+                {name}
+              </Text>
+              <HStack spacing={4}>
+                <Button
+                  size="sm"
+                  onClick={() =>
+                    navigate(`/projects/${id}/create`, { state: { patternId } })
+                  }
+                >
+                  Start Project
+                </Button>
+                <Button size="sm" onClick={toggleIsEditing}>
+                  Edit Pattern
+                </Button>
+                <Button size="sm" color="deleteButton" onClick={handleDelete}>
+                  Delete Pattern
+                </Button>
+              </HStack>
+            </Flex>
 
-          <PatternText text={text} />
-
-          <ImageManager
-            files={files || []}
-            headerText="Pattern Images"
-            showUpload={false}
-            showDelete={false}
-            itemType="pattern"
-            userId={id}
-          />
-
-          {link && (
-            <Box mt={4}>
-              <Link href={link} color="blue.500" isExternal>
-                Link to pattern
-              </Link>
+            <Box
+              p={6}
+              bg="section.bg"
+              borderRadius="lg"
+              border="1px solid"
+              borderColor="section.border"
+              shadow="sm"
+            >
+              <Text fontSize="lg" fontWeight="semibold" mb={4} color="fg.muted">
+                Pattern Instructions
+              </Text>
+              <PatternText text={text} />
             </Box>
-          )}
-          <Box mt={4}>
-            <Text fontSize="lg" mb={4}>
-              Notes for this pattern:
-            </Text>
-            <Notes notes={notes} />
-          </Box>
 
-          <TagList tags={tags} />
+            {files && files.length > 0 && (
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
+              >
+                <Text
+                  fontSize="lg"
+                  fontWeight="semibold"
+                  mb={4}
+                  color="fg.muted"
+                >
+                  Pattern Images
+                </Text>
+                <ImageManager
+                  files={files}
+                  headerText=""
+                  showUpload={false}
+                  showDelete={false}
+                  itemType="pattern"
+                  userId={id}
+                />
+              </Box>
+            )}
+
+            {link && (
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
+              >
+                <Text
+                  fontSize="lg"
+                  fontWeight="semibold"
+                  mb={4}
+                  color="fg.muted"
+                >
+                  Pattern Source
+                </Text>
+                <Link
+                  href={link}
+                  color="blue.500"
+                  isExternal
+                  _hover={{ color: 'blue.600', textDecoration: 'underline' }}
+                >
+                  {link}
+                </Link>
+              </Box>
+            )}
+
+            {tags && tags.length > 1 && (
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
+              >
+                <Text
+                  fontSize="lg"
+                  fontWeight="semibold"
+                  mb={4}
+                  color="fg.muted"
+                >
+                  Tags
+                </Text>
+                <TagList tags={tags} />
+              </Box>
+            )}
+
+            {notes && notes.trim() && (
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
+              >
+                <Text
+                  fontSize="lg"
+                  fontWeight="semibold"
+                  mb={4}
+                  color="fg.muted"
+                >
+                  Additional Notes
+                </Text>
+                <Notes notes={notes} />
+              </Box>
+            )}
+          </VStack>
 
           <ConfirmDialog
             isOpen={showDeleteDialog}

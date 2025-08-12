@@ -158,7 +158,7 @@ describe('ProjectPage', () => {
       expect(screen.getByText('Cancel')).toBeInTheDocument();
     });
 
-    fireEvent.change(screen.getByLabelText('Project Name'), {
+    fireEvent.change(screen.getByTestId('project-name-input'), {
       target: { value: 'Updated Project' },
     });
 

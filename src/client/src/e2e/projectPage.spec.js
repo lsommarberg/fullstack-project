@@ -84,7 +84,7 @@ describe('Project Page', () => {
     ).toBeVisible();
     await expect(page).toHaveURL(/\/projects\/\d+/);
     const currentDate = new Date().toLocaleDateString();
-    await expect(page.getByText(`Finished on: ${currentDate}`)).toBeVisible();
+    await expect(page.getByText(currentDate)).toBeVisible();
     await expect(page.getByText('Row Trackers')).not.toBeVisible();
     await page.getByText('My Projects').click();
     await expect(page.getByText('To Finish')).not.toBeVisible();

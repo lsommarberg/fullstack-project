@@ -5,12 +5,13 @@ import {
   Input,
   Button,
   Fieldset,
-  Stack,
   Text,
+  VStack,
+  HStack,
 } from '@chakra-ui/react';
 import RowTrackersSection from './RowTrackersSection';
 import { Field } from '@/components/ui/field';
-import { PatternMenu } from '../PatternSelectionDialog';
+import { PatternMenu } from './PatternSelectionMenu';
 import patternService from '../../services/pattern';
 import ImageManager from '../ImageManager';
 
@@ -24,6 +25,7 @@ const EditProject = ({
   userId,
   onCancel,
   handleImageDelete,
+  isFinished,
 }) => {
   const [projectName, setProjectName] = useState(name);
   const [projectNotes, setProjectNotes] = useState(notes);
@@ -51,10 +53,20 @@ const EditProject = ({
   }, [userId]);
 
   const handleSave = () => {
+    const validRowTrackers = rowTrackersState
+      .filter((tracker) => {
+        return tracker.section.trim() || tracker.totalRows;
+      })
+      .map((tracker) => ({
+        ...tracker,
+        section: tracker.section.trim() || 'Main',
+        totalRows: parseInt(tracker.totalRows) || 0,
+      }));
+
     onSave({
       name: projectName,
       notes: projectNotes,
-      rowTrackers: rowTrackersState,
+      rowTrackers: validRowTrackers,
       pattern: selectedPattern,
       files: projectFiles,
     });
@@ -105,85 +117,181 @@ const EditProject = ({
   };
 
   return (
-    <Box p={5} shadow="md" borderWidth="1px" bg="card.bg" color="fg.default">
+    <Box
+      p={8}
+      shadow="lg"
+      borderWidth="1px"
+      borderRadius="xl"
+      bg="card.bg"
+      color="fg.default"
+    >
       <form onSubmit={handleSave}>
         <Fieldset.Root>
-          <Stack spacing={4}>
-            <Fieldset.Legend>Edit Project</Fieldset.Legend>
-            <Fieldset.HelperText>
-              Update your project details
-            </Fieldset.HelperText>
-
-            <Field label="Project Name">
-              <Input
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-                placeholder="Enter project name"
-                bg="input.bg"
+          <VStack spacing={6} align="stretch">
+            <Box textAlign="center" mb={2}>
+              <Fieldset.Legend
+                fontSize="2xl"
+                fontWeight="bold"
                 color="fg.default"
-                borderColor="input.border"
-              />
-            </Field>
+              >
+                Edit Project
+              </Fieldset.Legend>
+              <Fieldset.HelperText fontSize="md" color="fg.muted" mt={2}>
+                Update your project details and settings
+              </Fieldset.HelperText>
+            </Box>
 
-            <Field label="Pattern">
-              {isLoading ? (
-                <Text>Loading patterns...</Text>
-              ) : patterns.length > 0 ? (
-                <PatternMenu
-                  onPatternSelect={handlePatternSelect}
-                  patterns={patterns}
-                  selectedPatternName={
-                    selectedPattern ? selectedPattern.name : ''
+            <Box
+              p={6}
+              bg="section.bg"
+              borderRadius="lg"
+              border="1px solid"
+              borderColor="section.border"
+              shadow="sm"
+            >
+              <VStack spacing={4} align="stretch">
+                <Field label="Project Name" required>
+                  <Input
+                    value={projectName}
+                    onChange={(e) => setProjectName(e.target.value)}
+                    placeholder="Enter project name"
+                    size="lg"
+                    bg="input.bg"
+                    color="fg.default"
+                    borderColor="input.border"
+                    _focus={{
+                      borderColor: 'blue.400',
+                      boxShadow: '0 0 0 1px blue.400',
+                    }}
+                    data-testid="project-name-input"
+                  />
+                </Field>
+
+                <Field label="Pattern">
+                  {isLoading ? (
+                    <Text>Loading patterns...</Text>
+                  ) : patterns.length > 0 ? (
+                    <PatternMenu
+                      onPatternSelect={handlePatternSelect}
+                      patterns={patterns}
+                      selectedPatternName={
+                        selectedPattern ? selectedPattern.name : ''
+                      }
+                    />
+                  ) : (
+                    <Text
+                      fontSize="sm"
+                      color="fg.muted"
+                      p={4}
+                      bg={{ base: 'gray.100', _dark: 'gray.700' }}
+                      borderRadius="md"
+                      border="1px solid"
+                      borderColor="card.border"
+                    >
+                      No patterns available. You can create one first or start
+                      without a pattern.
+                    </Text>
+                  )}
+                </Field>
+              </VStack>
+            </Box>
+
+            <Box
+              p={6}
+              bg="section.bg"
+              borderRadius="lg"
+              border="1px solid"
+              borderColor="section.border"
+              shadow="sm"
+            >
+              <Field>
+                <ImageManager
+                  files={projectFiles}
+                  headerText="Project Images"
+                  showUpload={true}
+                  showDelete={true}
+                  type="projects"
+                  onImageUpload={handleImageUpload}
+                  onImageDelete={handleImageDeleteLocal}
+                  onUploadError={(error) =>
+                    console.error('Upload error:', error)
                   }
+                  buttonText="Add Project Image"
+                  itemType="project"
+                  userId={userId}
                 />
-              ) : (
-                <Text fontSize="sm" color="gray.500">
-                  No patterns available. You can create one first or start
-                  without a pattern.
-                </Text>
-              )}
-            </Field>
-            <Field label="Images">
-              <ImageManager
-                files={projectFiles}
-                headerText="Project Images"
-                showUpload={true}
-                showDelete={true}
-                type="projects"
-                onImageUpload={handleImageUpload}
-                onImageDelete={handleImageDeleteLocal}
-                onUploadError={(error) => console.error('Upload error:', error)}
-                buttonText="Add Project Image"
-                itemType="project"
-                userId={userId}
-              />
-            </Field>
-            <RowTrackersSection
-              rowTrackers={rowTrackersState}
-              onAddTracker={addRowTracker}
-              onRemoveTracker={removeRowTracker}
-              onUpdateTracker={updateRowTracker}
-              isEditable={true}
-            />
+              </Field>
+            </Box>
 
-            <Field label="Notes">
-              <Textarea
-                value={projectNotes}
-                onChange={(e) => setProjectNotes(e.target.value)}
-                placeholder="Add notes about your project"
-                bg="input.bg"
-                color="fg.default"
-                borderColor="input.border"
-              />
-            </Field>
+            {!isFinished && (
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
+              >
+                <RowTrackersSection
+                  rowTrackers={rowTrackersState}
+                  onAddTracker={addRowTracker}
+                  onRemoveTracker={removeRowTracker}
+                  onUpdateTracker={updateRowTracker}
+                  isEditable={true}
+                />
+              </Box>
+            )}
 
-            <Button type="submit" onClick={handleSave}>
-              Save Changes
-            </Button>
-            <Button bg="cancelButton" onClick={onCancel}>
-              Cancel
-            </Button>
-          </Stack>
+            <Box
+              p={6}
+              bg="section.bg"
+              borderRadius="lg"
+              border="1px solid"
+              borderColor="section.border"
+              shadow="sm"
+            >
+              <Field label="Notes">
+                <Textarea
+                  value={projectNotes}
+                  onChange={(e) => setProjectNotes(e.target.value)}
+                  placeholder="Add notes about your project"
+                  minH="120px"
+                  bg="input.bg"
+                  color="fg.default"
+                  borderColor="input.border"
+                  _focus={{
+                    borderColor: 'blue.400',
+                    boxShadow: '0 0 0 1px blue.400',
+                  }}
+                />
+              </Field>
+            </Box>
+
+            <HStack mt={8} spacing={4} justify="center">
+              <Button
+                type="submit"
+                onClick={handleSave}
+                size="lg"
+                colorScheme="blue"
+                px={8}
+                py={6}
+                fontSize="md"
+                fontWeight="semibold"
+              >
+                Save Changes
+              </Button>
+              <Button
+                onClick={onCancel}
+                bg={'cancelButton'}
+                size="lg"
+                px={8}
+                py={6}
+                fontSize="md"
+              >
+                Cancel
+              </Button>
+            </HStack>
+          </VStack>
         </Fieldset.Root>
       </form>
     </Box>

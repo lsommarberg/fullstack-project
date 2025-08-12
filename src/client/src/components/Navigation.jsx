@@ -19,6 +19,9 @@ const Navigation = ({ user, setUser }) => {
       boxShadow="md"
       bg="nav.bg"
       color="fg.default"
+      position="sticky"
+      top={0}
+      zIndex={1000}
     >
       <Flex align="center">
         <Button onClick={() => navigate('/')} mr={4}>
