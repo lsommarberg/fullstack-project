@@ -1,15 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
-import { Text, Link, Box, Flex, HStack, Button } from '@chakra-ui/react';
+import {
+  Text,
+  Link,
+  Box,
+  Flex,
+  HStack,
+  Button,
+  VStack,
+} from '@chakra-ui/react';
 import projectService from '../../services/project';
 import SidebarLayout from '../layout/SidebarLayout';
 import Notes from '../pattern/Notes';
 import { toaster } from '../ui/toaster';
 import ConfirmDialog from '../ConfirmDialog';
-import { RowTracker } from './RowTracker';
+import RowTrackersSection from './RowTrackersSection';
 import EditProject from './EditProject';
 import FinishProjectDialog from './FinishProjectDialog';
-import FinishedProject from './FinishedProject';
 import useImageUpload from '../../hooks/useImageManagement';
 import ImageManager from '../ImageManager';
 import uploadService from '../../services/upload';
@@ -23,7 +30,6 @@ const ProjectPage = () => {
   const navigate = useNavigate();
   const [isFinishing, setIsFinishing] = useState(false);
   const [finishDialogOpen, setFinishDialogOpen] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
   const { deleteImage } = useImageUpload();
 
   useEffect(() => {
@@ -163,7 +169,6 @@ const ProjectPage = () => {
 
       const updatedProject = await projectService.getProjectById(id, projectId);
       setProjectData(updatedProject);
-      setIsFinished(true);
       setFinishDialogOpen(false);
     } catch (error) {
       console.error('Error finishing project:', error);
@@ -190,66 +195,52 @@ const ProjectPage = () => {
     }
   };
 
-  if (isEditing) {
-    return (
-      <SidebarLayout userId={id}>
-        {projectData && (
-          <EditProject
-            name={name}
-            notes={notes}
-            rowTrackers={rowTrackers}
-            pattern={pattern}
-            onSave={updateProject}
-            onCancel={() => setIsEditing(false)}
-            userId={id}
-            handleImageDelete={handleImageDelete}
-            files={files}
-          />
-        )}
-      </SidebarLayout>
-    );
-  }
-
-  const renderFinishedProject = () => (
-    <FinishedProject
-      projectData={projectData}
-      formattedDate={formattedDate}
-      handleDelete={handleDelete}
-      handleImageDelete={handleImageDelete}
-      showDeleteDialog={showDeleteDialog}
-      setShowDeleteDialog={setShowDeleteDialog}
-      confirmDelete={confirmDelete}
-      isDeleting={isDeleting}
-      userId={id}
-    />
-  );
-
   return (
     <SidebarLayout userId={id}>
       {projectData ? (
         <>
-          {isFinished || finishedAt !== null ? (
-            renderFinishedProject()
+          {isEditing ? (
+            <EditProject
+              name={name}
+              notes={notes}
+              rowTrackers={rowTrackers}
+              pattern={pattern}
+              onSave={updateProject}
+              onCancel={() => setIsEditing(false)}
+              userId={id}
+              handleImageDelete={handleImageDelete}
+              files={files}
+              isFinished={finishedAt}
+            />
           ) : (
-            <>
-              <Box
-                p={5}
-                shadow="md"
-                borderWidth="1px"
-                bg="card.bg"
-                color="fg.default"
-              >
-                <Flex justify="space-between" align="center" mb={4}>
-                  <Text fontSize="2xl" fontWeight="bold" mb={4}>
+            <Box
+              p={8}
+              shadow="lg"
+              borderWidth="1px"
+              borderRadius="xl"
+              bg="card.bg"
+              color="fg.default"
+            >
+              <VStack spacing={6} align="stretch">
+                <Flex justify="space-between" align="center">
+                  <Text
+                    fontSize="2xl"
+                    fontWeight="bold"
+                    color={finishedAt ? 'green.500' : 'fg.default'}
+                  >
+                    {finishedAt ? '✓ ' : ''}
                     {name}
+                    {finishedAt ? ' (Completed)' : ''}
                   </Text>
                   <HStack spacing={4}>
                     <Button onClick={() => setIsEditing(true)}>
                       Edit Project
                     </Button>
-                    <Button onClick={() => setFinishDialogOpen(true)}>
-                      Finish project
-                    </Button>
+                    {!finishedAt && (
+                      <Button onClick={() => setFinishDialogOpen(true)}>
+                        Finish project
+                      </Button>
+                    )}
                     <Button
                       color="deleteButton"
                       onClick={handleDelete}
@@ -259,62 +250,161 @@ const ProjectPage = () => {
                     </Button>
                   </HStack>
                 </Flex>
-                <Text mb={4}>Started on: {formattedDate}</Text>
-                {pattern && (
-                  <Text mb={4}>
-                    Pattern:{' '}
-                    <Link
-                      as={RouterLink}
-                      to={`/patterns/${id}/${pattern.id}`}
-                      color="blue.500"
-                      textDecoration="underline"
+
+                <Box
+                  p={6}
+                  bg="section.bg"
+                  borderRadius="lg"
+                  border="1px solid"
+                  borderColor="section.border"
+                  shadow="sm"
+                >
+                  <VStack spacing={4} align="stretch">
+                    <Box>
+                      <Text
+                        fontSize="lg"
+                        fontWeight="semibold"
+                        mb={2}
+                        color="fg.muted"
+                      >
+                        Project Started
+                      </Text>
+                      <Text fontSize="md">{formattedDate}</Text>
+                    </Box>
+
+                    {finishedAt && (
+                      <Box>
+                        <Text
+                          fontSize="lg"
+                          fontWeight="semibold"
+                          mb={2}
+                          color="fg.muted"
+                        >
+                          Project Completed
+                        </Text>
+                        <Text fontSize="md">
+                          {new Date(finishedAt).toLocaleDateString()}
+                        </Text>
+                      </Box>
+                    )}
+
+                    {pattern && (
+                      <Box>
+                        <Text
+                          fontSize="lg"
+                          fontWeight="semibold"
+                          mb={2}
+                          color="fg.muted"
+                        >
+                          Pattern
+                        </Text>
+                        <Link
+                          as={RouterLink}
+                          to={`/patterns/${id}/${pattern.id}`}
+                          color="blue.500"
+                          textDecoration="underline"
+                          _hover={{ color: 'blue.600' }}
+                        >
+                          {pattern.name}
+                        </Link>
+                      </Box>
+                    )}
+                  </VStack>
+                </Box>
+
+                {rowTrackers && rowTrackers.length > 0 && !finishedAt && (
+                  <Box
+                    p={6}
+                    bg="section.bg"
+                    borderRadius="lg"
+                    border="1px solid"
+                    borderColor="section.border"
+                    shadow="sm"
+                  >
+                    <Text
+                      fontSize="lg"
+                      fontWeight="semibold"
+                      mb={4}
+                      color="fg.muted"
                     >
-                      {pattern.name}
-                    </Link>
-                  </Text>
+                      Row Trackers
+                    </Text>
+                    <RowTrackersSection
+                      rowTrackers={rowTrackers}
+                      onUpdateTracker={(index, field, value) => {
+                        if (field === 'currentRow') {
+                          onCurrentRowChange(index, value);
+                        } else if (field === 'totalRows') {
+                          onTotalRowsChange(index, value);
+                        }
+                      }}
+                      isEditable={false}
+                      showHeader={false}
+                    />
+                  </Box>
                 )}
-                <Box mb={4}>
-                  <Text fontWeight="bold">Row Trackers:</Text>
-                  {rowTrackers.length === 0 ? (
-                    <Text>No row trackers available</Text>
-                  ) : (
-                    rowTrackers.map((tracker, index) => (
-                      <RowTracker
-                        key={index}
-                        index={index}
-                        section={tracker.section}
-                        currentRow={tracker.currentRow}
-                        totalRows={tracker.totalRows}
-                        onCurrentRowChange={onCurrentRowChange}
-                        onTotalRowsChange={onTotalRowsChange}
-                      />
-                    ))
-                  )}
-                </Box>
 
-                <ImageManager
-                  files={files || []}
-                  headerText="Project Images"
-                  showUpload={false}
-                  showDelete={false}
-                  itemType="project"
-                  userId={id}
-                />
+                {files && files.length > 0 && (
+                  <Box
+                    p={6}
+                    bg="section.bg"
+                    borderRadius="lg"
+                    border="1px solid"
+                    borderColor="section.border"
+                    shadow="sm"
+                  >
+                    <Text
+                      fontSize="lg"
+                      fontWeight="semibold"
+                      mb={4}
+                      color="fg.muted"
+                    >
+                      {finishedAt ? 'Final Project Images' : 'Project Images'}
+                    </Text>
+                    <ImageManager
+                      files={files}
+                      headerText=""
+                      showUpload={false}
+                      showDelete={false}
+                      itemType="project"
+                      userId={id}
+                    />
+                  </Box>
+                )}
 
-                <Box mb={4}>
-                  <Text fontWeight="bold">Notes:</Text>
-                  {<Notes notes={notes} />}
-                </Box>
-                <ConfirmDialog
-                  isOpen={showDeleteDialog}
-                  onClose={() => setShowDeleteDialog(false)}
-                  onConfirm={confirmDelete}
-                  isLoading={isDeleting}
-                  confirmText={'Delete Project'}
-                  cancelText="Cancel"
-                  title="Delete Project"
-                  message="Are you sure you want to delete this project and all associated images? This action cannot be undone."
-                />
+                {notes && notes.trim() && (
+                  <Box
+                    p={6}
+                    bg="section.bg"
+                    borderRadius="lg"
+                    border="1px solid"
+                    borderColor="section.border"
+                    shadow="sm"
+                  >
+                    <Text
+                      fontSize="lg"
+                      fontWeight="semibold"
+                      mb={4}
+                      color="fg.muted"
+                    >
+                      {finishedAt ? 'Final Notes' : 'Notes'}
+                    </Text>
+                    <Notes notes={notes} />
+                  </Box>
+                )}
+              </VStack>
+
+              <ConfirmDialog
+                isOpen={showDeleteDialog}
+                onClose={() => setShowDeleteDialog(false)}
+                onConfirm={confirmDelete}
+                isLoading={isDeleting}
+                confirmText={'Delete Project'}
+                cancelText="Cancel"
+                title="Delete Project"
+                message="Are you sure you want to delete this project and all associated images? This action cannot be undone."
+              />
+              {!finishedAt && (
                 <FinishProjectDialog
                   isOpen={finishDialogOpen}
                   onClose={() => setFinishDialogOpen(false)}
@@ -324,8 +414,8 @@ const ProjectPage = () => {
                   currentImages={files}
                   userId={id}
                 />
-              </Box>
-            </>
+              )}
+            </Box>
           )}
         </>
       ) : (

@@ -8,10 +8,13 @@ import {
   Textarea,
   Box,
   HStack,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
 import SidebarLayout from '../layout/SidebarLayout';
 import RowTrackersSection from './RowTrackersSection';
+import { PatternMenu } from './PatternSelectionMenu';
 import projectService from '../../services/project';
 import patternService from '../../services/pattern';
 import { toaster } from '../ui/toaster';
@@ -31,28 +34,40 @@ const ProjectForm = () => {
   const [files, setFiles] = useState([]);
   const location = useLocation();
   const patternFromState = location.state?.patternId;
+  const [patterns, setPatterns] = useState([]);
+  const [selectedPattern, setSelectedPattern] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (patternFromState) {
-      const fetchPattern = async () => {
-        try {
-          const patternData = await patternService.getPatternById(
-            id,
-            patternFromState,
-          );
-          setNotes(patternData.notes || '');
-          setName(patternData.name || '');
-        } catch (error) {
-          console.error('Error fetching pattern:', error);
-          toaster.error({
-            description: 'Failed to fetch pattern',
-            duration: 5000,
-          });
+    const loadUserPatterns = async () => {
+      try {
+        setIsLoading(true);
+        const userPatterns = await patternService.getPatterns(id);
+        if (userPatterns) {
+          setPatterns(userPatterns);
+          if (patternFromState) {
+            const preselectedPattern = userPatterns.find(
+              (p) => p.id === patternFromState,
+            );
+            if (preselectedPattern) {
+              setSelectedPattern(preselectedPattern);
+              setNotes(preselectedPattern.notes || '');
+              setName(preselectedPattern.name || '');
+            }
+          }
         }
-      };
-      fetchPattern();
-    }
-  }, [patternFromState]);
+      } catch (error) {
+        console.error('Error fetching patterns:', error);
+        toaster.error({
+          description: 'Failed to fetch patterns',
+          duration: 5000,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadUserPatterns();
+  }, [id, patternFromState]);
 
   const addRowTracker = () => {
     setRowTrackers([
@@ -77,6 +92,11 @@ const ProjectForm = () => {
     setRowTrackers(updatedTrackers);
   };
 
+  const handlePatternSelect = (patternId) => {
+    const pattern = patterns.find((p) => p.id === patternId);
+    setSelectedPattern(pattern || null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -92,7 +112,7 @@ const ProjectForm = () => {
         name,
         startedAt,
         rowTrackers: validRowTrackers,
-        pattern: patternFromState || null,
+        pattern: selectedPattern ? selectedPattern.id : null,
         notes,
         files: files,
       });
@@ -139,81 +159,188 @@ const ProjectForm = () => {
 
   return (
     <SidebarLayout userId={id}>
-      <Box p={5} shadow="md" borderWidth="1px" bg="card.bg" color="fg.default">
+      <Box
+        p={8}
+        shadow="lg"
+        borderWidth="1px"
+        borderRadius="xl"
+        bg="card.bg"
+        color="fg.default"
+      >
         <form onSubmit={handleSubmit}>
           <Fieldset.Root>
-            <Stack spacing={4}>
-              <Fieldset.Legend>Create a Project</Fieldset.Legend>
-              <Fieldset.HelperText>
-                Fill in the details to create a new project.
-              </Fieldset.HelperText>
-
-              <Field label="Project Name">
-                <Input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter project name"
-                  required
-                  bg="input.bg"
+            <VStack spacing={6} align="stretch">
+              <Box textAlign="center" mb={2}>
+                <Fieldset.Legend
+                  fontSize="2xl"
+                  fontWeight="bold"
                   color="fg.default"
-                  borderColor="input.border"
-                />
-              </Field>
+                >
+                  Create a New Project
+                </Fieldset.Legend>
+              </Box>
 
-              <Field label="Started At">
-                <Input
-                  type="date"
-                  value={startedAt}
-                  onChange={(e) => setStartedAt(e.target.value)}
-                  required
-                  bg="input.bg"
-                  color="fg.default"
-                  borderColor="input.border"
-                />
-              </Field>
-
-              <RowTrackersSection
-                rowTrackers={rowTrackers}
-                onAddTracker={addRowTracker}
-                onRemoveTracker={removeRowTracker}
-                onUpdateTracker={updateRowTracker}
-                isEditable={true}
-              />
-              <Field
-                label="Project Images"
-                helperText="Upload images for your project (optional)"
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
               >
-                <ImageManager
-                  files={files}
-                  headerText="Project Images"
-                  showUpload={true}
-                  showDelete={true}
-                  type="projects"
-                  onImageUpload={handleImageUpload}
-                  onImageDelete={handleImageDelete}
-                  onUploadError={handleImageError}
-                  buttonText="Upload Project Image"
-                  itemType="project"
-                  userId={id}
-                />
-              </Field>
-              <Field label="Notes (optional)">
-                <Textarea
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Enter notes for the project"
-                  bg="input.bg"
-                  color="fg.default"
-                  borderColor="input.border"
-                />
-              </Field>
-            </Stack>
+                <VStack spacing={4} align="stretch">
+                  <Field label="Project Name" required>
+                    <Input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Enter a name for your project"
+                      required
+                      size="lg"
+                      bg="input.bg"
+                      color="fg.default"
+                      borderColor="input.border"
+                      _focus={{
+                        borderColor: 'blue.400',
+                        boxShadow: '0 0 0 1px blue.400',
+                      }}
+                    />
+                  </Field>
 
-            <HStack mt={4} spacing={4}>
-              <Button data-testid="create-project-button" type="submit">
+                  <Field label="Started At" required>
+                    <Input
+                      type="date"
+                      value={startedAt}
+                      onChange={(e) => setStartedAt(e.target.value)}
+                      required
+                      size="lg"
+                      bg="input.bg"
+                      color="fg.default"
+                      borderColor="input.border"
+                      _focus={{
+                        borderColor: 'blue.400',
+                        boxShadow: '0 0 0 1px blue.400',
+                      }}
+                    />
+                  </Field>
+
+                  <Field label="Pattern (optional)">
+                    {isLoading ? (
+                      <Text>Loading patterns...</Text>
+                    ) : patterns.length > 0 ? (
+                      <PatternMenu
+                        onPatternSelect={handlePatternSelect}
+                        patterns={patterns}
+                        selectedPatternName={
+                          selectedPattern ? selectedPattern.name : ''
+                        }
+                      />
+                    ) : (
+                      <Text
+                        fontSize="sm"
+                        color="fg.muted"
+                        p={4}
+                        bg={{ base: 'gray.100', _dark: 'gray.700' }}
+                        borderRadius="md"
+                        border="1px solid"
+                        borderColor="card.border"
+                      >
+                        No patterns available. You can create one first or start
+                        without a pattern.
+                      </Text>
+                    )}
+                  </Field>
+                </VStack>
+              </Box>
+
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
+              >
+                <RowTrackersSection
+                  rowTrackers={rowTrackers}
+                  onAddTracker={addRowTracker}
+                  onRemoveTracker={removeRowTracker}
+                  onUpdateTracker={updateRowTracker}
+                  isEditable={true}
+                />
+              </Box>
+
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
+              >
+                <Field helperText="Upload reference images, charts, or progress photos">
+                  <ImageManager
+                    files={files}
+                    headerText="Project Images"
+                    showUpload={true}
+                    showDelete={true}
+                    type="projects"
+                    onImageUpload={handleImageUpload}
+                    onImageDelete={handleImageDelete}
+                    onUploadError={handleImageError}
+                    buttonText="Upload Project Image"
+                    itemType="project"
+                    userId={id}
+                  />
+                </Field>
+              </Box>
+
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
+              >
+                <Field label="Notes (optional)">
+                  <Textarea
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Add any notes, reminders, or special instructions for this project"
+                    minH="120px"
+                    bg="input.bg"
+                    color="fg.default"
+                    borderColor="input.border"
+                    _focus={{
+                      borderColor: 'blue.400',
+                      boxShadow: '0 0 0 1px blue.400',
+                    }}
+                  />
+                </Field>
+              </Box>
+            </VStack>
+
+            <HStack mt={8} spacing={4} justify="center">
+              <Button
+                data-testid="create-project-button"
+                type="submit"
+                size="lg"
+                colorScheme="blue"
+                px={8}
+                py={6}
+                fontSize="md"
+                fontWeight="semibold"
+              >
                 Create Project
               </Button>
-              <Button onClick={() => navigate(-1)} bg="cancelButton">
+              <Button
+                onClick={() => navigate(-1)}
+                bg={'cancelButton'}
+                size="lg"
+                px={8}
+                py={6}
+                fontSize="md"
+              >
                 Cancel
               </Button>
             </HStack>

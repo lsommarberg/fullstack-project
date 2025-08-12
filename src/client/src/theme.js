@@ -7,6 +7,7 @@ export const config = defineConfig({
         primary: { value: '#a5bcf8' },
         secondary: { value: '#e9d5ff' },
         tertiary: { value: '#f3e8ff' },
+        sectionLight: { value: '#f8f5ff' }, // Much lighter, better contrast
         // tertiary: { value: '#bbf7d0' },
 
         dark: { value: '#000000' },
@@ -22,7 +23,7 @@ export const config = defineConfig({
           value: { base: '{colors.secondary}', _dark: '{colors.dark}' },
         },
         'card.border': {
-          value: { base: 'gray.200', _dark: 'gray.600' },
+          value: { base: 'gray.200', _dark: 'gray.500' },
         },
         'input.bg': {
           value: { base: '{colors.tertiary}', _dark: 'gray.700' },
@@ -43,11 +44,11 @@ export const config = defineConfig({
         cancelButton: {
           value: { base: '#4a5568', _dark: '#a0aec0' },
         },
-        link: {
-          value: { base: '#1A4670', _dark: '#1A4670' },
+        'section.bg': {
+          value: { base: 'white', _dark: 'gray.900' },
         },
-        linkText: {
-          value: { base: '#1A4670', _dark: 'colors.primary' },
+        'section.border': {
+          value: { base: 'gray.300', _dark: 'gray.600' },
         },
       },
     },

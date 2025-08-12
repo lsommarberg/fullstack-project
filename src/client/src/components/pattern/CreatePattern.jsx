@@ -4,10 +4,10 @@ import {
   Button,
   Fieldset,
   Input,
-  Stack,
   Textarea,
   Box,
   HStack,
+  VStack,
 } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
 import SidebarLayout from '../layout/SidebarLayout';
@@ -83,109 +83,197 @@ const PatternForm = () => {
 
   return (
     <SidebarLayout userId={id}>
-      <Box p={5} shadow="md" borderWidth="1px" bg="card.bg" color="fg.default">
+      <Box
+        p={8}
+        shadow="lg"
+        borderWidth="1px"
+        borderRadius="xl"
+        bg="card.bg"
+        color="fg.default"
+      >
         <form onSubmit={handleSubmit}>
           <Fieldset.Root>
-            <Stack spacing={4}>
-              <Fieldset.Legend>Create a Pattern</Fieldset.Legend>
-              <Fieldset.HelperText>
-                Please provide details for your new pattern.
-              </Fieldset.HelperText>
-            </Stack>
+            <VStack spacing={6} align="stretch">
+              <Box textAlign="center" mb={2}>
+                <Fieldset.Legend
+                  fontSize="2xl"
+                  fontWeight="bold"
+                  color="fg.default"
+                >
+                  Create a New Pattern
+                </Fieldset.Legend>
+                <Fieldset.HelperText fontSize="md" color="fg.muted" mt={2}>
+                  Add a new pattern to your collection with detailed
+                  instructions
+                </Fieldset.HelperText>
+              </Box>
 
-            <Fieldset.Content>
-              <Field label="Name" required>
-                <Input
-                  name="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  width="100%"
-                  bg="input.bg"
-                  color="fg.default"
-                  borderColor="input.border"
-                />
-              </Field>
-              <Field label="Text" required>
-                <Textarea
-                  name="text"
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  width="100%"
-                  minHeight={200}
-                  bg="input.bg"
-                  color="fg.default"
-                  borderColor="input.border"
-                />
-              </Field>
-              <Field
-                label="Link"
-                helperText="Optional: Provide a link to the pattern."
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
               >
-                <Input
-                  name="link"
-                  value={link}
-                  onChange={(e) => setLink(e.target.value)}
-                  width="100%"
-                  bg="input.bg"
-                  color="fg.default"
-                  borderColor="input.border"
-                />
-              </Field>
-              <Field
-                label="Tags"
-                helperText='Separate tags with a comma, e.g. "tag1, tag2"'
+                <VStack spacing={4} align="stretch">
+                  <Field label="Pattern Name" required>
+                    <Input
+                      name="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Enter a name for your pattern"
+                      size="lg"
+                      bg="input.bg"
+                      color="fg.default"
+                      borderColor="input.border"
+                      _focus={{
+                        borderColor: 'blue.400',
+                        boxShadow: '0 0 0 1px blue.400',
+                      }}
+                    />
+                  </Field>
+
+                  <Field label="Pattern Link (optional)">
+                    <Input
+                      name="link"
+                      value={link}
+                      onChange={(e) => setLink(e.target.value)}
+                      placeholder="Link to pattern source or website"
+                      size="lg"
+                      bg="input.bg"
+                      color="fg.default"
+                      borderColor="input.border"
+                      _focus={{
+                        borderColor: 'blue.400',
+                        boxShadow: '0 0 0 1px blue.400',
+                      }}
+                    />
+                  </Field>
+
+                  <Field
+                    label="Tags (optional)"
+                    helperText="Separate tags with commas (e.g., knitting, scarf, beginner)"
+                  >
+                    <Input
+                      name="tags"
+                      value={tagsString}
+                      onChange={(e) => setTagsString(e.target.value)}
+                      placeholder="Tags separated by commas"
+                      size="lg"
+                      bg="input.bg"
+                      color="fg.default"
+                      borderColor="input.border"
+                      _focus={{
+                        borderColor: 'blue.400',
+                        boxShadow: '0 0 0 1px blue.400',
+                      }}
+                    />
+                  </Field>
+                </VStack>
+              </Box>
+
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
               >
-                <Input
-                  name="tags"
-                  value={tagsString}
-                  onChange={(e) => setTagsString(e.target.value)}
-                  width="100%"
-                  bg="input.bg"
-                  color="fg.default"
-                  borderColor="input.border"
-                />
-              </Field>
-              <Field label="Notes">
-                <Textarea
-                  name="notes"
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  width="100%"
-                  bg="input.bg"
-                  color="fg.default"
-                  borderColor="input.border"
-                />
-              </Field>
-              <Field
-                label="Image Upload"
-                helperText="Upload images for your pattern (optional)"
+                <Field label="Pattern Instructions" required>
+                  <Textarea
+                    name="text"
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    minH="200px"
+                    placeholder="Enter detailed pattern instructions, stitch counts, and step-by-step directions"
+                    bg="input.bg"
+                    color="fg.default"
+                    borderColor="input.border"
+                    _focus={{
+                      borderColor: 'blue.400',
+                      boxShadow: '0 0 0 1px blue.400',
+                    }}
+                  />
+                </Field>
+              </Box>
+
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
               >
-                <ImageManager
-                  files={files}
-                  headerText="Pattern Images"
-                  showUpload={true}
-                  showDelete={true}
-                  type="patterns"
-                  onImageUpload={handleImageUpload}
-                  onImageDelete={handleImageDelete}
-                  onUploadError={handleImageError}
-                  buttonText="Upload Pattern Image"
-                  userId={id}
-                />
-              </Field>
-            </Fieldset.Content>
-            <HStack spacing={4}>
-              <Button
-                type="submit"
-                data-testid="create-pattern-button"
-                name="Create Pattern"
+                <Field helperText="Upload reference images, charts, or visual guides for your pattern">
+                  <ImageManager
+                    files={files}
+                    headerText="Pattern Images"
+                    showUpload={true}
+                    showDelete={true}
+                    type="patterns"
+                    onImageUpload={handleImageUpload}
+                    onImageDelete={handleImageDelete}
+                    onUploadError={handleImageError}
+                    buttonText="Upload Pattern Image"
+                    userId={id}
+                  />
+                </Field>
+              </Box>
+
+              <Box
+                p={6}
+                bg="section.bg"
+                borderRadius="lg"
+                border="1px solid"
+                borderColor="section.border"
+                shadow="sm"
               >
-                Create Pattern
-              </Button>
-              <Button bg="cancelButton" onClick={handleCancel}>
-                Cancel
-              </Button>
-            </HStack>
+                <Field label="Additional Notes (optional)">
+                  <Textarea
+                    name="notes"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    minH="120px"
+                    placeholder="Add any additional notes, modifications, or personal reminders about this pattern"
+                    bg="input.bg"
+                    color="fg.default"
+                    borderColor="input.border"
+                    _focus={{
+                      borderColor: 'blue.400',
+                      boxShadow: '0 0 0 1px blue.400',
+                    }}
+                  />
+                </Field>
+              </Box>
+
+              <HStack mt={8} spacing={4} justify="center">
+                <Button
+                  type="submit"
+                  size="lg"
+                  colorScheme="blue"
+                  px={8}
+                  py={6}
+                  fontSize="md"
+                  fontWeight="semibold"
+                  data-testid="create-pattern-button"
+                >
+                  Create Pattern
+                </Button>
+                <Button
+                  onClick={handleCancel}
+                  size="lg"
+                  px={8}
+                  py={6}
+                  fontSize="md"
+                  bg={'cancelButton'}
+                >
+                  Cancel
+                </Button>
+              </HStack>
+            </VStack>
           </Fieldset.Root>
         </form>
       </Box>

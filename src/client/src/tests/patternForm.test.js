@@ -33,12 +33,12 @@ describe('PatternForm', () => {
 
   test('renders without crashing', () => {
     render(<PatternForm />);
-    expect(screen.getByText(/Create a Pattern/i)).toBeInTheDocument();
-    expect(screen.getByText(/Name/i)).toBeInTheDocument();
-    expect(screen.getByText(/Text/i)).toBeInTheDocument();
-    expect(screen.getByRole('textbox', { name: /Link/i })).toBeInTheDocument();
-    expect(screen.getByRole('textbox', { name: /Tags/i })).toBeInTheDocument();
-    expect(screen.getByText(/Notes/i)).toBeInTheDocument();
+    expect(screen.getByText(/Create a New Pattern/i)).toBeInTheDocument();
+    expect(screen.getByText(/Pattern Name/i)).toBeInTheDocument();
+    expect(screen.getByText(/Pattern Instructions/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Pattern Link/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Tags/i)).toBeInTheDocument();
+    expect(screen.getByText(/Additional Notes/i)).toBeInTheDocument();
   });
 
   test('submits the form successfully', async () => {
@@ -46,19 +46,19 @@ describe('PatternForm', () => {
 
     render(<PatternForm />);
 
-    fireEvent.change(screen.getByLabelText(/Name/i), {
+    fireEvent.change(screen.getByLabelText(/Pattern Name/i), {
       target: { value: 'Test Pattern' },
     });
-    fireEvent.change(screen.getByLabelText(/Text/i), {
+    fireEvent.change(screen.getByLabelText(/Pattern Instructions/i), {
       target: { value: 'This is a test pattern.' },
     });
-    fireEvent.change(screen.getByLabelText(/Link/i), {
+    fireEvent.change(screen.getByLabelText(/Pattern Link/i), {
       target: { value: 'http://example.com' },
     });
     fireEvent.change(screen.getByLabelText(/Tags/i), {
       target: { value: 'tag1, tag2' },
     });
-    fireEvent.change(screen.getByLabelText(/Notes/i), {
+    fireEvent.change(screen.getByLabelText(/Additional Notes/i), {
       target: { value: 'Some notes' },
     });
 
@@ -88,10 +88,10 @@ describe('PatternForm', () => {
 
     render(<PatternForm />);
 
-    fireEvent.change(screen.getByLabelText(/Name/i), {
+    fireEvent.change(screen.getByLabelText(/Pattern Name/i), {
       target: { value: 'Test Pattern' },
     });
-    fireEvent.change(screen.getByLabelText(/Text/i), {
+    fireEvent.change(screen.getByLabelText(/Pattern Instructions/i), {
       target: { value: 'This is a test pattern.' },
     });
 
@@ -114,10 +114,14 @@ describe('PatternForm', () => {
   test('displays helper text correctly', () => {
     render(<PatternForm />);
     expect(
-      screen.getByText(/Optional: Provide a link to the pattern./i),
+      screen.getByText(
+        /Separate tags with commas \(e\.g\., knitting, scarf, beginner\)/i,
+      ),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/Separate tags with a comma, e.g. "tag1, tag2"/i),
+      screen.getByText(
+        /Upload reference images, charts, or visual guides for your pattern/i,
+      ),
     ).toBeInTheDocument();
   });
 
@@ -126,11 +130,11 @@ describe('PatternForm', () => {
     fireEvent.click(screen.getByTestId('create-pattern-button'));
 
     await waitFor(() => {
-      const nameInput = screen.getByLabelText(/Name/i);
+      const nameInput = screen.getByLabelText(/Pattern Name/i);
       expect(nameInput).toBeInvalid();
       expect(nameInput.validationMessage).toBe('Constraints not satisfied');
 
-      const textInput = screen.getByLabelText(/Text/i);
+      const textInput = screen.getByLabelText(/Pattern Instructions/i);
       expect(textInput).toBeInvalid();
       expect(textInput.validationMessage).toBe('Constraints not satisfied');
     });
