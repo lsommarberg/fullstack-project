@@ -40,13 +40,9 @@ const projectSchema = new mongoose.Schema({
       totalRows: Number,
     },
   ],
-  logEntries: [
-    {
-      date: { type: Date, default: Date.now },
-      note: String,
-      images: [String],
-    },
-  ],
+  tags: {
+    type: [String],
+  },
 });
 
 projectSchema.set('toJSON', {

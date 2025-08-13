@@ -3,6 +3,7 @@ import { Text, Flex } from '@chakra-ui/react';
 import { useParams, useNavigate } from 'react-router-dom';
 import projectService from '../../services/project';
 import ListPage from '../layout/ListPage';
+import { Tag } from '@/components/ui/tag';
 
 const ProjectsList = () => {
   const { id } = useParams();
@@ -35,6 +36,14 @@ const ProjectsList = () => {
       <Text fontSize="lg" fontWeight="bold">
         {project.name}
       </Text>
+      <Flex>
+        {project.tags &&
+          project.tags.map((tag, tagIndex) => (
+            <Tag key={tagIndex} color="fg.default" bg="input.bg" mr={2}>
+              {tag}
+            </Tag>
+          ))}
+      </Flex>
     </Flex>
   );
 

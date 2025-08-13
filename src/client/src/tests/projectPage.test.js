@@ -33,6 +33,7 @@ const getMockProject = () => ({
     { section: 'Sleeve', currentRow: 5, totalRows: 20 },
   ],
   files: [],
+  tags: ['knitting', 'scarf'],
 });
 
 jest.mock('react-markdown', () => (props) => <div {...props} />);
@@ -61,6 +62,7 @@ describe('ProjectPage', () => {
     notes: 'This is a test project',
     files: [],
     rowTrackers: [{ section: 'Body', currentRow: 25, totalRows: 100 }],
+    tags: ['knitting', 'scarf'],
   };
 
   test('renders project data correctly', async () => {
