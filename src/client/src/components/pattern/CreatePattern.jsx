@@ -56,7 +56,10 @@ const PatternForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const tagsArray = tagsString.split(',').map((item) => item.trim());
+    const tagsArray = tagsString
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
     try {
       await patternService.createPattern({
         name,

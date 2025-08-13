@@ -108,7 +108,10 @@ const ProjectForm = () => {
           currentRow: 0,
           totalRows: parseInt(tracker.totalRows) || 0,
         }));
-      const tagsArray = tagsString.split(',').map((item) => item.trim());
+      const tagsArray = tagsString
+        .split(',')
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
 
       await projectService.createProject({
         name,
