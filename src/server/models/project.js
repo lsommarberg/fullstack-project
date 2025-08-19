@@ -45,6 +45,9 @@ const projectSchema = new mongoose.Schema({
   },
 });
 
+projectSchema.index({ user: 1, startedAt: -1 });
+projectSchema.index({ user: 1, finishedAt: -1 });
+
 projectSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();

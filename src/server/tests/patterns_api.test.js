@@ -56,6 +56,60 @@ beforeAll(async () => {
 });
 
 describe('Pattern API', () => {
+  test('should search patterns by keyword', async () => {
+    const response = await api
+      .get(`/api/patterns/search?q=knit`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.length).toBeGreaterThan(0);
+    const names = response.body.map((p) => p.name.toLowerCase());
+    expect(names.some((n) => n.includes('knit'))).toBe(true);
+  });
+
+  test('should sort patterns by name when sortBy=name', async () => {
+    const response = await api
+      .get(`/api/patterns/search?q=knit&sortBy=name`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    const names = response.body.map((p) => p.name);
+    const sortedNames = [...names].sort();
+    expect(names).toEqual(sortedNames);
+  });
+
+  test('should sort patterns by createdAt descending by default', async () => {
+    const response = await api
+      .get(`/api/patterns/search?q=knit`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    const createdAts = response.body.map((p) =>
+      new Date(p.createdAt).getTime(),
+    );
+    const sortedCreatedAts = [...createdAts].sort((a, b) => b - a);
+    expect(createdAts).toEqual(sortedCreatedAts);
+  });
+
+  test('should return 400 if q is missing', async () => {
+    const response = await api
+      .get(`/api/patterns/search`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+    expect(response.body.error).toBe('Query parameter q is required');
+  });
+
+  test('should return 401 if not authenticated', async () => {
+    await api
+      .get(`/api/patterns/search?q=knit`)
+      .expect(401)
+      .expect('Content-Type', /application\/json/);
+  });
+
   test('should create a new pattern', async () => {
     const newPattern = {
       name: 'Other Knit Scarf',

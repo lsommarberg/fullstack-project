@@ -2,6 +2,43 @@ const router = require('express').Router();
 const Project = require('../models/project');
 const { userExtractor } = require('../utils/middleware');
 
+router.get('/search', userExtractor, async (req, res) => {
+  const { q } = req.query;
+  const filter = { user: req.user.id };
+  if (q) {
+    const re = new RegExp(q, 'i');
+    filter.$or = [{ name: re }, { notes: re }, { tags: re }];
+  }
+
+  if (req.query.startedAfter) {
+    filter.startedAt = {
+      ...filter.startedAt,
+      $gte: new Date(req.query.startedAfter),
+    };
+  }
+  if (req.query.startedBefore) {
+    filter.startedAt = {
+      ...filter.startedAt,
+      $lte: new Date(req.query.startedBefore),
+    };
+  }
+  if (req.query.finishedAfter) {
+    filter.finishedAt = {
+      ...filter.finishedAt,
+      $gte: new Date(req.query.finishedAfter),
+    };
+  }
+  if (req.query.finishedBefore) {
+    filter.finishedAt = {
+      ...filter.finishedAt,
+      $lte: new Date(req.query.finishedBefore),
+    };
+  }
+
+  const results = await Project.find(filter).sort({ startedAt: -1 }).exec();
+  res.json(results);
+});
+
 router.get('/:id', userExtractor, async (req, res) => {
   if (req.user.id !== req.params.id) {
     return res.status(403).json({ error: 'forbidden' });
