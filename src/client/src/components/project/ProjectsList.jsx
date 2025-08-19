@@ -190,8 +190,10 @@ const ProjectsList = () => {
 
   const isSearchActive = hasSearched;
   const projectsToShow = isSearchActive ? filteredProjects : allProjects;
-  const inProgressProjects = projectsToShow.filter((p) => p.finishedAt == null);
-  const finishedProjects = projectsToShow.filter((p) => p.finishedAt != null);
+  const inProgressProjects = projectsToShow.filter(
+    (p) => p.finishedAt === null,
+  );
+  const finishedProjects = projectsToShow.filter((p) => p.finishedAt !== null);
 
   return (
     <SidebarLayout userId={id}>
@@ -232,13 +234,17 @@ const ProjectsList = () => {
                 In progress
               </Link>
             </Tabs.Trigger>
-            <Tabs.Trigger value="finished" asChild>
+            <Tabs.Trigger
+              value="finished"
+              data-testid="projects-finished-tab"
+              asChild
+            >
               <Link unstyled href="#finished">
                 Finished
               </Link>
             </Tabs.Trigger>
           </Tabs.List>
-          <Tabs.Content value="all">
+          <Tabs.Content value="all" data-testid="projects-all-panel">
             <Stack spacing={4}>
               {isLoading ? (
                 <Text>Loading...</Text>
@@ -259,7 +265,10 @@ const ProjectsList = () => {
               )}
             </Stack>
           </Tabs.Content>
-          <Tabs.Content value="inprogress">
+          <Tabs.Content
+            value="inprogress"
+            data-testid="projects-inprogress-panel"
+          >
             <Stack spacing={4}>
               {isLoading ? (
                 <Text>Loading...</Text>
@@ -280,7 +289,7 @@ const ProjectsList = () => {
               )}
             </Stack>
           </Tabs.Content>
-          <Tabs.Content value="finished">
+          <Tabs.Content value="finished" data-testid="projects-finished-panel">
             <Stack spacing={4}>
               {isLoading ? (
                 <Text>Loading...</Text>

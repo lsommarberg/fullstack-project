@@ -15,6 +15,7 @@ export const ListItem = ({ item, getItemPath }) => (
     as={RouterLink}
     to={getItemPath(item)}
     _hover={{ boxShadow: 'md', cursor: 'pointer' }}
+    data-testid={'item-' + item.name}
   >
     <Card.Body>
       <Flex
@@ -84,7 +85,12 @@ const PatternList = () => {
   return (
     <SidebarLayout userId={id}>
       <Flex direction="column" p={6}>
-        <Text fontSize="2xl" fontWeight="bold" mb={4}>
+        <Text
+          fontSize="2xl"
+          fontWeight="bold"
+          mb={4}
+          data-testid="patterns-title"
+        >
           My Patterns
         </Text>
         <Flex mb={4} gap={4} align="center">

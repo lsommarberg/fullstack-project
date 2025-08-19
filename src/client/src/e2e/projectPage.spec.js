@@ -21,8 +21,11 @@ describe('Project Page', () => {
 
     await page.getByRole('link', { name: 'My Projects' }).click();
 
-    await expect(page.getByText('Test Project')).toBeVisible();
-    await page.getByText('Test Project').click();
+    await page.getByText('All').click();
+    const allPanel = page.getByTestId('projects-all-panel');
+
+    await expect(allPanel.getByText('Test Project')).toBeVisible();
+    await allPanel.getByText('Test Project').click();
     await expect(page).toHaveURL(/\/projects\/\d+/);
     await expect(page.getByText('Test notes for this project')).toBeVisible();
   });
@@ -31,8 +34,10 @@ describe('Project Page', () => {
     await addProject(page, 'To Delete');
     await expect(page).toHaveURL(/\/projects\/\d+/);
 
-    await expect(page.getByText('To Delete')).toBeVisible();
-    await page.getByText('To Delete').click();
+    await page.getByText('All').click();
+    const allPanel = page.getByTestId('projects-all-panel');
+    await expect(allPanel.getByText('To Delete')).toBeVisible();
+    await allPanel.getByText('To Delete').click();
 
     await page.getByRole('button', { name: 'Delete Project' }).click();
 
@@ -51,8 +56,10 @@ describe('Project Page', () => {
     await addProject(page, 'To Edit');
 
     await expect(page).toHaveURL(/\/projects\/\d+/);
-    await expect(page.getByText('To Edit')).toBeVisible();
-    await page.getByText('To Edit').click();
+
+    await page.getByText('All').click();
+    const allPanel = page.getByTestId('projects-all-panel');
+    await allPanel.getByText('To Edit').click();
 
     await page.getByRole('button', { name: 'Edit Project' }).click();
 
@@ -72,8 +79,10 @@ describe('Project Page', () => {
     await addProject(page, 'To Finish');
 
     await expect(page).toHaveURL(/\/projects\/\d+/);
-    await expect(page.getByText('To Finish')).toBeVisible();
-    await page.getByText('To Finish').click();
+
+    await page.getByText('All').click();
+    const allPanel = page.getByTestId('projects-all-panel');
+    await allPanel.getByTestId('item-To Finish').click();
 
     await page.getByRole('button', { name: 'Finish Project' }).click();
 
@@ -87,8 +96,13 @@ describe('Project Page', () => {
     await expect(page.getByText(currentDate)).toBeVisible();
     await expect(page.getByText('Row Trackers')).not.toBeVisible();
     await page.getByText('My Projects').click();
-    await expect(page.getByText('To Finish')).not.toBeVisible();
-    await page.getByText('Finished Projects').click();
-    await expect(page.getByText('To Finish')).toBeVisible();
+    await page.getByText('In progress').click();
+    const inProgressPanel = page.getByTestId('projects-inprogress-panel');
+    await expect(
+      inProgressPanel.getByTestId('item-To Finish'),
+    ).not.toBeVisible();
+    await page.getByTestId('projects-finished-tab').click();
+    const finishedPanel = page.getByTestId('projects-finished-panel');
+    await expect(finishedPanel.getByTestId('item-To Finish')).toBeVisible();
   });
 });

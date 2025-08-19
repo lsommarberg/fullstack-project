@@ -14,6 +14,9 @@ const ListPage = ({
   getItemPath,
   isLoading = false,
   emptyStateText = 'No items yet',
+  searchValue,
+  onSearchChange,
+  onSearchSubmit,
 }) => {
   const handleCreateClick = () => {
     if (onCreateClick) {
@@ -27,7 +30,16 @@ const ListPage = ({
         {title}
       </Text>
       <Flex mb={4} justify="space-between" align="center">
-        <Input placeholder={searchPlaceholder} size="md" width="60%" />
+        <Input
+          placeholder={searchPlaceholder}
+          size="md"
+          width="60%"
+          value={searchValue}
+          onChange={(e) => onSearchChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && onSearchSubmit) onSearchSubmit();
+          }}
+        />
         {(createPath || onCreateClick) && (
           <Button
             as={createPath ? RouterLink : undefined}
