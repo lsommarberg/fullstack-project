@@ -18,7 +18,7 @@ import projectService from '../../services/project';
 import SidebarLayout from '../layout/SidebarLayout';
 import { ListItem } from '../pattern/PatternsList';
 
-const ProjectsSearch = ({
+export const ProjectsSearch = ({
   searchQuery,
   setSearchQuery,
   handleSearch,
