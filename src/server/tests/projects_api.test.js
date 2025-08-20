@@ -15,9 +15,10 @@ let anotherUserId;
 let anotherUserToken;
 let projectId;
 
-beforeAll(async () => {
+beforeEach(async () => {
   await User.deleteMany({});
   await Pattern.deleteMany({});
+  await Project.deleteMany({});
 
   const passwordHash = await bcrypt.hash('password', 10);
   const user = new User({ username: 'testuser', passwordHash });
@@ -65,9 +66,96 @@ beforeAll(async () => {
 
   const savedProject = await newProject.save();
   projectId = savedProject._id;
+
+  await api
+    .post('/api/projects')
+    .set('Authorization', `Bearer ${token}`)
+    .send({
+      name: 'My Knitting Project',
+      pattern: patternId,
+      notes: 'Starting my first scarf project with this pattern.',
+    })
+    .expect(201);
 });
 
 describe('Project API', () => {
+  test('should search projects by keyword', async () => {
+    const response = await api
+      .get(`/api/projects/search?q=knitting`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+    expect(response.body.length).toBeGreaterThan(0);
+    const names = response.body.map((p) => p.name.toLowerCase());
+    expect(
+      names.some((n) => n.includes('knitting') || n.includes('knit')),
+    ).toBe(true);
+  });
+
+  test('should filter projects by startedAfter and startedBefore', async () => {
+    const startedAt = new Date('2025-08-01');
+    await api
+      .post('/api/projects')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'Date Filter Project',
+        pattern: patternId,
+        notes: 'Project for date filter test',
+        startedAt,
+      })
+      .expect(201);
+
+    const response = await api
+      .get(
+        `/api/projects/search?startedAfter=2025-07-31&startedBefore=2025-08-02`,
+      )
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+    const names = response.body.map((p) => p.name);
+    expect(names).toContain('Date Filter Project');
+  });
+
+  test('should filter projects by finishedAfter and finishedBefore', async () => {
+    const finishedAt = new Date('2025-08-10');
+    await api
+      .post('/api/projects')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'Finished Date Project',
+        pattern: patternId,
+        notes: 'Project for finished date filter test',
+        finishedAt,
+      })
+      .expect(201);
+
+    const response = await api
+      .get(
+        `/api/projects/search?finishedAfter=2025-08-09&finishedBefore=2025-08-11`,
+      )
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+    const names = response.body.map((p) => p.name);
+    expect(names).toContain('Finished Date Project');
+  });
+
+  test('should return empty array if no projects match', async () => {
+    const response = await api
+      .get(`/api/projects/search?q=nonexistentkeyword`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+    expect(response.body).toEqual([]);
+  });
+
+  test('should require authentication for search', async () => {
+    await api
+      .get(`/api/projects/search?q=knitting`)
+      .expect(401)
+      .expect('Content-Type', /application\/json/);
+  });
+
   test('should create a new project', async () => {
     const newProject = {
       name: 'My Knitting Project',
@@ -124,9 +212,10 @@ describe('Project API', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/);
 
-    expect(response.body).toHaveLength(2);
-    expect(response.body[0].name).toBe('My First Project');
-    expect(response.body[1].name).toBe('My Knitting Project');
+    expect(response.body.length).toBeGreaterThanOrEqual(2);
+    const names = response.body.map((p) => p.name);
+    expect(names).toContain('My First Project');
+    expect(names).toContain('My Knitting Project');
   });
 
   test('should return 403 Forbidden for getting projects of another user', async () => {

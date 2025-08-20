@@ -2,6 +2,30 @@ const router = require('express').Router();
 const Pattern = require('../models/pattern');
 const { userExtractor } = require('../utils/middleware');
 
+router.get('/search', userExtractor, async (req, res) => {
+  const { q, sortBy } = req.query;
+
+  if (!q) {
+    return res.status(400).json({ error: 'Query parameter q is required' });
+  }
+
+  const re = new RegExp(q, 'i');
+
+  let query = Pattern.find({
+    user: req.user.id,
+    $or: [{ name: re }, { text: re }, { tags: re }],
+  });
+
+  if (sortBy === 'name') {
+    query = query.sort({ name: 1 });
+  } else {
+    query = query.sort({ createdAt: -1 });
+  }
+
+  const results = await query.exec();
+  res.json(results);
+});
+
 router.get('/:id', userExtractor, async (req, res) => {
   if (req.user.id !== req.params.id) {
     return res.status(403).json({ error: 'forbidden' });

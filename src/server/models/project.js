@@ -40,14 +40,13 @@ const projectSchema = new mongoose.Schema({
       totalRows: Number,
     },
   ],
-  logEntries: [
-    {
-      date: { type: Date, default: Date.now },
-      note: String,
-      images: [String],
-    },
-  ],
+  tags: {
+    type: [String],
+  },
 });
+
+projectSchema.index({ user: 1, startedAt: -1 });
+projectSchema.index({ user: 1, finishedAt: -1 });
 
 projectSchema.set('toJSON', {
   transform: (document, returnedObject) => {

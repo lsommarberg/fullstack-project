@@ -48,10 +48,21 @@ const updatePattern = async (userId, patternId, updatedPattern) => {
   return response.data;
 };
 
+const searchPatterns = async (query) => {
+  const config = getConfig();
+  const params = new URLSearchParams({ q: query });
+  const response = await axios.get(
+    `${baseUrl}/search?${params.toString()}`,
+    config,
+  );
+  return response.data;
+};
+
 export default {
   getPatterns,
   getPatternById,
   createPattern,
   deletePattern,
   updatePattern,
+  searchPatterns,
 };

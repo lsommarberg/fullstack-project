@@ -53,6 +53,7 @@ const SidebarLayout = ({ children, userId }) => {
                 fontSize="sm"
                 color="text"
                 _hover={{ color: 'blue.500' }}
+                data-testid="sidebar-create-pattern"
               >
                 Create Pattern
               </Button>

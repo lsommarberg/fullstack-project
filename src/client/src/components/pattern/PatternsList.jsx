@@ -1,15 +1,55 @@
 import { useEffect, useState } from 'react';
-import { Text, Flex } from '@chakra-ui/react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Text, Flex, Input, Button, Stack, Card } from '@chakra-ui/react';
+import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 import patternService from '../../services/pattern';
 import { Tag } from '@/components/ui/tag';
-import ListPage from '../layout/ListPage';
+import SidebarLayout from '../layout/SidebarLayout';
+
+export const ListItem = ({ item, getItemPath }) => (
+  <Card.Root
+    key={item.id}
+    bg="card.bg"
+    color="fg.default"
+    borderWidth="1px"
+    borderColor="input.border"
+    as={RouterLink}
+    to={getItemPath(item)}
+    _hover={{ boxShadow: 'md', cursor: 'pointer' }}
+    data-testid={'item-' + item.name}
+  >
+    <Card.Body>
+      <Flex
+        justify="space-between"
+        align="center"
+        p={4}
+        minHeight="50px"
+        height="50px"
+      >
+        <Text fontSize="lg" fontWeight="bold">
+          {item.name}
+        </Text>
+        <Flex>
+          {item.tags &&
+            item.tags.length > 0 &&
+            item.tags.map((tag, tagIndex) => (
+              <Tag key={tagIndex} color="fg.default" bg="input.bg" mr={2}>
+                {tag}
+              </Tag>
+            ))}
+        </Flex>
+      </Flex>
+    </Card.Body>
+  </Card.Root>
+);
 
 const PatternList = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [patterns, setPatterns] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const getItemPath = (pattern) => `/patterns/${id}/${pattern.id}`;
 
   useEffect(() => {
     const getPatternData = async () => {
@@ -28,35 +68,71 @@ const PatternList = () => {
     getPatternData();
   }, [id, navigate]);
 
-  const renderPatternItem = (pattern) => (
-    <Flex justify="space-between" align="center">
-      <Text fontSize="lg" fontWeight="bold">
-        {pattern.name}
-      </Text>
-      <Flex>
-        {pattern.tags &&
-          pattern.tags.map((tag, tagIndex) => (
-            <Tag key={tagIndex} color="fg.default" bg="input.bg" mr={2}>
-              {tag}
-            </Tag>
-          ))}
-      </Flex>
-    </Flex>
-  );
+  const handleSearch = async () => {
+    setIsLoading(true);
+    try {
+      const result = await patternService.searchPatterns(searchQuery);
+      setPatterns(result);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        navigate('/');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <ListPage
-      userId={id}
-      title="My Patterns:"
-      items={patterns}
-      searchPlaceholder="Search patterns..."
-      createButtonText="Create New"
-      createPath={`/patterns/${id}/create`}
-      renderItem={renderPatternItem}
-      getItemPath={(pattern) => `/patterns/${id}/${pattern.id}`}
-      isLoading={isLoading}
-      emptyStateText="No patterns yet"
-    />
+    <SidebarLayout userId={id}>
+      <Flex direction="column" p={6}>
+        <Text
+          fontSize="2xl"
+          fontWeight="bold"
+          mb={4}
+          data-testid="patterns-title"
+        >
+          My Patterns
+        </Text>
+        <Flex mb={4} gap={4} align="center">
+          <Input
+            placeholder="Search patterns..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSearch();
+            }}
+            flex={2}
+            minWidth="200px"
+            borderColor="input.border"
+          />
+          <Button onClick={handleSearch} minWidth="100px">
+            Search
+          </Button>
+          <Button
+            colorScheme="teal"
+            onClick={() => navigate(`/patterns/${id}/create`)}
+            minWidth="100px"
+          >
+            Create New
+          </Button>
+        </Flex>
+        <Stack spacing={4} data-testid="patterns-list">
+          {isLoading ? (
+            <Text>Loading...</Text>
+          ) : patterns.length === 0 ? (
+            <Text>No patterns yet</Text>
+          ) : (
+            patterns.map((pattern) => (
+              <ListItem
+                item={pattern}
+                key={pattern.id}
+                getItemPath={getItemPath}
+              />
+            ))
+          )}
+        </Stack>
+      </Flex>
+    </SidebarLayout>
   );
 };
 

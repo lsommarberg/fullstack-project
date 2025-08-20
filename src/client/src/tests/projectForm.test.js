@@ -64,6 +64,7 @@ describe('ProjectForm', () => {
         pattern: null,
         rowTrackers: [],
         files: [],
+        tags: [],
       });
       expect(mockNavigate).toHaveBeenCalledWith('/projects/1');
       expect(toaster.success).toHaveBeenCalledWith({

@@ -20,6 +20,7 @@ import FinishProjectDialog from './FinishProjectDialog';
 import useImageUpload from '../../hooks/useImageManagement';
 import ImageManager from '../ImageManager';
 import uploadService from '../../services/upload';
+import TagList from '../pattern/TagList';
 
 const ProjectPage = () => {
   const { id, projectId } = useParams();
@@ -47,8 +48,16 @@ const ProjectPage = () => {
   if (!projectData) {
     return <Text>Loading...</Text>;
   }
-  const { name, startedAt, pattern, notes, rowTrackers, finishedAt, files } =
-    projectData;
+  const {
+    name,
+    startedAt,
+    pattern,
+    notes,
+    rowTrackers,
+    finishedAt,
+    files,
+    tags,
+  } = projectData;
 
   const formattedDate = new Date(startedAt).toLocaleDateString();
 
@@ -211,6 +220,7 @@ const ProjectPage = () => {
               handleImageDelete={handleImageDelete}
               files={files}
               isFinished={finishedAt}
+              tags={tags}
             />
           ) : (
             <Box
@@ -369,6 +379,27 @@ const ProjectPage = () => {
                       itemType="project"
                       userId={id}
                     />
+                  </Box>
+                )}
+
+                {tags && tags.length > 1 && (
+                  <Box
+                    p={6}
+                    bg="section.bg"
+                    borderRadius="lg"
+                    border="1px solid"
+                    borderColor="section.border"
+                    shadow="sm"
+                  >
+                    <Text
+                      fontSize="lg"
+                      fontWeight="semibold"
+                      mb={4}
+                      color="fg.muted"
+                    >
+                      Tags
+                    </Text>
+                    <TagList tags={tags} />
                   </Box>
                 )}
 

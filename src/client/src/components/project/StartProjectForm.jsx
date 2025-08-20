@@ -37,6 +37,7 @@ const ProjectForm = () => {
   const [patterns, setPatterns] = useState([]);
   const [selectedPattern, setSelectedPattern] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [tagsString, setTagsString] = useState('');
 
   useEffect(() => {
     const loadUserPatterns = async () => {
@@ -107,6 +108,10 @@ const ProjectForm = () => {
           currentRow: 0,
           totalRows: parseInt(tracker.totalRows) || 0,
         }));
+      const tagsArray = tagsString
+        .split(',')
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
 
       await projectService.createProject({
         name,
@@ -115,6 +120,7 @@ const ProjectForm = () => {
         pattern: selectedPattern ? selectedPattern.id : null,
         notes,
         files: files,
+        tags: tagsArray,
       });
       toaster.success({
         description: 'Project created successfully',
@@ -248,6 +254,25 @@ const ProjectForm = () => {
                         without a pattern.
                       </Text>
                     )}
+                  </Field>
+                  <Field
+                    label="Tags (optional)"
+                    helperText="Separate tags with commas (e.g., knitting, scarf, beginner)"
+                  >
+                    <Input
+                      name="tags"
+                      value={tagsString}
+                      onChange={(e) => setTagsString(e.target.value)}
+                      placeholder="Tags separated by commas"
+                      size="lg"
+                      bg="input.bg"
+                      color="fg.default"
+                      borderColor="input.border"
+                      _focus={{
+                        borderColor: 'blue.400',
+                        boxShadow: '0 0 0 1px blue.400',
+                      }}
+                    />
                   </Field>
                 </VStack>
               </Box>

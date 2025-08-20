@@ -21,6 +21,7 @@ const EditProject = ({
   pattern,
   files,
   rowTrackers,
+  tags,
   onSave,
   userId,
   onCancel,
@@ -30,6 +31,7 @@ const EditProject = ({
   const [projectName, setProjectName] = useState(name);
   const [projectNotes, setProjectNotes] = useState(notes);
   const [rowTrackersState, setRowTrackersState] = useState(rowTrackers);
+  const [projectTags, setProjectTags] = useState(tags.join(', '));
   const [projectFiles, setProjectFiles] = useState(files || []);
   const [patterns, setPatterns] = useState([]);
   const [selectedPattern, setSelectedPattern] = useState(pattern);
@@ -69,6 +71,7 @@ const EditProject = ({
       rowTrackers: validRowTrackers,
       pattern: selectedPattern,
       files: projectFiles,
+      tags: projectTags.split(',').map((tag) => tag.trim()),
     });
   };
 
@@ -195,6 +198,21 @@ const EditProject = ({
                 </Field>
               </VStack>
             </Box>
+            <Field label="Tags (optional)">
+              <Input
+                value={projectTags}
+                onChange={(e) => setProjectTags(e.target.value)}
+                placeholder="Tags separated by commas (e.g., knitting, scarf, beginner)"
+                size="lg"
+                bg="input.bg"
+                color="fg.default"
+                borderColor="input.border"
+                _focus={{
+                  borderColor: 'blue.400',
+                  boxShadow: '0 0 0 1px blue.400',
+                }}
+              />
+            </Field>
 
             <Box
               p={6}

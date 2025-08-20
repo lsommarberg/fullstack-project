@@ -23,6 +23,7 @@ describe('Project Form', () => {
 
     await page.getByRole('link', { name: 'My Projects' }).click();
 
-    await expect(page.getByText('Test Project')).toBeVisible();
+    const allPanel = page.getByTestId('projects-all-panel');
+    await expect(allPanel.getByText('Test Project')).toBeVisible();
   });
 });
