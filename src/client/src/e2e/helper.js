@@ -8,7 +8,7 @@ const loginWith = async (page, username, password) => {
 };
 
 const addPattern = async (page, name) => {
-  await page.getByRole('button', { name: 'Create Pattern' }).click();
+  await page.getByTestId('sidebar-create-pattern').click();
 
   await page.getByLabel('Pattern Name').fill(name || 'Test Pattern');
   await page
@@ -21,12 +21,12 @@ const addPattern = async (page, name) => {
   await page.getByTestId('create-pattern-button').click();
 };
 
-const addProject = async (page, name) => {
+const addProject = async (page, name, date) => {
   await page.getByRole('button', { name: 'Start New' }).click();
 
   await page.getByLabel('Project Name').fill(name || 'Test Project');
 
-  await page.getByLabel('Started At').fill('2023-10-01');
+  await page.getByLabel('Started At').fill(date || '2025-01-01');
   await page.getByTestId('tracker-section').fill('Main Section');
   await page.getByTestId('tracker-total-rows').fill('100');
 

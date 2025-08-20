@@ -74,12 +74,14 @@ export const ProjectsSearch = ({
                         value={startedAfter}
                         onChange={(e) => setStartedAfter(e.target.value)}
                         borderColor={'input.border'}
+                        data-testid="started-after-input"
                       />
                       <Input
                         type="date"
                         value={startedBefore}
                         onChange={(e) => setStartedBefore(e.target.value)}
                         borderColor={'input.border'}
+                        data-testid="started-before-input"
                       />
                     </HStack>
                   </Field>
@@ -93,12 +95,14 @@ export const ProjectsSearch = ({
                           value={finishedAfter}
                           onChange={(e) => setFinishedAfter(e.target.value)}
                           borderColor={'input.border'}
+                          data-testid="finished-after-input"
                         />
                         <Input
                           type="date"
                           value={finishedBefore}
                           onChange={(e) => setFinishedBefore(e.target.value)}
                           borderColor={'input.border'}
+                          data-testid="finished-before-input"
                         />
                       </HStack>
                     </Field>
@@ -107,7 +111,9 @@ export const ProjectsSearch = ({
               </>
             )}
             <HStack spacing={4} justify="flex-end">
-              <Button type="submit">Search</Button>
+              <Button type="submit" data-testid="projects-search-button">
+                Search
+              </Button>
               <Button
                 variant="outline"
                 borderColor={'input.border'}
@@ -199,7 +205,12 @@ const ProjectsList = () => {
     <SidebarLayout userId={id}>
       <Flex direction="column" p={6}>
         <HStack mb={4} justify="space-between" align="center">
-          <Text fontSize="2xl" fontWeight="bold" mb={4}>
+          <Text
+            fontSize="2xl"
+            fontWeight="bold"
+            mb={4}
+            data-testid="projects-title"
+          >
             My Projects
           </Text>
           <Spacer />

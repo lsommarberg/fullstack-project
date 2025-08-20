@@ -116,7 +116,7 @@ const PatternList = () => {
             Create New
           </Button>
         </Flex>
-        <Stack spacing={4}>
+        <Stack spacing={4} data-testid="patterns-list">
           {isLoading ? (
             <Text>Loading...</Text>
           ) : patterns.length === 0 ? (
