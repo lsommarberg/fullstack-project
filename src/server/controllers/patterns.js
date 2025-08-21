@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Pattern = require('../models/pattern');
+const User = require('../models/user');
 const { userExtractor } = require('../utils/middleware');
 
 router.get('/search', userExtractor, async (req, res) => {
@@ -66,7 +67,12 @@ router.delete('/:id/:patternId', userExtractor, async (req, res) => {
   if (!pattern) {
     return res.status(404).json({ error: 'pattern not found' });
   }
+
   await Pattern.deleteOne({ _id: req.params.patternId });
+
+  await User.findByIdAndUpdate(req.params.id, {
+    $pull: { patterns: req.params.patternId },
+  });
 
   res.status(204).end();
 });
