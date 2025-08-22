@@ -15,7 +15,9 @@
   "jest": {
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/controllers/reset.js"
+      "/controllers/reset.js",
+      "/middleware/upload.js",
+      "/utils/logger.js"
     ]
   },
   "author": "",

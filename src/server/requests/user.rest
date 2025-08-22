@@ -6,5 +6,13 @@ GET http://localhost:3001/api/users/6784fd15312d0eaed9da392b
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2Nzg0ZmQxNTMxMmQwZWFlZDlkYTM5MmIiLCJpYXQiOjE3MzY4NTA0NjYsImV4cCI6MTczNjg1NDA2Nn0.d1BfSwC1a5yZMYP1TnzTt-oyDOWlF9MlfC29jhumywg
 Accept: application/json
 
+###
+PUT http://localhost:3001/api/users/67909aaaeb6908c46b8f4563
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1cyIsImlkIjoiNjc5MDlhYWFlYjY5MDhjNDZiOGY0NTYzIiwiaWF0IjoxNzU1NzYzNzU5LCJleHAiOjE3NTU3NjczNTl9.Pi9pw7n9_PNxhyL_IQfNq9rzA3xUPX2aDNnJCbu900U
+Content-Type: application/json
 
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2Nzg0ZmQxNTMxMmQwZWFlZDlkYTM5MmIiLCJpYXQiOjE3MzY4NTA0NjYsImV4cCI6MTczNjg1NDA2Nn0.d1BfSwC1a5yZMYP1TnzTt-oyDOWlF9MlfC29jhumywg
+{
+  "username": "newusername",
+  "currentPassword": "testpassword",
+  "newPassword": "newpassword"
+}
