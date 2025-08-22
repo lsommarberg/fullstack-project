@@ -2,7 +2,6 @@ const express = require('express');
 const upload = require('../middleware/upload');
 const cloudinary = require('../config/cloudinary');
 const { userExtractor } = require('../utils/middleware');
-const User = require('../models/user');
 const router = express.Router();
 
 const MAX_STORAGE_LIMIT = 100 * 1024 * 1024;
