@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Navigation from './components/Navigation';
-import UserPage from './components/UserPage';
+import UserPage from './components/user/UserPage';
 import PatternList from './components/pattern/PatternsList';
 import PatternPage from './components/pattern/PatternPage';
 import PatternForm from './components/pattern/CreatePattern';

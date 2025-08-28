@@ -2,7 +2,6 @@ const express = require('express');
 const upload = require('../middleware/upload');
 const cloudinary = require('../config/cloudinary');
 const { userExtractor } = require('../utils/middleware');
-const User = require('../models/user');
 const router = express.Router();
 
 const MAX_STORAGE_LIMIT = 100 * 1024 * 1024;
@@ -18,14 +17,7 @@ router.post('/:id', userExtractor, upload.single('image'), async (req, res) => {
     });
   }
 
-  const user = await User.findById(req.user.id);
-  if (!user) {
-    return res.status(401).json({
-      success: false,
-      message: 'User not found',
-    });
-  }
-
+  const user = req.user;
   const fileSize = req.file.size;
 
   if (user.uploadStats + fileSize > MAX_STORAGE_LIMIT) {
@@ -71,13 +63,7 @@ router.delete('/:id', userExtractor, async (req, res) => {
     });
   }
 
-  const user = await User.findById(req.user.id);
-  if (!user) {
-    return res.status(401).json({
-      success: false,
-      message: 'User not found',
-    });
-  }
+  const user = req.user;
 
   const imageInfo = await cloudinary.api.resource(publicId);
   const fileSize = imageInfo.bytes;

@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Project = require('../models/project');
+const User = require('../models/user');
 const { userExtractor } = require('../utils/middleware');
 
 router.get('/search', userExtractor, async (req, res) => {
@@ -86,7 +87,12 @@ router.delete('/:id/:projectId', userExtractor, async (req, res) => {
   if (!project) {
     return res.status(404).json({ error: 'project not found' });
   }
+
   await Project.deleteOne({ _id: req.params.projectId });
+
+  await User.findByIdAndUpdate(req.params.id, {
+    $pull: { projects: req.params.projectId },
+  });
 
   res.status(204).end();
 });

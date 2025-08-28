@@ -21,11 +21,10 @@ const userExtractor = async (req, res, next) => {
     return res.status(401).json({ error: 'token invalid' });
   }
   const user = await User.findById(decodedToken.id);
-  if (user) {
-    req.user = user;
-  } else {
-    req.user = null;
+  if (!user) {
+    return res.status(401).json({ error: 'token invalid' });
   }
+  req.user = user;
   next();
 };
 
