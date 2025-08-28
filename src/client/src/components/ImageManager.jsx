@@ -1,8 +1,11 @@
 import { Box, Text, Image, SimpleGrid, Button, VStack } from '@chakra-ui/react';
 import { FileUpload } from '@chakra-ui/react';
 import { HiUpload } from 'react-icons/hi';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useImageUpload from '../hooks/useImageManagement';
+import userService from '../services/user';
+
+const MAX_STORAGE_LIMIT = 100 * 1024 * 1024;
 
 const ImageManager = ({
   files = [],
@@ -17,6 +20,7 @@ const ImageManager = ({
   buttonText = 'Upload Image',
   buttonSize = 'sm',
   userId,
+  itemId,
 }) => {
   const [deletingId, setDeletingId] = useState(null);
   const [localError, setLocalError] = useState(null);
@@ -24,6 +28,22 @@ const ImageManager = ({
     userId,
     type,
   );
+  const [userStorageUsed, setUserStorageUsed] = useState(0);
+
+  useEffect(() => {
+    const fetchUserStorage = async () => {
+      try {
+        const { storageUsed } = await userService.getUserStorage(userId);
+        setUserStorageUsed(storageUsed);
+      } catch (error) {
+        console.error('Error fetching user storage:', error);
+      }
+    };
+
+    fetchUserStorage();
+  }, [userId, files]);
+
+  const totalStorage = MAX_STORAGE_LIMIT;
 
   const displayError = error || localError;
 
@@ -69,7 +89,7 @@ const ImageManager = ({
     setDeletingId(publicId);
 
     try {
-      await deleteImage(publicId, () => {
+      await deleteImage(publicId, itemId || null, () => {
         if (onImageDelete) {
           onImageDelete(publicId);
         }
@@ -89,33 +109,42 @@ const ImageManager = ({
       <Text fontSize="lg" mb={4} fontWeight="semibold">
         {headerText}
       </Text>
-
       {showUpload && (
-        <VStack spacing={4} align="start" mb={6}>
-          <FileUpload.Root
-            accept="image/*"
-            maxFiles={1}
-            onFileChange={handleFileChange}
-          >
-            <FileUpload.HiddenInput />
-            <FileUpload.Trigger asChild>
-              <Button
-                size={buttonSize}
-                isLoading={loading}
-                loadingText="Uploading..."
-              >
-                <HiUpload /> {buttonText}
-              </Button>
-            </FileUpload.Trigger>
-            <FileUpload.List />
-          </FileUpload.Root>
-
-          {displayError && (
-            <Text color="red.500" fontSize="sm">
-              {displayError}
+        <>
+          {userStorageUsed && (
+            <Text fontSize="sm" mb={4} color="blue.600" fontWeight="medium">
+              Storage used:{' '}
+              {((userStorageUsed / totalStorage) * 100).toFixed(2)}% (
+              {(userStorageUsed / (1024 * 1024)).toFixed(2)} MB of{' '}
+              {(totalStorage / (1024 * 1024)).toFixed(2)} MB)
             </Text>
           )}
-        </VStack>
+          <VStack spacing={4} align="start" mb={6}>
+            <FileUpload.Root
+              accept="image/*"
+              maxFiles={1}
+              onFileChange={handleFileChange}
+            >
+              <FileUpload.HiddenInput />
+              <FileUpload.Trigger asChild>
+                <Button
+                  size={buttonSize}
+                  isLoading={loading}
+                  loadingText="Uploading..."
+                >
+                  <HiUpload /> {buttonText}
+                </Button>
+              </FileUpload.Trigger>
+              <FileUpload.List />
+            </FileUpload.Root>
+
+            {displayError && (
+              <Text color="red.500" fontSize="sm">
+                {displayError}
+              </Text>
+            )}
+          </VStack>
+        </>
       )}
 
       {files && files.length > 0 ? (
