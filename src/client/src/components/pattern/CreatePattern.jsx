@@ -217,6 +217,7 @@ const PatternForm = () => {
                     showUpload={true}
                     showDelete={true}
                     type="patterns"
+                    itemType="pattern"
                     onImageUpload={handleImageUpload}
                     onImageDelete={handleImageDelete}
                     onUploadError={handleImageError}

@@ -28,11 +28,16 @@ const useImageUpload = (id, type) => {
     }
   };
 
-  const deleteImage = async (publicId, onSuccess) => {
+  const deleteImage = async (publicId, itemId = null, onSuccess) => {
     setLoading(true);
     setError(null);
     try {
-      const result = await uploadService.deleteImage(id, publicId);
+      const result = await uploadService.deleteImage(
+        id,
+        publicId,
+        type,
+        itemId,
+      );
 
       if (!result || result.error) {
         const errMsg = result?.error || 'Delete failed';

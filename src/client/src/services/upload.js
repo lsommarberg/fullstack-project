@@ -34,12 +34,19 @@ const uploadImage = async (userId, file, type) => {
   }
 };
 
-const deleteImage = async (userId, publicId) => {
+const deleteImage = async (userId, publicId, type = null, itemId = null) => {
   try {
     const config = getConfig();
+    const requestData = { publicId };
+
+    if (type && itemId) {
+      requestData.type = type;
+      requestData.itemId = itemId;
+    }
+
     const response = await axios.delete(`${baseUrl}/${userId}`, {
       ...config,
-      data: { publicId },
+      data: requestData,
     });
     return response.data;
   } catch (error) {

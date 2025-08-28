@@ -198,21 +198,33 @@ const EditProject = ({
                 </Field>
               </VStack>
             </Box>
-            <Field label="Tags (optional)">
-              <Input
-                value={projectTags}
-                onChange={(e) => setProjectTags(e.target.value)}
-                placeholder="Tags separated by commas (e.g., knitting, scarf, beginner)"
-                size="lg"
-                bg="input.bg"
-                color="fg.default"
-                borderColor="input.border"
-                _focus={{
-                  borderColor: 'blue.400',
-                  boxShadow: '0 0 0 1px blue.400',
-                }}
-              />
-            </Field>
+
+            <Box
+              p={6}
+              bg="section.bg"
+              borderRadius="lg"
+              border="1px solid"
+              borderColor="section.border"
+              shadow="sm"
+            >
+              <VStack spacing={4} align="stretch">
+                <Field label="Tags (optional)">
+                  <Input
+                    value={projectTags}
+                    onChange={(e) => setProjectTags(e.target.value)}
+                    placeholder="Tags separated by commas (e.g., knitting, scarf, beginner)"
+                    size="lg"
+                    bg="input.bg"
+                    color="fg.default"
+                    borderColor="input.border"
+                    _focus={{
+                      borderColor: 'blue.400',
+                      boxShadow: '0 0 0 1px blue.400',
+                    }}
+                  />
+                </Field>
+              </VStack>
+            </Box>
 
             <Box
               p={6}
@@ -228,7 +240,6 @@ const EditProject = ({
                   headerText="Project Images"
                   showUpload={true}
                   showDelete={true}
-                  type="projects"
                   onImageUpload={handleImageUpload}
                   onImageDelete={handleImageDeleteLocal}
                   onUploadError={(error) =>
@@ -236,6 +247,7 @@ const EditProject = ({
                   }
                   buttonText="Add Project Image"
                   itemType="project"
+                  type="projects"
                   userId={userId}
                 />
               </Field>
