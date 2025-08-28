@@ -25,4 +25,15 @@ describe('Pattern Form', () => {
 
     await expect(page.getByText('Test Pattern')).toBeVisible();
   });
+
+  test('pattern creation form has image upload functionality', async ({
+    page,
+  }) => {
+    await page.getByTestId('sidebar-create-pattern').click();
+
+    await expect(page.getByText('Pattern Images')).toBeVisible();
+    await expect(page.getByText('Upload Pattern Image')).toBeVisible();
+
+    await expect(page.getByText('Upload Pattern Image')).toBeEnabled();
+  });
 });
