@@ -23,7 +23,14 @@ const getUser = async (userId) => {
   return response.data;
 };
 
+const updateUser = async (userId, userData) => {
+  const config = getConfig();
+  const response = await axios.put(`${baseUrl}/${userId}`, userData, config);
+  return response.data;
+};
+
 export default {
   getUserStorage,
   getUser,
+  updateUser,
 };
