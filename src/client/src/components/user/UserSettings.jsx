@@ -8,53 +8,79 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { toaster } from '../ui/toaster';
 
+const validationSchema = Yup.object().shape({
+  username: Yup.string()
+    .required('Username is required')
+    .min(3, 'Username must be at least 3 characters'),
+  currentPassword: Yup.string(),
+  newPassword: Yup.string(),
+  confirmPassword: Yup.string(),
+});
+
 const UserSettings = ({ user, onSave, onCancel }) => {
-  const [username, setUsername] = useState(user.username || '');
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+    reset,
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      username: user?.username || '',
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    },
+  });
 
-  const handleSave = async (e) => {
-    e.preventDefault();
-
-    if (!username.trim()) {
-      toaster.error({
-        description: 'Username is required',
-        duration: 3000,
-      });
-      return;
-    }
-
-    if (newPassword && newPassword !== confirmPassword) {
-      toaster.error({
-        description: 'New passwords do not match',
-        duration: 3000,
-      });
-      return;
-    }
-
-    if (newPassword && !currentPassword) {
-      toaster.error({
-        description: 'Current password is required to set a new password',
-        duration: 3000,
-      });
-      return;
-    }
-
-    setIsLoading(true);
-
+  const onSubmit = async (data) => {
     try {
+      setError();
+
+      if (data.newPassword && data.newPassword.length > 0) {
+        if (!data.currentPassword) {
+          setError('currentPassword', {
+            type: 'manual',
+            message: 'Current password is required to set a new password',
+          });
+          return;
+        }
+        if (data.newPassword.length < 6) {
+          setError('newPassword', {
+            type: 'manual',
+            message: 'Password must be at least 6 characters',
+          });
+          return;
+        }
+        if (!data.confirmPassword) {
+          setError('confirmPassword', {
+            type: 'manual',
+            message: 'Please confirm your new password',
+          });
+          return;
+        }
+        if (data.newPassword !== data.confirmPassword) {
+          setError('confirmPassword', {
+            type: 'manual',
+            message: 'Passwords do not match',
+          });
+          return;
+        }
+      }
+
       const updatedData = {
-        username: username.trim(),
+        username: data.username.trim(),
       };
 
-      if (newPassword) {
-        updatedData.currentPassword = currentPassword;
-        updatedData.newPassword = newPassword;
+      if (data.newPassword) {
+        updatedData.currentPassword = data.currentPassword;
+        updatedData.newPassword = data.newPassword;
       }
 
       await onSave(updatedData);
@@ -64,16 +90,32 @@ const UserSettings = ({ user, onSave, onCancel }) => {
         duration: 3000,
       });
 
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-    } catch (error) {
-      toaster.error({
-        description: error.message || 'Failed to update profile',
-        duration: 3000,
+      reset({
+        username: data.username,
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
       });
-    } finally {
-      setIsLoading(false);
+    } catch (error) {
+      if (
+        error.message?.includes('username') ||
+        error.message?.includes('unique')
+      ) {
+        setError('username', {
+          type: 'manual',
+          message: 'Username is already taken',
+        });
+      } else if (error.message?.includes('password')) {
+        setError('currentPassword', {
+          type: 'manual',
+          message: 'Current password is incorrect',
+        });
+      } else {
+        toaster.error({
+          description: error.message || 'Failed to update profile',
+          duration: 3000,
+        });
+      }
     }
   };
 
@@ -86,7 +128,7 @@ const UserSettings = ({ user, onSave, onCancel }) => {
       bg="card.bg"
       color="fg.default"
     >
-      <form onSubmit={handleSave}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Fieldset.Root>
           <VStack spacing={6} align="stretch">
             <Box textAlign="center" mb={2}>
@@ -111,10 +153,9 @@ const UserSettings = ({ user, onSave, onCancel }) => {
               shadow="sm"
             >
               <VStack spacing={4} align="stretch">
-                <Field label="Username" required>
+                <Field label="Username" required invalid={!!errors.username}>
                   <Input
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    data-testid="username-input"
                     placeholder="Enter your username"
                     size="lg"
                     bg="input.bg"
@@ -124,7 +165,13 @@ const UserSettings = ({ user, onSave, onCancel }) => {
                       borderColor: 'blue.400',
                       boxShadow: '0 0 0 1px blue.400',
                     }}
+                    {...register('username')}
                   />
+                  {errors.username && (
+                    <Text color="red.500" fontSize="sm" mt={1}>
+                      {errors.username.message}
+                    </Text>
+                  )}
                 </Field>
               </VStack>
             </Box>
@@ -147,11 +194,13 @@ const UserSettings = ({ user, onSave, onCancel }) => {
                   Change Password (Optional)
                 </Text>
 
-                <Field label="Current Password">
+                <Field
+                  label="Current Password"
+                  invalid={!!errors.currentPassword}
+                >
                   <Input
                     type="password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    data-testid="current-password-input"
                     placeholder="Enter your current password"
                     size="lg"
                     bg="input.bg"
@@ -161,14 +210,19 @@ const UserSettings = ({ user, onSave, onCancel }) => {
                       borderColor: 'blue.400',
                       boxShadow: '0 0 0 1px blue.400',
                     }}
+                    {...register('currentPassword')}
                   />
+                  {errors.currentPassword && (
+                    <Text color="red.500" fontSize="sm" mt={1}>
+                      {errors.currentPassword.message}
+                    </Text>
+                  )}
                 </Field>
 
-                <Field label="New Password">
+                <Field label="New Password" invalid={!!errors.newPassword}>
                   <Input
                     type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
+                    data-testid="new-password-input"
                     placeholder="Enter new password"
                     size="lg"
                     bg="input.bg"
@@ -178,14 +232,22 @@ const UserSettings = ({ user, onSave, onCancel }) => {
                       borderColor: 'blue.400',
                       boxShadow: '0 0 0 1px blue.400',
                     }}
+                    {...register('newPassword')}
                   />
+                  {errors.newPassword && (
+                    <Text color="red.500" fontSize="sm" mt={1}>
+                      {errors.newPassword.message}
+                    </Text>
+                  )}
                 </Field>
 
-                <Field label="Confirm New Password">
+                <Field
+                  label="Confirm New Password"
+                  invalid={!!errors.confirmPassword}
+                >
                   <Input
                     type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    data-testid="confirm-password-input"
                     placeholder="Confirm new password"
                     size="lg"
                     bg="input.bg"
@@ -195,7 +257,13 @@ const UserSettings = ({ user, onSave, onCancel }) => {
                       borderColor: 'blue.400',
                       boxShadow: '0 0 0 1px blue.400',
                     }}
+                    {...register('confirmPassword')}
                   />
+                  {errors.confirmPassword && (
+                    <Text color="red.500" fontSize="sm" mt={1}>
+                      {errors.confirmPassword.message}
+                    </Text>
+                  )}
                 </Field>
               </VStack>
             </Box>
@@ -203,25 +271,27 @@ const UserSettings = ({ user, onSave, onCancel }) => {
             <HStack mt={8} spacing={4} justify="center">
               <Button
                 type="submit"
+                data-testid="save-button"
                 size="lg"
                 colorScheme="blue"
                 px={8}
                 py={6}
                 fontSize="md"
                 fontWeight="semibold"
-                isLoading={isLoading}
+                isLoading={isSubmitting}
                 loadingText="Saving..."
               >
                 Save Changes
               </Button>
               <Button
                 onClick={onCancel}
+                data-testid="cancel-button"
                 size="lg"
                 px={8}
                 py={6}
                 fontSize="md"
                 bg="cancelButton"
-                disabled={isLoading}
+                disabled={isSubmitting}
               >
                 Cancel
               </Button>

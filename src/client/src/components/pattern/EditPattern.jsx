@@ -21,6 +21,7 @@ const EditPattern = ({
   onSave,
   onCancel,
   userId,
+  patternId,
 }) => {
   const [editableName, setEditableName] = useState(name);
   const [editableText, setEditableText] = useState(text);
@@ -195,6 +196,7 @@ const EditPattern = ({
                   buttonText="Add Pattern Image"
                   itemType="pattern"
                   userId={userId}
+                  itemId={patternId}
                 />
               </Field>
             </Box>

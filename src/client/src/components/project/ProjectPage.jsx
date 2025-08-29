@@ -103,7 +103,7 @@ const ProjectPage = () => {
       if (files && files.length > 0) {
         for (const file of files) {
           try {
-            await deleteImage(file.publicId);
+            await deleteImage(file.publicId, projectId);
           } catch (imageError) {
             console.error(`Error deleting image ${file.publicId}:`, imageError);
           }
@@ -377,6 +377,7 @@ const ProjectPage = () => {
                       showUpload={false}
                       showDelete={false}
                       itemType="project"
+                      type="projects"
                       userId={id}
                     />
                   </Box>

@@ -141,6 +141,7 @@ const FinishProjectDialog = ({
                       showUpload={false}
                       showDelete={false}
                       itemType="project"
+                      type="projects"
                       userId={userId}
                     />
 

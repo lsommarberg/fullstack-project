@@ -2,6 +2,8 @@ const express = require('express');
 const upload = require('../middleware/upload');
 const cloudinary = require('../config/cloudinary');
 const { userExtractor } = require('../utils/middleware');
+const Pattern = require('../models/pattern');
+const Project = require('../models/project');
 const router = express.Router();
 
 const MAX_STORAGE_LIMIT = 100 * 1024 * 1024;
@@ -54,7 +56,7 @@ router.delete('/:id', userExtractor, async (req, res) => {
   if (req.user.id !== req.params.id) {
     return res.status(403).json({ error: 'forbidden' });
   }
-  const { publicId } = req.body;
+  const { publicId, type, itemId } = req.body;
 
   if (!publicId) {
     return res.status(400).json({
@@ -63,30 +65,62 @@ router.delete('/:id', userExtractor, async (req, res) => {
     });
   }
 
-  const user = req.user;
-
-  const imageInfo = await cloudinary.api.resource(publicId);
-  const fileSize = imageInfo.bytes;
-
-  const result = await cloudinary.uploader.destroy(publicId);
-
-  if (result.result !== 'ok') {
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to delete image from storage',
-    });
+  if (!type || !itemId) {
+    console.log('No type or itemId provided - doing Cloudinary-only deletion');
   }
 
-  user.uploadStats = Math.max(0, user.uploadStats - fileSize);
-  await user.save();
+  const user = req.user;
 
-  res.json({
-    success: true,
-    fileSize: fileSize,
-    storageUsed: user.uploadStats,
-    storageLimit: MAX_STORAGE_LIMIT,
-    message: 'Image deleted successfully',
-  });
+  try {
+    const imageInfo = await cloudinary.api.resource(publicId);
+    const fileSize = imageInfo.bytes;
+
+    const result = await cloudinary.uploader.destroy(publicId);
+
+    if (result.result !== 'ok') {
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to delete image from storage',
+      });
+    }
+
+    user.uploadStats = Math.max(0, user.uploadStats - fileSize);
+    await user.save();
+
+    // If type and itemId are provided, also remove from database
+    if (type && itemId) {
+      let Model;
+      if (type === 'patterns') {
+        Model = Pattern;
+      } else if (type === 'projects') {
+        Model = Project;
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid type. Must be "patterns" or "projects"',
+        });
+      }
+
+      await Model.findOneAndUpdate(
+        { _id: itemId, user: user.id },
+        { $pull: { files: { publicId: publicId } } },
+      );
+    }
+
+    res.json({
+      success: true,
+      fileSize: fileSize,
+      storageUsed: user.uploadStats,
+      storageLimit: MAX_STORAGE_LIMIT,
+      message: 'Image deleted successfully',
+    });
+  } catch (error) {
+    console.error('Delete error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error deleting image',
+    });
+  }
 });
 
 module.exports = router;

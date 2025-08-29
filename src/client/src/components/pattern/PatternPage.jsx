@@ -61,7 +61,7 @@ const Pattern = () => {
       if (files && files.length > 0) {
         for (const file of files) {
           try {
-            await deleteImage(file.publicId);
+            await deleteImage(file.publicId, patternId);
           } catch (imageError) {
             console.error(`Error deleting image ${file.publicId}:`, imageError);
           }
@@ -127,6 +127,7 @@ const Pattern = () => {
           onSave={handleSave}
           onCancel={handleCancel}
           userId={id}
+          patternId={patternId}
         />
       ) : (
         <Box
@@ -197,6 +198,7 @@ const Pattern = () => {
                   showUpload={false}
                   showDelete={false}
                   itemType="pattern"
+                  type="patterns"
                   userId={id}
                 />
               </Box>
