@@ -142,6 +142,7 @@ const ProjectPage = () => {
       rowTrackers: updatedData.rowTrackers,
       pattern: updatedData.pattern,
       files: updatedData.files,
+      tags: updatedData.tags,
     });
     setIsEditing(false);
 
@@ -243,16 +244,22 @@ const ProjectPage = () => {
                     {finishedAt ? ' (Completed)' : ''}
                   </Text>
                   <HStack spacing={4}>
-                    <Button onClick={() => setIsEditing(true)}>
+                    <Button
+                      variant="secondary"
+                      onClick={() => setIsEditing(true)}
+                    >
                       Edit Project
                     </Button>
                     {!finishedAt && (
-                      <Button onClick={() => setFinishDialogOpen(true)}>
+                      <Button
+                        variant="primary"
+                        onClick={() => setFinishDialogOpen(true)}
+                      >
                         Finish project
                       </Button>
                     )}
                     <Button
-                      color="deleteButton"
+                      variant="delete"
                       onClick={handleDelete}
                       isLoading={isDeleting}
                     >

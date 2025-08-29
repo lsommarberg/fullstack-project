@@ -81,9 +81,7 @@ const SignupForm = () => {
               placeholder="Username"
               data-testid="username_signup"
               {...register('username')}
-              borderColor="input.border"
-              bg="input.bg"
-              color="fg.default"
+              variant="input"
             />
             {errors.username && (
               <Text color="red.500">{errors.username.message}</Text>
@@ -97,9 +95,7 @@ const SignupForm = () => {
               placeholder="Password"
               data-testid="password_signup"
               {...register('password')}
-              borderColor="input.border"
-              bg="input.bg"
-              color="fg.default"
+              variant="input"
             />
             {errors.password && (
               <Text color="red.500">{errors.password.message}</Text>
@@ -113,9 +109,7 @@ const SignupForm = () => {
               data-testid="password_signup_confirmation"
               placeholder="Confirm Password"
               {...register('passwordConfirm')}
-              borderColor="input.border"
-              bg="input.bg"
-              color="fg.default"
+              variant="input"
             />
             {errors.passwordConfirm && (
               <Text color="red.500">{errors.passwordConfirm.message}</Text>
@@ -123,7 +117,12 @@ const SignupForm = () => {
           </Field>
         </Fieldset.Content>
 
-        <Button type="submit" data-testid="signup_submit" width="full">
+        <Button
+          type="submit"
+          data-testid="signup_submit"
+          width="full"
+          variant="primary"
+        >
           Sign Up
         </Button>
       </Fieldset.Root>

@@ -22,7 +22,7 @@ const RowTrackersSection = ({
         <HStack justify="space-between" align="center" mb={3}>
           <Text fontWeight="semibold">Row Trackers (optional)</Text>
           {isEditable && (
-            <Button size="sm" onClick={onAddTracker}>
+            <Button size="sm" onClick={onAddTracker} variant="secondary">
               Add Section
             </Button>
           )}
@@ -61,6 +61,10 @@ const RowTrackersSection = ({
                       }
                       size="sm"
                       data-testid={'tracker-section'}
+                      _focus={{
+                        borderColor: 'input.borderFocus',
+                        boxShadow: '0 0 0 1px input.borderFocus',
+                      }}
                     />
                     <Box minH="20px" fontSize="xs">
                       {needsSectionName && (
@@ -88,6 +92,10 @@ const RowTrackersSection = ({
                       size="sm"
                       min="0"
                       data-testid="tracker-total-rows"
+                      _focus={{
+                        borderColor: 'input.borderFocus',
+                        boxShadow: '0 0 0 1px input.borderFocus',
+                      }}
                     />
                     <Box minH="20px"></Box>
                   </VStack>
@@ -133,6 +141,10 @@ const RowTrackersSection = ({
                       borderColor="input.border"
                       size="sm"
                       min="0"
+                      _focus={{
+                        borderColor: 'input.borderFocus',
+                        boxShadow: '0 0 0 1px input.borderFocus',
+                      }}
                     />
                   </Box>
 
@@ -156,6 +168,10 @@ const RowTrackersSection = ({
                       borderColor="input.border"
                       size="sm"
                       min="0"
+                      _focus={{
+                        borderColor: 'input.borderFocus',
+                        boxShadow: '0 0 0 1px input.borderFocus',
+                      }}
                     />
                   </Box>
                 </HStack>

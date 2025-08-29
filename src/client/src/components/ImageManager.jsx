@@ -189,7 +189,6 @@ const ImageManager = ({
                     top="8px"
                     right="8px"
                     size="sm"
-                    colorScheme="red"
                     variant="solid"
                     onClick={(e) => {
                       e.stopPropagation();

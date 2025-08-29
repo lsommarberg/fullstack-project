@@ -1,11 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Text, Flex, Input, Button, Stack, Card } from '@chakra-ui/react';
+import {
+  Text,
+  Flex,
+  Input,
+  Button,
+  Stack,
+  Card,
+  HStack,
+  Spacer,
+  Wrap,
+  Box,
+  WrapItem,
+} from '@chakra-ui/react';
 import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 import patternService from '../../services/pattern';
 import { Tag } from '@/components/ui/tag';
 import SidebarLayout from '../layout/SidebarLayout';
 
-export const ListItem = ({ item, getItemPath }) => (
+export const ListItem = ({ item, getItemPath, finished }) => (
   <Card.Root
     key={item.id}
     bg="card.bg"
@@ -18,25 +30,36 @@ export const ListItem = ({ item, getItemPath }) => (
     data-testid={'item-' + item.name}
   >
     <Card.Body>
-      <Flex
-        justify="space-between"
-        align="center"
-        p={4}
-        minHeight="50px"
-        height="50px"
-      >
-        <Text fontSize="lg" fontWeight="bold">
-          {item.name}
-        </Text>
-        <Flex>
-          {item.tags &&
-            item.tags.length > 0 &&
-            item.tags.map((tag, tagIndex) => (
-              <Tag key={tagIndex} color="fg.default" bg="input.bg" mr={2}>
-                {tag}
-              </Tag>
-            ))}
-        </Flex>
+      <Flex justify="space-between" align="center" p={4} minHeight="50px">
+        <HStack>
+          <Text fontSize="lg" fontWeight="bold">
+            {item.name}
+          </Text>
+          {finished && (
+            <Text as="span" color="green.500" fontSize="xl" ml={2}>
+              ✓
+            </Text>
+          )}
+        </HStack>
+        <Box minWidth="120px" ml={8}>
+          <Wrap justify="flex-end">
+            {item.tags &&
+              item.tags.length > 0 &&
+              item.tags.map((tag, tagIndex) => (
+                <WrapItem key={tagIndex}>
+                  <Tag
+                    color="fg.default"
+                    bg="input.bg"
+                    borderColor="blue.400"
+                    borderWidth="1px"
+                    size="lg"
+                  >
+                    {tag}
+                  </Tag>
+                </WrapItem>
+              ))}
+          </Wrap>
+        </Box>
       </Flex>
     </Card.Body>
   </Card.Root>
@@ -85,15 +108,24 @@ const PatternList = () => {
   return (
     <SidebarLayout userId={id}>
       <Flex direction="column" p={6}>
-        <Text
-          fontSize="2xl"
-          fontWeight="bold"
-          mb={4}
-          data-testid="patterns-title"
-        >
-          My Patterns
-        </Text>
-        <Flex mb={4} gap={4} align="center">
+        <HStack mb={4} align="center" justify={'space-between'}>
+          <Text
+            fontSize="2xl"
+            fontWeight="bold"
+            mb={4}
+            data-testid="patterns-title"
+          >
+            My Patterns
+          </Text>
+          <Spacer />
+          <Button
+            onClick={() => navigate(`/patterns/${id}/create`)}
+            variant="secondary"
+          >
+            Create New
+          </Button>
+        </HStack>
+        <Flex mb={4} my="5" gap={4} align="center">
           <Input
             placeholder="Search patterns..."
             value={searchQuery}
@@ -103,17 +135,11 @@ const PatternList = () => {
             }}
             flex={2}
             minWidth="200px"
-            borderColor="input.border"
+            variant={'input'}
+            size={'lg'}
           />
-          <Button onClick={handleSearch} minWidth="100px">
+          <Button onClick={handleSearch} variant="primary">
             Search
-          </Button>
-          <Button
-            colorScheme="teal"
-            onClick={() => navigate(`/patterns/${id}/create`)}
-            minWidth="100px"
-          >
-            Create New
           </Button>
         </Flex>
         <Stack spacing={4} data-testid="patterns-list">

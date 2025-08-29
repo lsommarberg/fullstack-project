@@ -82,7 +82,10 @@ const FinishedProjectsList = () => {
             Finished Projects
           </Text>
           <Spacer />
-          <Button onClick={() => navigate(`/projects/${id}/create`)}>
+          <Button
+            onClick={() => navigate(`/projects/${id}/create`)}
+            variant="secondary"
+          >
             Start New
           </Button>
         </HStack>

@@ -145,17 +145,17 @@ const Pattern = () => {
               </Text>
               <HStack spacing={4}>
                 <Button
-                  size="sm"
+                  variant="primary"
                   onClick={() =>
                     navigate(`/projects/${id}/create`, { state: { patternId } })
                   }
                 >
                   Start Project
                 </Button>
-                <Button size="sm" onClick={toggleIsEditing}>
+                <Button variant="secondary" onClick={toggleIsEditing}>
                   Edit Pattern
                 </Button>
-                <Button size="sm" color="deleteButton" onClick={handleDelete}>
+                <Button variant="delete" onClick={handleDelete}>
                   Delete Pattern
                 </Button>
               </HStack>
@@ -283,7 +283,6 @@ const Pattern = () => {
             message="Are you sure you want to delete this pattern and all associated images? This action cannot be undone."
             confirmText="Delete"
             cancelText="Cancel"
-            confirmColorScheme="red"
             isLoading={isDeleting}
           />
         </Box>

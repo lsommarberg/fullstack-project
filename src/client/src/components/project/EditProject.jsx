@@ -159,13 +159,7 @@ const EditProject = ({
                     onChange={(e) => setProjectName(e.target.value)}
                     placeholder="Enter project name"
                     size="lg"
-                    bg="input.bg"
-                    color="fg.default"
-                    borderColor="input.border"
-                    _focus={{
-                      borderColor: 'blue.400',
-                      boxShadow: '0 0 0 1px blue.400',
-                    }}
+                    variant="input"
                     data-testid="project-name-input"
                   />
                 </Field>
@@ -214,13 +208,7 @@ const EditProject = ({
                     onChange={(e) => setProjectTags(e.target.value)}
                     placeholder="Tags separated by commas (e.g., knitting, scarf, beginner)"
                     size="lg"
-                    bg="input.bg"
-                    color="fg.default"
-                    borderColor="input.border"
-                    _focus={{
-                      borderColor: 'blue.400',
-                      boxShadow: '0 0 0 1px blue.400',
-                    }}
+                    variant="input"
                   />
                 </Field>
               </VStack>
@@ -290,35 +278,24 @@ const EditProject = ({
                   color="fg.default"
                   borderColor="input.border"
                   _focus={{
-                    borderColor: 'blue.400',
-                    boxShadow: '0 0 0 1px blue.400',
+                    borderColor: 'input.borderFocus',
+                    boxShadow: '0 0 0 1px input.borderFocus',
                   }}
                 />
               </Field>
             </Box>
 
             <HStack mt={8} spacing={4} justify="center">
+              <Button onClick={onCancel} size="xl" variant="cancel">
+                Cancel
+              </Button>
               <Button
                 type="submit"
                 onClick={handleSave}
-                size="lg"
-                colorScheme="blue"
-                px={8}
-                py={6}
-                fontSize="md"
-                fontWeight="semibold"
+                size="xl"
+                variant="primary"
               >
                 Save Changes
-              </Button>
-              <Button
-                onClick={onCancel}
-                bg={'cancelButton'}
-                size="lg"
-                px={8}
-                py={6}
-                fontSize="md"
-              >
-                Cancel
               </Button>
             </HStack>
           </VStack>

@@ -103,7 +103,10 @@ const UserPage = ({ user }) => {
                 <Tabs.Context>
                   {(tabs) =>
                     tabs.value === 'profile' && (
-                      <Button onClick={() => setIsEditing(true)}>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setIsEditing(true)}
+                      >
                         Edit Profile
                       </Button>
                     )

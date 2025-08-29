@@ -202,13 +202,7 @@ const ProjectForm = () => {
                       placeholder="Enter a name for your project"
                       required
                       size="lg"
-                      bg="input.bg"
-                      color="fg.default"
-                      borderColor="input.border"
-                      _focus={{
-                        borderColor: 'blue.400',
-                        boxShadow: '0 0 0 1px blue.400',
-                      }}
+                      variant={'input'}
                     />
                   </Field>
 
@@ -265,13 +259,7 @@ const ProjectForm = () => {
                       onChange={(e) => setTagsString(e.target.value)}
                       placeholder="Tags separated by commas"
                       size="lg"
-                      bg="input.bg"
-                      color="fg.default"
-                      borderColor="input.border"
-                      _focus={{
-                        borderColor: 'blue.400',
-                        boxShadow: '0 0 0 1px blue.400',
-                      }}
+                      variant="input"
                     />
                   </Field>
                 </VStack>
@@ -337,8 +325,8 @@ const ProjectForm = () => {
                     color="fg.default"
                     borderColor="input.border"
                     _focus={{
-                      borderColor: 'blue.400',
-                      boxShadow: '0 0 0 1px blue.400',
+                      borderColor: 'input.borderFocus',
+                      boxShadow: '0 0 0 1px input.borderFocus',
                     }}
                   />
                 </Field>
@@ -346,27 +334,16 @@ const ProjectForm = () => {
             </VStack>
 
             <HStack mt={8} spacing={4} justify="center">
+              <Button onClick={() => navigate(-1)} size="xl" variant="cancel">
+                Cancel
+              </Button>
               <Button
                 data-testid="create-project-button"
                 type="submit"
-                size="lg"
-                colorScheme="blue"
-                px={8}
-                py={6}
-                fontSize="md"
-                fontWeight="semibold"
+                variant="primary"
+                size="xl"
               >
                 Create Project
-              </Button>
-              <Button
-                onClick={() => navigate(-1)}
-                bg={'cancelButton'}
-                size="lg"
-                px={8}
-                py={6}
-                fontSize="md"
-              >
-                Cancel
               </Button>
             </HStack>
           </Fieldset.Root>

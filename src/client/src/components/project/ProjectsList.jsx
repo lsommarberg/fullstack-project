@@ -50,13 +50,13 @@ export const ProjectsSearch = ({
                 placeholder="Search projects..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                size="md"
-                color="fg.default"
-                borderColor="input.border"
+                size="lg"
+                variant="input"
               />
             </Field>
             <Button
-              variant="outline"
+              variant="ghost"
+              borderColor={'section.border'}
               size="sm"
               alignSelf="flex-start"
               onClick={() => setShowAdvanced((prev) => !prev)}
@@ -111,15 +111,19 @@ export const ProjectsSearch = ({
               </>
             )}
             <HStack spacing={4} justify="flex-end">
-              <Button type="submit" data-testid="projects-search-button">
-                Search
-              </Button>
               <Button
-                variant="outline"
-                borderColor={'input.border'}
+                variant="ghost"
+                borderColor={'section.border'}
                 onClick={handleClearSearch}
               >
                 Clear Search
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                data-testid="projects-search-button"
+              >
+                Search
               </Button>
             </HStack>
           </VStack>
@@ -214,7 +218,10 @@ const ProjectsList = () => {
             My Projects
           </Text>
           <Spacer />
-          <Button onClick={() => navigate(`/projects/${id}/create`)}>
+          <Button
+            variant="secondary"
+            onClick={() => navigate(`/projects/${id}/create`)}
+          >
             Create New
           </Button>
         </HStack>
@@ -271,6 +278,7 @@ const ProjectsList = () => {
                     item={project}
                     key={project.id}
                     getItemPath={getItemPath}
+                    finished={!!project.finishedAt}
                   />
                 ))
               )}

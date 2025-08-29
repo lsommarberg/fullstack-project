@@ -272,12 +272,7 @@ const UserSettings = ({ user, onSave, onCancel }) => {
               <Button
                 type="submit"
                 data-testid="save-button"
-                size="lg"
-                colorScheme="blue"
-                px={8}
-                py={6}
-                fontSize="md"
-                fontWeight="semibold"
+                variant="primary"
                 isLoading={isSubmitting}
                 loadingText="Saving..."
               >
@@ -286,11 +281,7 @@ const UserSettings = ({ user, onSave, onCancel }) => {
               <Button
                 onClick={onCancel}
                 data-testid="cancel-button"
-                size="lg"
-                px={8}
-                py={6}
-                fontSize="md"
-                bg="cancelButton"
+                variant="cancel"
                 disabled={isSubmitting}
               >
                 Cancel

@@ -38,12 +38,13 @@ const ConfirmDialog = ({
               </Dialog.Body>
               <Dialog.Footer>
                 <Dialog.ActionTrigger asChild>
-                  <Button variant="outline">{cancelText}</Button>
+                  <Button variant="cancel">{cancelText}</Button>
                 </Dialog.ActionTrigger>
                 <Button
                   data-testid="confirm-button"
                   onClick={handleConfirm}
                   isLoading={isLoading}
+                  variant="primary"
                 >
                   {confirmText}
                 </Button>

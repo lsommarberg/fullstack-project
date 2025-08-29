@@ -96,7 +96,7 @@ const PatternForm = () => {
       >
         <form onSubmit={handleSubmit}>
           <Fieldset.Root>
-            <VStack spacing={6} align="stretch">
+            <VStack spacing={8} align="stretch">
               <Box textAlign="center" mb={2}>
                 <Fieldset.Legend
                   fontSize="2xl"
@@ -119,7 +119,7 @@ const PatternForm = () => {
                 borderColor="section.border"
                 shadow="sm"
               >
-                <VStack spacing={4} align="stretch">
+                <VStack spacing={6} align="stretch">
                   <Field label="Pattern Name" required>
                     <Input
                       name="name"
@@ -127,13 +127,7 @@ const PatternForm = () => {
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Enter a name for your pattern"
                       size="lg"
-                      bg="input.bg"
-                      color="fg.default"
-                      borderColor="input.border"
-                      _focus={{
-                        borderColor: 'blue.400',
-                        boxShadow: '0 0 0 1px blue.400',
-                      }}
+                      variant="input"
                     />
                   </Field>
 
@@ -144,13 +138,7 @@ const PatternForm = () => {
                       onChange={(e) => setLink(e.target.value)}
                       placeholder="Link to pattern source or website"
                       size="lg"
-                      bg="input.bg"
-                      color="fg.default"
-                      borderColor="input.border"
-                      _focus={{
-                        borderColor: 'blue.400',
-                        boxShadow: '0 0 0 1px blue.400',
-                      }}
+                      variant="input"
                     />
                   </Field>
 
@@ -164,13 +152,7 @@ const PatternForm = () => {
                       onChange={(e) => setTagsString(e.target.value)}
                       placeholder="Tags separated by commas"
                       size="lg"
-                      bg="input.bg"
-                      color="fg.default"
-                      borderColor="input.border"
-                      _focus={{
-                        borderColor: 'blue.400',
-                        boxShadow: '0 0 0 1px blue.400',
-                      }}
+                      variant="input"
                     />
                   </Field>
                 </VStack>
@@ -195,8 +177,8 @@ const PatternForm = () => {
                     color="fg.default"
                     borderColor="input.border"
                     _focus={{
-                      borderColor: 'blue.400',
-                      boxShadow: '0 0 0 1px blue.400',
+                      borderColor: 'input.borderFocus',
+                      boxShadow: '0 0 0 1px input.borderFocus',
                     }}
                   />
                 </Field>
@@ -246,35 +228,24 @@ const PatternForm = () => {
                     color="fg.default"
                     borderColor="input.border"
                     _focus={{
-                      borderColor: 'blue.400',
-                      boxShadow: '0 0 0 1px blue.400',
+                      borderColor: 'input.borderFocus',
+                      boxShadow: '0 0 0 1px input.borderFocus',
                     }}
                   />
                 </Field>
               </Box>
 
               <HStack mt={8} spacing={4} justify="center">
+                <Button onClick={handleCancel} size="xl" variant="cancel">
+                  Cancel
+                </Button>
                 <Button
                   type="submit"
-                  size="lg"
-                  colorScheme="blue"
-                  px={8}
-                  py={6}
-                  fontSize="md"
-                  fontWeight="semibold"
+                  size="xl"
+                  variant="primary"
                   data-testid="create-pattern-button"
                 >
                   Create Pattern
-                </Button>
-                <Button
-                  onClick={handleCancel}
-                  size="lg"
-                  px={8}
-                  py={6}
-                  fontSize="md"
-                  bg={'cancelButton'}
-                >
-                  Cancel
                 </Button>
               </HStack>
             </VStack>
