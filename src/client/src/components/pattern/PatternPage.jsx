@@ -163,6 +163,7 @@ const Pattern = () => {
                   variant="delete"
                   onClick={handleDelete}
                   aria-label="Delete this pattern"
+                  data-testid="delete-pattern-button"
                 >
                   Delete Pattern
                 </Button>

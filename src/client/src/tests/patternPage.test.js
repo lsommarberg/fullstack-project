@@ -81,7 +81,7 @@ describe('PatternPage', () => {
       expect(screen.getByText('Test Pattern')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Delete Pattern'));
+    fireEvent.click(screen.getByTestId('delete-pattern-button'));
 
     await waitFor(() => {
       expect(screen.getByText('Confirm Deletion')).toBeInTheDocument();
@@ -92,7 +92,7 @@ describe('PatternPage', () => {
       ).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Delete'));
+    fireEvent.click(screen.getByTestId('confirm-button'));
 
     await waitFor(() => {
       expect(patternService.deletePattern).toHaveBeenCalledWith('1', '1');
@@ -203,7 +203,7 @@ describe('PatternPage', () => {
       expect(screen.getByText('Test Pattern')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Delete Pattern'));
+    fireEvent.click(screen.getByTestId('delete-pattern-button'));
 
     await waitFor(() => {
       expect(screen.getByText('Confirm Deletion')).toBeInTheDocument();
@@ -214,7 +214,7 @@ describe('PatternPage', () => {
       ).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Delete'));
+    fireEvent.click(screen.getByTestId('confirm-button'));
 
     await waitFor(() => {
       expect(toaster.error).toHaveBeenCalledWith({
