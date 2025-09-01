@@ -17,6 +17,14 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), null], 'Passwords must match'),
 });
 
+/**
+ * User registration component that handles new account creation with form validation.
+ * Uses react-hook-form with Yup validation for password strength and confirmation matching.
+ * Redirects to login page after successful registration.
+ *
+ * @component
+ * @returns {JSX.Element} Registration form with username, password, and confirmation fields
+ */
 const SignupForm = () => {
   const {
     register,

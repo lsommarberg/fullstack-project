@@ -20,11 +20,41 @@ import FinishedProjectsList from './components/project/FinishedProjectsList';
 import SidebarLayout from './components/layout/SidebarLayout';
 import { Toaster } from './components/ui/toaster';
 
+/**
+ * Main application component that handles routing, authentication, and user session management.
+ *
+ * This component:
+ * - Manages user authentication state
+ * - Handles automatic session expiration and logout
+ * - Provides persistent navigation and routing
+ * - Redirects users based on authentication status
+ *
+ * @component
+ * @returns {JSX.Element} The main application with navigation and routing
+ */
 const App = () => {
+  /**
+   * User authentication state
+   * @type {Object|null} Current authenticated user object or null if not logged in
+   */
   const [user, setUser] = useState(null);
+
   const navigate = useNavigate();
   const location = useLocation();
 
+  /**
+   * Effect hook that manages automatic session expiration and authentication state.
+   *
+   * This effect:
+   * - Checks localStorage for stored user session on component mount
+   * - Validates session expiration time
+   * - Automatically logs out expired sessions
+   * - Redirects to login page when session expires (except from signup page)
+   * - Removes invalid or expired session data from localStorage
+   *
+   * @dependency {function} navigate - React Router navigation function
+   * @dependency {Object} location.pathname - Current route pathname
+   */
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('user');
     if (loggedUserJSON) {
@@ -57,9 +87,14 @@ const App = () => {
 
   return (
     <div>
+      {/* Global toast notifications */}
       <Toaster />
+
+      {/* Main navigation bar - persists across all routes */}
       <Navigation user={user} setUser={setUser} />
+
       <Routes>
+        {/* Home route - redirects based on authentication status */}
         <Route
           path="/"
           element={
@@ -70,12 +105,15 @@ const App = () => {
             )
           }
         />
+
+        {/* Authentication routes */}
         <Route
           path="/login"
           element={user ? <Navigate to="/" /> : <Login setUser={setUser} />}
         />
         <Route path="/signup" element={<SignUp />} />
 
+        {/* Protected routes with sidebar layout */}
         <Route element={<SidebarLayout userId={user?.id} />}>
           <Route path="/users/:id" element={<UserPage user={user} />} />
           <Route path="/patterns/:id" element={<PatternList />} />

@@ -21,6 +21,14 @@ import ImageManager from '../ImageManager';
 import uploadService from '../../services/upload';
 import TagList from '../pattern/TagList';
 
+/**
+ * Individual project page that displays project details, progress tracking, and management controls.
+ * Provides functionality for editing project details, managing images, tracking row progress,
+ * adding notes, and finishing or deleting projects.
+ *
+ * @component
+ * @returns {JSX.Element} Project detail page with management controls and progress tracking
+ */
 const ProjectPage = () => {
   const { id, projectId } = useParams();
   const [projectData, setProjectData] = useState(null);

@@ -16,6 +16,26 @@ import patternService from '../../services/pattern';
 import ImageManager from '../ImageManager';
 import useUnsavedChangesWarning from '../../hooks/useUnSavedChangesWarning';
 
+/**
+ * Project editing form component with unsaved changes warning and comprehensive project management.
+ * Allows editing of project name, notes, tags, row trackers, and associated images.
+ * Includes pattern selection and provides save/cancel functionality with change detection.
+ *
+ * @component
+ * @param {Object} props - The component props
+ * @param {string} props.name - Current project name
+ * @param {string} props.notes - Current project notes
+ * @param {Object} props.pattern - Associated pattern object
+ * @param {Array} props.files - Project image files
+ * @param {Array} props.rowTrackers - Project row tracking data
+ * @param {Array} props.tags - Project tags array
+ * @param {Function} props.onSave - Callback function when project is saved
+ * @param {string} props.userId - Current user ID
+ * @param {Function} props.onCancel - Callback function when editing is cancelled
+ * @param {Function} props.handleImageDelete - Function to handle image deletion
+ * @param {boolean} props.isFinished - Whether the project is marked as finished
+ * @returns {JSX.Element} Comprehensive project editing form with change detection
+ */
 const EditProject = ({
   name,
   notes,

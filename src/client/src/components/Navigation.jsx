@@ -3,6 +3,17 @@ import { ColorModeButton } from '@/components/ui/color-mode';
 
 import { Outlet, Link as RouterLink } from 'react-router-dom';
 
+/**
+ * Main navigation component that provides persistent navigation bar and user authentication controls.
+ * Uses React Router's Outlet pattern to render child routes while maintaining navigation state.
+ * Displays different navigation options based on user authentication status.
+ *
+ * @component
+ * @param {Object} props - The component props
+ * @param {Object|null} props.user - Current authenticated user object, null if not logged in
+ * @param {Function} props.setUser - Function to update user state (for logout functionality)
+ * @returns {JSX.Element} Navigation bar with outlet for child routes
+ */
 const Navigation = ({ user, setUser }) => {
   const logout = () => {
     setUser(null);

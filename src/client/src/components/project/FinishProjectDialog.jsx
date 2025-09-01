@@ -14,11 +14,28 @@ import {
 import { Field } from '@/components/ui/field';
 import ImageManager from '../ImageManager';
 
+/**
+ * Modal dialog component for finishing/completing projects with comprehensive project completion options.
+ * Provides functionality to set finish date, add final notes, manage project images,
+ * and handle existing image cleanup. Includes validation and proper form state management.
+ *
+ * @component
+ * @param {Object} props - The component props
+ * @param {boolean} props.isOpen - Whether the dialog is currently open
+ * @param {Function} props.onClose - Callback function when dialog is closed
+ * @param {Function} props.onConfirm - Callback function when project completion is confirmed
+ * @param {string} props.cancelText - Text for the cancel button
+ * @param {string} props.confirmText - Text for the confirm button
+ * @param {boolean} props.isLoading - Whether the completion operation is in progress
+ * @param {string} props.currentProjectName - Current name of the project being finished
+ * @param {Array} props.currentImages - Existing project images
+ * @param {string} props.userId - Current user ID for image management
+ * @returns {JSX.Element} Modal dialog for project completion with image and data management
+ */
 const FinishProjectDialog = ({
   isOpen,
   onClose,
   onConfirm,
-  title = 'Finish Project',
   cancelText = 'Cancel',
   confirmText = 'Finish Project',
   isLoading = false,

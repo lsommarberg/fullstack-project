@@ -19,6 +19,14 @@ import patternService from '../../services/pattern';
 import { toaster } from '../ui/toaster';
 import ImageManager from '../ImageManager';
 
+/**
+ * Project creation form component for starting new knitting projects.
+ * Provides comprehensive project setup including pattern selection, row tracking, image upload,
+ * and project metadata.
+ *
+ * @component
+ * @returns {JSX.Element} Complete project creation form with pattern integration and row tracking
+ */
 const ProjectForm = () => {
   const { id } = useParams();
   const [name, setName] = useState('');

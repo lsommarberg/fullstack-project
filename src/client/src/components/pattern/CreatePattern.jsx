@@ -14,6 +14,14 @@ import patternService from '../../services/pattern';
 import { toaster } from '../ui/toaster';
 import ImageManager from '../ImageManager';
 
+/**
+ * Pattern creation form component for adding new knitting patterns.
+ * Provides form fields for pattern name, instructions, external links, tags, notes, and images.
+ * Handles form submission and navigation after successful pattern creation.
+ *
+ * @component
+ * @returns {JSX.Element} Pattern creation form with all necessary fields and image upload
+ */
 const PatternForm = () => {
   const { id } = useParams();
   const [name, setName] = useState('');

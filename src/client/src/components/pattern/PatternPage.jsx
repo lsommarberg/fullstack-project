@@ -20,6 +20,14 @@ import ConfirmDialog from '../ConfirmDialog';
 import ImageManager from '../ImageManager';
 import useImageUpload from '../../hooks/useImageManagement';
 
+/**
+ * Individual pattern page that displays pattern details and provides management controls.
+ * Allows users to view, edit, and delete patterns, manage images, and add notes.
+ * Provides functionality for creating new projects from the pattern.
+ *
+ * @component
+ * @returns {JSX.Element} Pattern detail page with management controls and editing functionality
+ */
 const Pattern = () => {
   const { id, patternId } = useParams();
   const [patternData, setPatternData] = useState(null);

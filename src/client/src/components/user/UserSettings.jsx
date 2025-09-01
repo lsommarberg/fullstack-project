@@ -22,6 +22,18 @@ const validationSchema = Yup.object().shape({
   confirmPassword: Yup.string(),
 });
 
+/**
+ * User settings form component for updating profile information and password.
+ * Provides form validation for username changes and password updates with confirmation.
+ * Includes current password verification for security when changing passwords.
+ *
+ * @component
+ * @param {Object} props - The component props
+ * @param {Object} props.user - Current user object with username and other profile data
+ * @param {Function} props.onSave - Callback function when settings are successfully saved
+ * @param {Function} props.onCancel - Callback function when user cancels editing
+ * @returns {JSX.Element} Settings form with username and password change fields
+ */
 const UserSettings = ({ user, onSave, onCancel }) => {
   const {
     register,

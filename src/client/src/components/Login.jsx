@@ -4,6 +4,16 @@ import loginService from '../services/login';
 import { Button, Fieldset, Input, Stack, Text } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
 
+/**
+ * User login component that handles authentication and redirects to user dashboard.
+ * Provides form validation and error handling for login attempts.
+ * Sets user state and navigation after successful authentication.
+ *
+ * @component
+ * @param {Object} props - The component props
+ * @param {Function} props.setUser - Function to update the global user state after login
+ * @returns {JSX.Element} Login form with username and password fields
+ */
 const Login = ({ setUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

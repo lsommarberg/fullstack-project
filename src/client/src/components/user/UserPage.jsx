@@ -15,6 +15,16 @@ import userService from '../../services/user';
 
 const MAX_STORAGE_LIMIT = 100 * 1024 * 1024;
 
+/**
+ * User dashboard page that displays user profile information, settings, and analytics.
+ * Provides tabs for viewing patterns, projects, and account settings.
+ * Includes functionality for editing user profile and viewing storage usage.
+ *
+ * @component
+ * @param {Object} props - The component props
+ * @param {Object} props.user - Current authenticated user object with token and basic info
+ * @returns {JSX.Element} User dashboard with tabs for patterns, projects, and settings
+ */
 const UserPage = ({ user }) => {
   const { id } = useParams();
   const [fullUserData, setFullUserData] = useState(null);
