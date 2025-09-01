@@ -120,7 +120,7 @@ const config = defineConfig({
           value: { base: '#ffffff', _dark: '#0f172a' },
         },
         secondaryButton: {
-          value: { base: '#60a5fa', _dark: '#2563eb' },
+          value: { base: '#67b7efff', _dark: '#2563eb' },
         },
         secondaryButtonText: {
           value: { base: '#0f172a', _dark: '#ffffff' },
@@ -136,6 +136,9 @@ const config = defineConfig({
         },
         'section.border': {
           value: { base: '{colors.blue.200}', _dark: '{colors.blue.700}' },
+        },
+        'cardPattern.bg': {
+          value: { base: '#f3e8ff', _dark: '#6a6594ff' },
         },
       },
     },

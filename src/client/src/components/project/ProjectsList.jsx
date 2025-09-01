@@ -4,134 +4,16 @@ import {
   Flex,
   Tabs,
   Link,
-  Input,
-  Button,
   Stack,
-  Fieldset,
   HStack,
-  VStack,
   Spacer,
+  Button,
 } from '@chakra-ui/react';
-import { Field } from '@/components/ui/field';
 import { useParams, useNavigate } from 'react-router-dom';
 import projectService from '../../services/project';
 import SidebarLayout from '../layout/SidebarLayout';
-import { ListItem } from '../pattern/PatternsList';
-
-export const ProjectsSearch = ({
-  searchQuery,
-  setSearchQuery,
-  handleSearch,
-  startedAfter,
-  setStartedAfter,
-  startedBefore,
-  setStartedBefore,
-  finishedAfter,
-  setFinishedAfter,
-  finishedBefore,
-  setFinishedBefore,
-  status,
-  handleClearSearch,
-}) => {
-  const [showAdvanced, setShowAdvanced] = useState(false);
-  return (
-    <Flex mb={4} w="full" align="center">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSearch();
-        }}
-        style={{ width: '100%' }}
-      >
-        <Fieldset.Root>
-          <VStack align="stretch" spacing={4}>
-            <Field label="Search Projects">
-              <Input
-                placeholder="Search projects..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                size="lg"
-                variant="input"
-              />
-            </Field>
-            <Button
-              variant="ghost"
-              borderColor={'section.border'}
-              size="sm"
-              alignSelf="flex-start"
-              onClick={() => setShowAdvanced((prev) => !prev)}
-              mb={2}
-            >
-              {showAdvanced ? 'Hide Advanced Filters' : 'Show Advanced Filters'}
-            </Button>
-            {showAdvanced && (
-              <>
-                <HStack spacing={4}>
-                  <Field label="Started Between">
-                    <HStack>
-                      <Input
-                        type="date"
-                        value={startedAfter}
-                        onChange={(e) => setStartedAfter(e.target.value)}
-                        borderColor={'input.border'}
-                        data-testid="started-after-input"
-                      />
-                      <Input
-                        type="date"
-                        value={startedBefore}
-                        onChange={(e) => setStartedBefore(e.target.value)}
-                        borderColor={'input.border'}
-                        data-testid="started-before-input"
-                      />
-                    </HStack>
-                  </Field>
-                </HStack>
-                {status.value !== 'inprogress' && (
-                  <HStack spacing={4}>
-                    <Field label="Finished Between">
-                      <HStack>
-                        <Input
-                          type="date"
-                          value={finishedAfter}
-                          onChange={(e) => setFinishedAfter(e.target.value)}
-                          borderColor={'input.border'}
-                          data-testid="finished-after-input"
-                        />
-                        <Input
-                          type="date"
-                          value={finishedBefore}
-                          onChange={(e) => setFinishedBefore(e.target.value)}
-                          borderColor={'input.border'}
-                          data-testid="finished-before-input"
-                        />
-                      </HStack>
-                    </Field>
-                  </HStack>
-                )}
-              </>
-            )}
-            <HStack spacing={4} justify="flex-end">
-              <Button
-                variant="ghost"
-                borderColor={'section.border'}
-                onClick={handleClearSearch}
-              >
-                Clear Search
-              </Button>
-              <Button
-                type="submit"
-                variant="primary"
-                data-testid="projects-search-button"
-              >
-                Search
-              </Button>
-            </HStack>
-          </VStack>
-        </Fieldset.Root>
-      </form>
-    </Flex>
-  );
-};
+import SearchBar from '../SearchBar';
+import ListItem from '../ListItem';
 
 const ProjectsList = () => {
   const { id } = useParams();
@@ -225,7 +107,7 @@ const ProjectsList = () => {
             Create New
           </Button>
         </HStack>
-        <ProjectsSearch
+        <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           handleSearch={handleSearch}
@@ -239,6 +121,7 @@ const ProjectsList = () => {
           setFinishedBefore={setFinishedBefore}
           status={status}
           handleClearSearch={handleClearSearch}
+          placeHolderText="Search projects..."
         />
         <Tabs.Root defaultValue="all" onValueChange={setStatus}>
           <Tabs.List mb={4}>

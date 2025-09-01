@@ -135,7 +135,7 @@ const Pattern = () => {
           shadow="lg"
           borderWidth="1px"
           borderRadius="xl"
-          bg="card.bg"
+          bg="cardPattern.bg"
           color="fg.default"
         >
           <VStack spacing={6} align="stretch">

@@ -34,6 +34,6 @@ describe('Frontpage', () => {
 
   test('user can login', async ({ page }) => {
     await loginWith(page, 'testuser', 'test');
-    await expect(page.getByText(/Welcome: testuser/i)).toBeVisible();
+    await expect(page.getByText(/testuser's Dashboard/i)).toBeVisible();
   });
 });

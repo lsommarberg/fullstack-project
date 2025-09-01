@@ -14,6 +14,7 @@ import { Field } from '@/components/ui/field';
 import { PatternMenu } from './PatternSelectionMenu';
 import patternService from '../../services/pattern';
 import ImageManager from '../ImageManager';
+import useUnsavedChangesWarning from '../../hooks/useUnSavedChangesWarning';
 
 const EditProject = ({
   name,
@@ -36,6 +37,14 @@ const EditProject = ({
   const [patterns, setPatterns] = useState([]);
   const [selectedPattern, setSelectedPattern] = useState(pattern);
   const [isLoading, setIsLoading] = useState(false);
+  const hasUnsavedChanges =
+    projectName !== name ||
+    projectNotes !== notes ||
+    JSON.stringify(rowTrackersState) !== JSON.stringify(rowTrackers) ||
+    projectTags !== tags.join(', ') ||
+    (selectedPattern ? selectedPattern.id : null) !==
+      (pattern ? pattern.id : null);
+  useUnsavedChangesWarning(hasUnsavedChanges);
 
   useEffect(() => {
     const loadUserPatterns = async () => {

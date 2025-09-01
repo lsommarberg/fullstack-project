@@ -157,6 +157,7 @@ const ImageManager = ({
                 position="relative"
                 borderRadius="md"
                 overflow="hidden"
+                p={2}
               >
                 <Image
                   src={file.url || file.secure_url}

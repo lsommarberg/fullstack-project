@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
 import ImageManager from '../ImageManager';
+import useUnsavedChangesWarning from '../../hooks/useUnSavedChangesWarning';
 
 const EditPattern = ({
   name,
@@ -29,6 +30,14 @@ const EditPattern = ({
   const [editableTags, setEditableTags] = useState(tags.join(', '));
   const [editableNotes, setEditableNotes] = useState(notes);
   const [patternFiles, setPatternFiles] = useState(files || []);
+
+  const hasUnsavedChanges =
+    editableName !== name ||
+    editableText !== text ||
+    editableLink !== link ||
+    editableTags !== tags.join(', ') ||
+    editableNotes !== notes;
+  useUnsavedChangesWarning(hasUnsavedChanges);
 
   const handleSave = (e) => {
     e?.preventDefault();
@@ -68,7 +77,7 @@ const EditPattern = ({
       shadow="lg"
       borderWidth="1px"
       borderRadius="xl"
-      bg="card.bg"
+      bg="cardPattern.bg"
       color="fg.default"
     >
       <form onSubmit={handleSave}>

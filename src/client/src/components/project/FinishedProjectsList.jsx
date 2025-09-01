@@ -3,8 +3,8 @@ import { Text, Flex, Stack, Spacer, Button, HStack } from '@chakra-ui/react';
 import { useParams, useNavigate } from 'react-router-dom';
 import projectService from '../../services/project';
 import SidebarLayout from '../layout/SidebarLayout';
-import { ListItem } from '../pattern/PatternsList';
-import { ProjectsSearch } from './ProjectsList';
+import ListItem from '../ListItem';
+import SearchBar from '../SearchBar';
 
 const FinishedProjectsList = () => {
   const { id } = useParams();
@@ -89,7 +89,7 @@ const FinishedProjectsList = () => {
             Start New
           </Button>
         </HStack>
-        <ProjectsSearch
+        <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           handleSearch={handleSearch}

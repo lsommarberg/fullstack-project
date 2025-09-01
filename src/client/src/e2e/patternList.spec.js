@@ -34,7 +34,7 @@ describe('Pattern List', () => {
     await page.getByRole('link', { name: 'My Patterns' }).click();
     const searchInput = page.getByPlaceholder('Search patterns...');
     await searchInput.fill('First');
-    await page.getByRole('button', { name: 'Search' }).click();
+    await page.getByTestId('projects-search-button').click();
 
     const listContainer = page.locator('[data-testid="patterns-list"]');
     const patterns = listContainer.locator('[data-testid^="item-"]');
@@ -50,7 +50,7 @@ describe('Pattern List', () => {
     await page.getByRole('link', { name: 'My Patterns' }).click();
     const searchInput = page.getByPlaceholder('Search patterns...');
     await searchInput.fill('NonExistentPattern');
-    await page.getByRole('button', { name: 'Search' }).click();
+    await page.getByTestId('projects-search-button').click();
 
     const listContainer = page.locator('[data-testid="patterns-list"]');
     const patterns = listContainer.locator('[data-testid^="item-"]');
@@ -65,7 +65,7 @@ describe('Pattern List', () => {
     await page.getByRole('link', { name: 'My Patterns' }).click();
     const searchInput = page.getByPlaceholder('Search patterns...');
     await searchInput.fill('First');
-    await page.getByRole('button', { name: 'Search' }).click();
+    await page.getByTestId('projects-search-button').click();
 
     const listContainer = page.locator('[data-testid="patterns-list"]');
     const patterns = listContainer.locator('[data-testid^="item-"]');
