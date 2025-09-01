@@ -90,7 +90,12 @@ const Login = ({ setUser }) => {
           </Field>
         </Fieldset.Content>
 
-        <Button type="submit" width="full" variant="primary">
+        <Button
+          type="submit"
+          width="full"
+          variant="primary"
+          aria-label="Login to your account"
+        >
           Login
         </Button>
       </Fieldset.Root>

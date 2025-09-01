@@ -1,7 +1,12 @@
 import { Box, Flex, VStack, Button, Link, Text } from '@chakra-ui/react';
-import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  useNavigate,
+  useLocation,
+  Outlet,
+} from 'react-router-dom';
 
-const SidebarLayout = ({ children, userId }) => {
+const SidebarLayout = ({ userId }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -130,7 +135,7 @@ const SidebarLayout = ({ children, userId }) => {
       </Box>
 
       <Box flex="1" p={4} overflow="auto">
-        {children}
+        <Outlet />
       </Box>
     </Flex>
   );

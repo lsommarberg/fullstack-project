@@ -122,6 +122,7 @@ const SignupForm = () => {
           data-testid="signup_submit"
           width="full"
           variant="primary"
+          aria-label="Sign up for a new account"
         >
           Sign Up
         </Button>

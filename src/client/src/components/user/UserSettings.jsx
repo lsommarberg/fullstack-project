@@ -275,6 +275,7 @@ const UserSettings = ({ user, onSave, onCancel }) => {
                 variant="primary"
                 isLoading={isSubmitting}
                 loadingText="Saving..."
+                aria-label="Save profile changes"
               >
                 Save Changes
               </Button>
@@ -283,6 +284,7 @@ const UserSettings = ({ user, onSave, onCancel }) => {
                 data-testid="cancel-button"
                 variant="cancel"
                 disabled={isSubmitting}
+                aria-label="Cancel profile editing"
               >
                 Cancel
               </Button>

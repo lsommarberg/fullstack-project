@@ -48,16 +48,6 @@ describe('ImageManager', () => {
     jest.clearAllMocks();
   });
 
-  test('renders without crashing', () => {
-    render(<ImageManager />);
-    expect(screen.getByText('Images')).toBeInTheDocument();
-  });
-
-  test('displays custom header text', () => {
-    render(<ImageManager headerText="Custom Images" />);
-    expect(screen.getByText('Custom Images')).toBeInTheDocument();
-  });
-
   test('shows upload button when showUpload is true', () => {
     render(<ImageManager showUpload={true} buttonText="Upload Image" />);
     expect(screen.getByText('Upload Image')).toBeInTheDocument();

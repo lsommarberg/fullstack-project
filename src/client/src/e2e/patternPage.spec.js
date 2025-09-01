@@ -44,7 +44,7 @@ describe('Pattern Page', () => {
     await expect(page.getByText('To Delete')).toBeVisible();
     await page.getByText('To Delete').click();
 
-    await page.getByRole('button', { name: 'Delete Pattern' }).click();
+    await page.getByRole('button', { name: 'Delete this pattern' }).click();
 
     await expect(
       page.getByText(
@@ -66,7 +66,7 @@ describe('Pattern Page', () => {
     await expect(page.getByText('To Edit')).toBeVisible();
     await page.getByText('To Edit').click();
 
-    await page.getByRole('button', { name: 'Edit Pattern' }).click();
+    await page.getByRole('button', { name: 'Edit this pattern' }).click();
 
     await page.getByTestId('pattern-name-input').fill('Edited Pattern');
     await page.getByTestId('pattern-textarea').fill('Edited description');

@@ -25,7 +25,8 @@ describe('Frontpage', () => {
   });
 
   test('user can sign up', async ({ page }) => {
-    await page.getByRole('button', { name: 'Sign Up' }).click();
+    await page.getByTestId('nav-signup').click();
+    await expect(page).toHaveURL(/signup/);
     await page.getByTestId('username_signup').fill('test');
     await page.getByTestId('password_signup').fill('test');
     await page.getByTestId('password_signup_confirmation').fill('test');

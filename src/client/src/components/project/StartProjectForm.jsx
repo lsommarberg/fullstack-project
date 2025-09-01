@@ -12,7 +12,6 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
-import SidebarLayout from '../layout/SidebarLayout';
 import RowTrackersSection from './RowTrackersSection';
 import { PatternMenu } from './PatternSelectionMenu';
 import projectService from '../../services/project';
@@ -164,192 +163,199 @@ const ProjectForm = () => {
   };
 
   return (
-    <SidebarLayout userId={id}>
-      <Box
-        p={8}
-        shadow="lg"
-        borderWidth="1px"
-        borderRadius="xl"
-        bg="card.bg"
-        color="fg.default"
-      >
-        <form onSubmit={handleSubmit}>
-          <Fieldset.Root>
-            <VStack spacing={6} align="stretch">
-              <Box textAlign="center" mb={2}>
-                <Fieldset.Legend
-                  fontSize="2xl"
-                  fontWeight="bold"
-                  color="fg.default"
-                >
-                  Create a New Project
-                </Fieldset.Legend>
-              </Box>
-
-              <Box
-                p={6}
-                bg="section.bg"
-                borderRadius="lg"
-                border="1px solid"
-                borderColor="section.border"
-                shadow="sm"
+    <Box
+      p={8}
+      shadow="lg"
+      borderWidth="1px"
+      borderRadius="xl"
+      bg="card.bg"
+      color="fg.default"
+    >
+      <form onSubmit={handleSubmit}>
+        <Fieldset.Root>
+          <VStack spacing={6} align="stretch">
+            <Box textAlign="center" mb={2}>
+              <Fieldset.Legend
+                fontSize="2xl"
+                fontWeight="bold"
+                color="fg.default"
               >
-                <VStack spacing={4} align="stretch">
-                  <Field label="Project Name" required>
-                    <Input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Enter a name for your project"
-                      required
-                      size="lg"
-                      variant={'input'}
-                    />
-                  </Field>
+                Create a New Project
+              </Fieldset.Legend>
+            </Box>
 
-                  <Field label="Started At" required>
-                    <Input
-                      type="date"
-                      value={startedAt}
-                      onChange={(e) => setStartedAt(e.target.value)}
-                      required
-                      size="lg"
-                      bg="input.bg"
-                      color="fg.default"
-                      borderColor="input.border"
-                      _focus={{
-                        borderColor: 'blue.400',
-                        boxShadow: '0 0 0 1px blue.400',
-                      }}
-                    />
-                  </Field>
-
-                  <Field label="Pattern (optional)">
-                    {isLoading ? (
-                      <Text>Loading patterns...</Text>
-                    ) : patterns.length > 0 ? (
-                      <PatternMenu
-                        onPatternSelect={handlePatternSelect}
-                        patterns={patterns}
-                        selectedPatternName={
-                          selectedPattern ? selectedPattern.name : ''
-                        }
-                      />
-                    ) : (
-                      <Text
-                        fontSize="sm"
-                        color="fg.muted"
-                        p={4}
-                        bg={{ base: 'gray.100', _dark: 'gray.700' }}
-                        borderRadius="md"
-                        border="1px solid"
-                        borderColor="card.border"
-                      >
-                        No patterns available. You can create one first or start
-                        without a pattern.
-                      </Text>
-                    )}
-                  </Field>
-                  <Field
-                    label="Tags (optional)"
-                    helperText="Separate tags with commas (e.g., knitting, scarf, beginner)"
-                  >
-                    <Input
-                      name="tags"
-                      value={tagsString}
-                      onChange={(e) => setTagsString(e.target.value)}
-                      placeholder="Tags separated by commas"
-                      size="lg"
-                      variant="input"
-                    />
-                  </Field>
-                </VStack>
-              </Box>
-
-              <Box
-                p={6}
-                bg="section.bg"
-                borderRadius="lg"
-                border="1px solid"
-                borderColor="section.border"
-                shadow="sm"
-              >
-                <RowTrackersSection
-                  rowTrackers={rowTrackers}
-                  onAddTracker={addRowTracker}
-                  onRemoveTracker={removeRowTracker}
-                  onUpdateTracker={updateRowTracker}
-                  isEditable={true}
-                />
-              </Box>
-
-              <Box
-                p={6}
-                bg="section.bg"
-                borderRadius="lg"
-                border="1px solid"
-                borderColor="section.border"
-                shadow="sm"
-              >
-                <Field helperText="Upload reference images, charts, or progress photos">
-                  <ImageManager
-                    files={files}
-                    headerText="Project Images"
-                    showUpload={true}
-                    showDelete={true}
-                    type="projects"
-                    onImageUpload={handleImageUpload}
-                    onImageDelete={handleImageDelete}
-                    onUploadError={handleImageError}
-                    buttonText="Upload Project Image"
-                    itemType="project"
-                    userId={id}
+            <Box
+              p={6}
+              bg="section.bg"
+              borderRadius="lg"
+              border="1px solid"
+              borderColor="section.border"
+              shadow="sm"
+            >
+              <VStack spacing={4} align="stretch">
+                <Field label="Project Name" required>
+                  <Input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Enter a name for your project"
+                    required
+                    size="lg"
+                    variant={'input'}
                   />
                 </Field>
-              </Box>
 
-              <Box
-                p={6}
-                bg="section.bg"
-                borderRadius="lg"
-                border="1px solid"
-                borderColor="section.border"
-                shadow="sm"
-              >
-                <Field label="Notes (optional)">
-                  <Textarea
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Add any notes, reminders, or special instructions for this project"
-                    minH="120px"
+                <Field label="Started At" required>
+                  <Input
+                    type="date"
+                    value={startedAt}
+                    onChange={(e) => setStartedAt(e.target.value)}
+                    required
+                    size="lg"
                     bg="input.bg"
                     color="fg.default"
                     borderColor="input.border"
                     _focus={{
-                      borderColor: 'input.borderFocus',
-                      boxShadow: '0 0 0 1px input.borderFocus',
+                      borderColor: 'blue.400',
+                      boxShadow: '0 0 0 1px blue.400',
                     }}
                   />
                 </Field>
-              </Box>
-            </VStack>
 
-            <HStack mt={8} spacing={4} justify="center">
-              <Button onClick={() => navigate(-1)} size="xl" variant="cancel">
-                Cancel
-              </Button>
-              <Button
-                data-testid="create-project-button"
-                type="submit"
-                variant="primary"
-                size="xl"
+                <Field label="Pattern (optional)">
+                  {isLoading ? (
+                    <Text>Loading patterns...</Text>
+                  ) : patterns.length > 0 ? (
+                    <PatternMenu
+                      onPatternSelect={handlePatternSelect}
+                      patterns={patterns}
+                      selectedPatternName={
+                        selectedPattern ? selectedPattern.name : ''
+                      }
+                    />
+                  ) : (
+                    <Text
+                      fontSize="sm"
+                      color="fg.muted"
+                      p={4}
+                      bg={{ base: 'gray.100', _dark: 'gray.700' }}
+                      borderRadius="md"
+                      border="1px solid"
+                      borderColor="card.border"
+                    >
+                      No patterns available. You can create one first or start
+                      without a pattern.
+                    </Text>
+                  )}
+                </Field>
+                <Field
+                  label="Tags (optional)"
+                  helperText="Separate tags with commas (e.g., knitting, scarf, beginner)"
+                >
+                  <Input
+                    name="tags"
+                    value={tagsString}
+                    onChange={(e) => setTagsString(e.target.value)}
+                    placeholder="Tags separated by commas"
+                    size="lg"
+                    variant="input"
+                  />
+                </Field>
+              </VStack>
+            </Box>
+
+            <Box
+              p={6}
+              bg="section.bg"
+              borderRadius="lg"
+              border="1px solid"
+              borderColor="section.border"
+              shadow="sm"
+            >
+              <RowTrackersSection
+                rowTrackers={rowTrackers}
+                onAddTracker={addRowTracker}
+                onRemoveTracker={removeRowTracker}
+                onUpdateTracker={updateRowTracker}
+                isEditable={true}
+              />
+            </Box>
+
+            <Box
+              p={6}
+              bg="section.bg"
+              borderRadius="lg"
+              border="1px solid"
+              borderColor="section.border"
+              shadow="sm"
+            >
+              <Field
+                label="Project Images"
+                helperText="Upload reference images, charts, or progress photos"
               >
-                Create Project
-              </Button>
-            </HStack>
-          </Fieldset.Root>
-        </form>
-      </Box>
-    </SidebarLayout>
+                <ImageManager
+                  files={files}
+                  headerText="Project Images"
+                  showUpload={true}
+                  showDelete={true}
+                  type="projects"
+                  onImageUpload={handleImageUpload}
+                  onImageDelete={handleImageDelete}
+                  onUploadError={handleImageError}
+                  buttonText="Upload Project Image"
+                  itemType="project"
+                  userId={id}
+                />
+              </Field>
+            </Box>
+
+            <Box
+              p={6}
+              bg="section.bg"
+              borderRadius="lg"
+              border="1px solid"
+              borderColor="section.border"
+              shadow="sm"
+            >
+              <Field label="Notes (optional)">
+                <Textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Add any notes, reminders, or special instructions for this project"
+                  minH="120px"
+                  bg="input.bg"
+                  color="fg.default"
+                  borderColor="input.border"
+                  _focus={{
+                    borderColor: 'input.borderFocus',
+                    boxShadow: '0 0 0 1px input.borderFocus',
+                  }}
+                />
+              </Field>
+            </Box>
+          </VStack>
+
+          <HStack mt={8} spacing={4} justify="center">
+            <Button
+              onClick={() => navigate(-1)}
+              size="xl"
+              variant="cancel"
+              aria-label="Cancel project creation"
+            >
+              Cancel
+            </Button>
+            <Button
+              data-testid="create-project-button"
+              type="submit"
+              variant="primary"
+              size="xl"
+              aria-label="Create new project"
+            >
+              Create Project
+            </Button>
+          </HStack>
+        </Fieldset.Root>
+      </form>
+    </Box>
   );
 };
 

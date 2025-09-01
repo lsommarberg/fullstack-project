@@ -172,7 +172,7 @@ const EditPattern = ({
               borderColor="section.border"
               shadow="sm"
             >
-              <Field>
+              <Field label="Pattern Images">
                 <ImageManager
                   files={patternFiles}
                   headerText="Pattern Images"
@@ -226,8 +226,9 @@ const EditPattern = ({
                 size="xl"
                 variant="primary"
                 data-testid="save-button"
+                aria-label="Save pattern changes"
               >
-                Save
+                Save Changes
               </Button>
             </HStack>
           </VStack>

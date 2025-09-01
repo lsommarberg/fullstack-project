@@ -10,7 +10,6 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import projectService from '../../services/project';
-import SidebarLayout from '../layout/SidebarLayout';
 import Notes from '../pattern/Notes';
 import { toaster } from '../ui/toaster';
 import ConfirmDialog from '../ConfirmDialog';
@@ -206,7 +205,7 @@ const ProjectPage = () => {
   };
 
   return (
-    <SidebarLayout userId={id}>
+    <>
       {projectData ? (
         <>
           {isEditing ? (
@@ -247,6 +246,7 @@ const ProjectPage = () => {
                     <Button
                       variant="secondary"
                       onClick={() => setIsEditing(true)}
+                      aria-label="Edit this project"
                     >
                       Edit Project
                     </Button>
@@ -254,6 +254,7 @@ const ProjectPage = () => {
                       <Button
                         variant="primary"
                         onClick={() => setFinishDialogOpen(true)}
+                        aria-label="Finish this project"
                       >
                         Finish project
                       </Button>
@@ -262,6 +263,7 @@ const ProjectPage = () => {
                       variant="delete"
                       onClick={handleDelete}
                       isLoading={isDeleting}
+                      aria-label="Delete this project"
                     >
                       Delete Project
                     </Button>
@@ -338,6 +340,7 @@ const ProjectPage = () => {
                           color="fg.muted"
                           textDecoration="underline"
                           _hover={{ color: 'fg.default' }}
+                          aria-label={`View pattern ${pattern.name}`}
                         >
                           {pattern.name}
                         </Link>
@@ -477,7 +480,7 @@ const ProjectPage = () => {
       ) : (
         <Text>Loading...</Text>
       )}
-    </SidebarLayout>
+    </>
   );
 };
 

@@ -117,7 +117,7 @@ const FinishProjectDialog = ({
                   />
                 </Field>
                 {currentImages && currentImages.length > 0 && (
-                  <Box>
+                  <Field label="Current Project Images">
                     <ImageManager
                       files={currentImages}
                       headerText="Current Project Images"
@@ -165,7 +165,7 @@ const FinishProjectDialog = ({
                         </Checkbox.Root>
                       )}
                     </VStack>
-                  </Box>
+                  </Field>
                 )}
                 <Field
                   label="Add Final Images"
@@ -206,7 +206,11 @@ const FinishProjectDialog = ({
             </Dialog.Body>
             <Dialog.Footer>
               <HStack spacing={2}>
-                <Button onClick={handleCancel} variant="cancel">
+                <Button
+                  onClick={handleCancel}
+                  variant="cancel"
+                  aria-label="Cancel finishing project"
+                >
                   {cancelText}
                 </Button>
                 <Button
@@ -215,6 +219,7 @@ const FinishProjectDialog = ({
                   isLoading={isLoading}
                   disabled={!projectName.trim() || !finishDate}
                   variant="primary"
+                  aria-label="Confirm finish project"
                 >
                   {confirmText}
                 </Button>

@@ -76,7 +76,7 @@ describe('Pattern List', () => {
     await patterns.nth(0).click();
     await expect(page).toHaveURL(/\/patterns\/\d+/);
     await expect(
-      page.getByRole('button', { name: 'Delete Pattern' }),
+      page.getByText('This is a test pattern description'),
     ).toBeVisible();
   });
 });

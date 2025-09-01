@@ -118,6 +118,7 @@ const SearchBar = ({
                 variant="ghost"
                 borderColor={'section.border'}
                 onClick={handleClearSearch}
+                aria-label="Clear search filters"
               >
                 Clear Search
               </Button>
@@ -125,6 +126,7 @@ const SearchBar = ({
                 type="submit"
                 variant="primary"
                 data-testid="projects-search-button"
+                aria-label="Search projects"
               >
                 Search
               </Button>

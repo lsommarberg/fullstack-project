@@ -231,7 +231,7 @@ const EditProject = ({
               borderColor="section.border"
               shadow="sm"
             >
-              <Field>
+              <Field label="Project Images">
                 <ImageManager
                   files={projectFiles}
                   headerText="Project Images"
@@ -295,7 +295,12 @@ const EditProject = ({
             </Box>
 
             <HStack mt={8} spacing={4} justify="center">
-              <Button onClick={onCancel} size="xl" variant="cancel">
+              <Button
+                onClick={onCancel}
+                size="xl"
+                variant="cancel"
+                aria-label="Cancel project editing"
+              >
                 Cancel
               </Button>
               <Button
@@ -303,6 +308,7 @@ const EditProject = ({
                 onClick={handleSave}
                 size="xl"
                 variant="primary"
+                aria-label="Save project changes"
               >
                 Save Changes
               </Button>

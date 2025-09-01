@@ -7,6 +7,7 @@ import {
   Input,
   IconButton,
 } from '@chakra-ui/react';
+import { Field } from '@/components/ui/field';
 
 const RowTrackersSection = ({
   rowTrackers,
@@ -22,7 +23,12 @@ const RowTrackersSection = ({
         <HStack justify="space-between" align="center" mb={3}>
           <Text fontWeight="semibold">Row Trackers (optional)</Text>
           {isEditable && (
-            <Button size="sm" onClick={onAddTracker} variant="secondary">
+            <Button
+              size="sm"
+              onClick={onAddTracker}
+              variant="secondary"
+              aria-label="Add row tracker section"
+            >
               Add Section
             </Button>
           )}
@@ -45,27 +51,26 @@ const RowTrackersSection = ({
               {isEditable ? (
                 <HStack spacing={3} align="start">
                   <VStack flex="1" align="stretch" spacing={1}>
-                    <Text fontSize="sm" fontWeight="medium" color="fg.default">
-                      Section Name
-                    </Text>
-                    <Input
-                      value={tracker.section}
-                      onChange={(e) =>
-                        onUpdateTracker(index, 'section', e.target.value)
-                      }
-                      placeholder="e.g., Body, Sleeves, etc."
-                      bg="card.bg"
-                      color="fg.default"
-                      borderColor={
-                        needsSectionName ? 'orange.400' : 'input.border'
-                      }
-                      size="sm"
-                      data-testid={'tracker-section'}
-                      _focus={{
-                        borderColor: 'input.borderFocus',
-                        boxShadow: '0 0 0 1px input.borderFocus',
-                      }}
-                    />
+                    <Field label="Section Name" required={needsSectionName}>
+                      <Input
+                        value={tracker.section}
+                        onChange={(e) =>
+                          onUpdateTracker(index, 'section', e.target.value)
+                        }
+                        placeholder="e.g., Body, Sleeves, etc."
+                        bg="card.bg"
+                        color="fg.default"
+                        borderColor={
+                          needsSectionName ? 'orange.400' : 'input.border'
+                        }
+                        size="sm"
+                        data-testid={'tracker-section'}
+                        _focus={{
+                          borderColor: 'input.borderFocus',
+                          boxShadow: '0 0 0 1px input.borderFocus',
+                        }}
+                      />
+                    </Field>
                     <Box minH="20px" fontSize="xs">
                       {needsSectionName && (
                         <Text color="orange.600" fontSize="xs">
@@ -76,27 +81,26 @@ const RowTrackersSection = ({
                   </VStack>
 
                   <VStack width="120px" align="stretch" spacing={1}>
-                    <Text fontSize="sm" fontWeight="medium" color="fg.default">
-                      Total Rows
-                    </Text>
-                    <Input
-                      type="number"
-                      value={tracker.totalRows || ''}
-                      onChange={(e) =>
-                        onUpdateTracker(index, 'totalRows', e.target.value)
-                      }
-                      placeholder="100"
-                      bg="card.bg"
-                      color="fg.default"
-                      borderColor="input.border"
-                      size="sm"
-                      min="0"
-                      data-testid="tracker-total-rows"
-                      _focus={{
-                        borderColor: 'input.borderFocus',
-                        boxShadow: '0 0 0 1px input.borderFocus',
-                      }}
-                    />
+                    <Field label="Total Rows">
+                      <Input
+                        type="number"
+                        value={tracker.totalRows || ''}
+                        onChange={(e) =>
+                          onUpdateTracker(index, 'totalRows', e.target.value)
+                        }
+                        placeholder="100"
+                        bg="card.bg"
+                        color="fg.default"
+                        borderColor="input.border"
+                        size="sm"
+                        min="0"
+                        data-testid="tracker-total-rows"
+                        _focus={{
+                          borderColor: 'input.borderFocus',
+                          boxShadow: '0 0 0 1px input.borderFocus',
+                        }}
+                      />
+                    </Field>
                     <Box minH="20px"></Box>
                   </VStack>
 
@@ -107,6 +111,7 @@ const RowTrackersSection = ({
                       bg="deleteButton"
                       color="white"
                       _hover={{ opacity: 0.8 }}
+                      aria-label={`Remove row tracker section ${index + 1}`}
                     >
                       ×
                     </IconButton>
@@ -121,31 +126,27 @@ const RowTrackersSection = ({
                   </Box>
 
                   <Box width="120px">
-                    <Text
-                      fontSize="sm"
-                      fontWeight="medium"
-                      color="fg.default"
-                      mb={1}
-                    >
-                      Current Row
-                    </Text>
-                    <Input
-                      type="number"
-                      value={tracker.currentRow === 0 ? '' : tracker.currentRow}
-                      onChange={(e) =>
-                        onUpdateTracker(index, 'currentRow', e.target.value)
-                      }
-                      placeholder="0"
-                      bg="card.bg"
-                      color="fg.default"
-                      borderColor="input.border"
-                      size="sm"
-                      min="0"
-                      _focus={{
-                        borderColor: 'input.borderFocus',
-                        boxShadow: '0 0 0 1px input.borderFocus',
-                      }}
-                    />
+                    <Field label="Current Row">
+                      <Input
+                        type="number"
+                        value={
+                          tracker.currentRow === 0 ? '' : tracker.currentRow
+                        }
+                        onChange={(e) =>
+                          onUpdateTracker(index, 'currentRow', e.target.value)
+                        }
+                        placeholder="0"
+                        bg="card.bg"
+                        color="fg.default"
+                        borderColor="input.border"
+                        size="sm"
+                        min="0"
+                        _focus={{
+                          borderColor: 'input.borderFocus',
+                          boxShadow: '0 0 0 1px input.borderFocus',
+                        }}
+                      />
+                    </Field>
                   </Box>
 
                   <Box width="120px">

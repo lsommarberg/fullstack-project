@@ -39,14 +39,14 @@ describe('Project Page', () => {
     await expect(allPanel.getByText('To Delete')).toBeVisible();
     await allPanel.getByText('To Delete').click();
 
-    await page.getByRole('button', { name: 'Delete Project' }).click();
+    await page.getByRole('button', { name: 'Delete this project' }).click();
 
     await expect(
       page.getByText(
         'Are you sure you want to delete this project and all associated images? This action cannot be undone.',
       ),
     ).toBeVisible();
-    await page.getByRole('button', { name: 'Delete' }).click();
+    await page.getByRole('button', { name: 'Delete Project' }).click();
 
     await expect(page).toHaveURL(/\/projects\/\d+/);
     await expect(page.getByText('Project deleted successfully')).toBeVisible();
@@ -61,13 +61,13 @@ describe('Project Page', () => {
     const allPanel = page.getByTestId('projects-all-panel');
     await allPanel.getByText('To Edit').click();
 
-    await page.getByRole('button', { name: 'Edit Project' }).click();
+    await page.getByRole('button', { name: 'Edit this project' }).click();
 
     await expect(page.getByText('Edit Project')).toBeVisible();
     await page.getByLabel('Project Name').fill('Edited Project');
     await page.getByLabel('Notes').fill('Edited notes for this project');
 
-    await page.getByRole('button', { name: 'Save Changes' }).click();
+    await page.getByRole('button', { name: 'Save project changes' }).click();
 
     await expect(page.getByText('Project updated successfully')).toBeVisible();
     await expect(page).toHaveURL(/\/projects\/\d+/);
@@ -84,7 +84,7 @@ describe('Project Page', () => {
     const allPanel = page.getByTestId('projects-all-panel');
     await allPanel.getByTestId('item-To Finish').click();
 
-    await page.getByRole('button', { name: 'Finish Project' }).click();
+    await page.getByRole('button', { name: 'Finish this project' }).click();
 
     await page.getByTestId('confirm-button').click();
 
