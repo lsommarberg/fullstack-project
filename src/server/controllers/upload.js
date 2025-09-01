@@ -8,6 +8,26 @@ const router = express.Router();
 
 const MAX_STORAGE_LIMIT = 100 * 1024 * 1024;
 
+/**
+ * File upload controller for managing image uploads to Cloudinary.
+ * Handles image uploads for patterns and projects with storage limit enforcement.
+ * Includes image deletion and storage management functionality.
+ */
+
+/**
+ * Upload image file to Cloudinary with storage limit validation.
+ * Associates uploaded image with patterns or projects based on request type.
+ *
+ * @route POST /api/upload/:id
+ * @param {string} req.params.id - User ID for authorization
+ * @param {Object} req.file - Uploaded image file (multipart/form-data)
+ * @param {string} req.body.type - Upload type (patterns/projects)
+ * @param {string} req.body.itemId - ID of pattern or project to associate with
+ * @returns {Object} 200 - Upload success with image URL and metadata
+ * @returns {Object} 400 - No file provided or validation errors
+ * @returns {Object} 403 - Access forbidden
+ * @returns {Object} 413 - Storage limit exceeded
+ */
 router.post('/:id', userExtractor, upload.single('image'), async (req, res) => {
   if (req.user.id !== req.params.id) {
     return res.status(403).json({ error: 'forbidden' });

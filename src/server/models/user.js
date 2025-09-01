@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+/**
+ * User model schema for knitting pattern management application.
+ * Stores user authentication data, profile information, and upload statistics.
+ * Includes virtual properties for related patterns and projects.
+ */
 const userSchema = mongoose.Schema({
   username: {
     type: String,

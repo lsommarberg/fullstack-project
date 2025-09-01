@@ -3,6 +3,24 @@ const Project = require('../models/project');
 const User = require('../models/user');
 const { userExtractor } = require('../utils/middleware');
 
+/**
+ * Project management controller providing CRUD operations for knitting projects.
+ * Includes project search, filtering by dates and status, creation, updates, and completion.
+ * All operations require user authentication and projects are user-scoped.
+ */
+
+/**
+ * Search and filter projects with advanced filtering options.
+ * Supports text search, date range filtering, and status filtering.
+ *
+ * @route GET /api/projects/search
+ * @param {string} req.query.q - Search query string (optional)
+ * @param {string} req.query.startedAfter - Filter projects started after date (optional)
+ * @param {string} req.query.startedBefore - Filter projects started before date (optional)
+ * @param {string} req.query.finishedAfter - Filter projects finished after date (optional)
+ * @param {string} req.query.finishedBefore - Filter projects finished before date (optional)
+ * @returns {Array} 200 - Filtered projects for authenticated user
+ */
 router.get('/search', userExtractor, async (req, res) => {
   const { q } = req.query;
   const filter = { user: req.user.id };
