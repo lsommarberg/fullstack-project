@@ -93,9 +93,8 @@ describe('Project List', () => {
     await expect(projects.nth(0)).toContainText('First');
 
     await projects.nth(0).click();
-    await expect(
-      page.getByRole('button', { name: 'Delete Project' }),
-    ).toBeVisible();
+    await expect(page.getByText('Notes for this project')).toBeVisible();
+    await expect(page).toHaveURL(/\/projects\/\d+/);
   });
 
   test('should search projects by date range', async ({ page }) => {

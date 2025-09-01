@@ -106,13 +106,10 @@ const ImageManager = ({
 
   return (
     <Box mt={6}>
-      <Text fontSize="lg" mb={4} fontWeight="semibold">
-        {headerText}
-      </Text>
       {showUpload && (
         <>
           {userStorageUsed && (
-            <Text fontSize="sm" mb={4} color="blue.600" fontWeight="medium">
+            <Text fontSize="sm" mb={4} color="fg.muted" fontWeight="medium">
               Storage used:{' '}
               {((userStorageUsed / totalStorage) * 100).toFixed(2)}% (
               {(userStorageUsed / (1024 * 1024)).toFixed(2)} MB of{' '}
@@ -124,6 +121,7 @@ const ImageManager = ({
               accept="image/*"
               maxFiles={1}
               onFileChange={handleFileChange}
+              aria-label="Upload image file"
             >
               <FileUpload.HiddenInput />
               <FileUpload.Trigger asChild>
@@ -131,11 +129,12 @@ const ImageManager = ({
                   size={buttonSize}
                   isLoading={loading}
                   loadingText="Uploading..."
+                  aria-label={buttonText}
                 >
                   <HiUpload /> {buttonText}
                 </Button>
               </FileUpload.Trigger>
-              <FileUpload.List />
+              <FileUpload.List aria-label="Uploaded image files list" />
             </FileUpload.Root>
 
             {displayError && (
@@ -157,6 +156,10 @@ const ImageManager = ({
                 position="relative"
                 borderRadius="md"
                 overflow="hidden"
+                p={2}
+                aria-label={`Image container for ${itemType} image ${
+                  index + 1
+                }`}
               >
                 <Image
                   src={file.url || file.secure_url}
@@ -173,7 +176,7 @@ const ImageManager = ({
                       alignItems="center"
                       justifyContent="center"
                     >
-                      <Text color="gray.500">Image not available</Text>
+                      <Text color="fg.muted">Image not available</Text>
                     </Box>
                   }
                   _hover={{ transform: 'scale(1.05)', cursor: 'pointer' }}
@@ -181,6 +184,7 @@ const ImageManager = ({
                   onClick={() =>
                     window.open(file.url || file.secure_url, '_blank')
                   }
+                  aria-label={`View ${itemType} image ${index + 1}`}
                 />
 
                 {showDelete && publicId && (
@@ -189,7 +193,6 @@ const ImageManager = ({
                     top="8px"
                     right="8px"
                     size="sm"
-                    colorScheme="red"
                     variant="solid"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -198,6 +201,7 @@ const ImageManager = ({
                     isLoading={deletingId === publicId}
                     loadingText="Deleting..."
                     zIndex={1}
+                    aria-label={`Delete ${itemType} image ${index + 1}`}
                   >
                     ✕
                   </Button>
@@ -208,7 +212,7 @@ const ImageManager = ({
         </SimpleGrid>
       ) : (
         showUpload && (
-          <Text color="gray.500" fontSize="sm">
+          <Text color="secondaryButtonText" fontSize="sm">
             No images uploaded yet.
           </Text>
         )

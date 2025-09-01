@@ -14,6 +14,7 @@ import { Field } from '@/components/ui/field';
 import { PatternMenu } from './PatternSelectionMenu';
 import patternService from '../../services/pattern';
 import ImageManager from '../ImageManager';
+import useUnsavedChangesWarning from '../../hooks/useUnSavedChangesWarning';
 
 const EditProject = ({
   name,
@@ -36,6 +37,14 @@ const EditProject = ({
   const [patterns, setPatterns] = useState([]);
   const [selectedPattern, setSelectedPattern] = useState(pattern);
   const [isLoading, setIsLoading] = useState(false);
+  const hasUnsavedChanges =
+    projectName !== name ||
+    projectNotes !== notes ||
+    JSON.stringify(rowTrackersState) !== JSON.stringify(rowTrackers) ||
+    projectTags !== tags.join(', ') ||
+    (selectedPattern ? selectedPattern.id : null) !==
+      (pattern ? pattern.id : null);
+  useUnsavedChangesWarning(hasUnsavedChanges);
 
   useEffect(() => {
     const loadUserPatterns = async () => {
@@ -159,13 +168,7 @@ const EditProject = ({
                     onChange={(e) => setProjectName(e.target.value)}
                     placeholder="Enter project name"
                     size="lg"
-                    bg="input.bg"
-                    color="fg.default"
-                    borderColor="input.border"
-                    _focus={{
-                      borderColor: 'blue.400',
-                      boxShadow: '0 0 0 1px blue.400',
-                    }}
+                    variant="input"
                     data-testid="project-name-input"
                   />
                 </Field>
@@ -214,13 +217,7 @@ const EditProject = ({
                     onChange={(e) => setProjectTags(e.target.value)}
                     placeholder="Tags separated by commas (e.g., knitting, scarf, beginner)"
                     size="lg"
-                    bg="input.bg"
-                    color="fg.default"
-                    borderColor="input.border"
-                    _focus={{
-                      borderColor: 'blue.400',
-                      boxShadow: '0 0 0 1px blue.400',
-                    }}
+                    variant="input"
                   />
                 </Field>
               </VStack>
@@ -234,7 +231,7 @@ const EditProject = ({
               borderColor="section.border"
               shadow="sm"
             >
-              <Field>
+              <Field label="Project Images">
                 <ImageManager
                   files={projectFiles}
                   headerText="Project Images"
@@ -290,8 +287,8 @@ const EditProject = ({
                   color="fg.default"
                   borderColor="input.border"
                   _focus={{
-                    borderColor: 'blue.400',
-                    boxShadow: '0 0 0 1px blue.400',
+                    borderColor: 'input.borderFocus',
+                    boxShadow: '0 0 0 1px input.borderFocus',
                   }}
                 />
               </Field>
@@ -299,26 +296,21 @@ const EditProject = ({
 
             <HStack mt={8} spacing={4} justify="center">
               <Button
-                type="submit"
-                onClick={handleSave}
-                size="lg"
-                colorScheme="blue"
-                px={8}
-                py={6}
-                fontSize="md"
-                fontWeight="semibold"
-              >
-                Save Changes
-              </Button>
-              <Button
                 onClick={onCancel}
-                bg={'cancelButton'}
-                size="lg"
-                px={8}
-                py={6}
-                fontSize="md"
+                size="xl"
+                variant="cancel"
+                aria-label="Cancel project editing"
               >
                 Cancel
+              </Button>
+              <Button
+                type="submit"
+                onClick={handleSave}
+                size="xl"
+                variant="primary"
+                aria-label="Save project changes"
+              >
+                Save Changes
               </Button>
             </HStack>
           </VStack>

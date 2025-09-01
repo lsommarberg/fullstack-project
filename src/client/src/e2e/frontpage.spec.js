@@ -25,7 +25,8 @@ describe('Frontpage', () => {
   });
 
   test('user can sign up', async ({ page }) => {
-    await page.getByRole('button', { name: 'Sign Up' }).click();
+    await page.getByTestId('nav-signup').click();
+    await expect(page).toHaveURL(/signup/);
     await page.getByTestId('username_signup').fill('test');
     await page.getByTestId('password_signup').fill('test');
     await page.getByTestId('password_signup_confirmation').fill('test');
@@ -34,6 +35,6 @@ describe('Frontpage', () => {
 
   test('user can login', async ({ page }) => {
     await loginWith(page, 'testuser', 'test');
-    await expect(page.getByText(/Welcome: testuser/i)).toBeVisible();
+    await expect(page.getByText(/testuser's Dashboard/i)).toBeVisible();
   });
 });

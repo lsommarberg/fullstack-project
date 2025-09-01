@@ -10,7 +10,6 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import projectService from '../../services/project';
-import SidebarLayout from '../layout/SidebarLayout';
 import Notes from '../pattern/Notes';
 import { toaster } from '../ui/toaster';
 import ConfirmDialog from '../ConfirmDialog';
@@ -142,6 +141,7 @@ const ProjectPage = () => {
       rowTrackers: updatedData.rowTrackers,
       pattern: updatedData.pattern,
       files: updatedData.files,
+      tags: updatedData.tags,
     });
     setIsEditing(false);
 
@@ -205,7 +205,7 @@ const ProjectPage = () => {
   };
 
   return (
-    <SidebarLayout userId={id}>
+    <>
       {projectData ? (
         <>
           {isEditing ? (
@@ -243,84 +243,111 @@ const ProjectPage = () => {
                     {finishedAt ? ' (Completed)' : ''}
                   </Text>
                   <HStack spacing={4}>
-                    <Button onClick={() => setIsEditing(true)}>
+                    <Button
+                      variant="secondary"
+                      onClick={() => setIsEditing(true)}
+                      aria-label="Edit this project"
+                    >
                       Edit Project
                     </Button>
                     {!finishedAt && (
-                      <Button onClick={() => setFinishDialogOpen(true)}>
+                      <Button
+                        variant="primary"
+                        onClick={() => setFinishDialogOpen(true)}
+                        aria-label="Finish this project"
+                      >
                         Finish project
                       </Button>
                     )}
                     <Button
-                      color="deleteButton"
+                      variant="delete"
                       onClick={handleDelete}
                       isLoading={isDeleting}
+                      aria-label="Delete this project"
                     >
                       Delete Project
                     </Button>
                   </HStack>
                 </Flex>
 
-                <Box
-                  p={6}
-                  bg="section.bg"
-                  borderRadius="lg"
-                  border="1px solid"
-                  borderColor="section.border"
-                  shadow="sm"
-                >
-                  <VStack spacing={4} align="stretch">
-                    <Box>
-                      <Text
-                        fontSize="lg"
-                        fontWeight="semibold"
-                        mb={2}
-                        color="fg.muted"
-                      >
-                        Project Started
+                <VStack spacing={4} align="stretch">
+                  <Box
+                    p={4}
+                    bg="section.bg"
+                    borderRadius="md"
+                    border="2px solid"
+                    borderColor="card.border"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <HStack spacing={3} align="center">
+                      <Box as="span" fontSize="2xl" color="fg.muted">
+                        📅
+                      </Box>
+                      <Text fontSize="xl" fontWeight="bold" color="fg.muted">
+                        Project Started:
                       </Text>
-                      <Text fontSize="md">{formattedDate}</Text>
-                    </Box>
+                      <Text fontSize="xl" color="fg.muted">
+                        {formattedDate}
+                      </Text>
+                    </HStack>
+                  </Box>
 
-                    {finishedAt && (
-                      <Box>
-                        <Text
-                          fontSize="lg"
-                          fontWeight="semibold"
-                          mb={2}
-                          color="fg.muted"
-                        >
-                          Project Completed
+                  {finishedAt && (
+                    <Box
+                      p={4}
+                      bg="section.bg"
+                      borderRadius="md"
+                      border="2px solid"
+                      borderColor="card.border"
+                      display="flex"
+                      alignItems="center"
+                    >
+                      <HStack spacing={3} align="center">
+                        <Box as="span" fontSize="2xl" color="fg.muted">
+                          ✅
+                        </Box>
+                        <Text fontSize="xl" fontWeight="bold" color="fg.muted">
+                          Project Completed:
                         </Text>
-                        <Text fontSize="md">
+                        <Text fontSize="xl" color="fg.muted">
                           {new Date(finishedAt).toLocaleDateString()}
                         </Text>
-                      </Box>
-                    )}
+                      </HStack>
+                    </Box>
+                  )}
 
-                    {pattern && (
-                      <Box>
-                        <Text
-                          fontSize="lg"
-                          fontWeight="semibold"
-                          mb={2}
-                          color="fg.muted"
-                        >
-                          Pattern
+                  {pattern && (
+                    <Box
+                      p={4}
+                      bg="section.bg"
+                      borderRadius="md"
+                      border="2px solid"
+                      borderColor="card.border"
+                      display="flex"
+                      alignItems="center"
+                    >
+                      <HStack spacing={3} align="center">
+                        <Box as="span" fontSize="2xl" color="fg.muted">
+                          🧶
+                        </Box>
+                        <Text fontSize="xl" fontWeight="bold" color="fg.muted">
+                          Pattern:
                         </Text>
                         <Link
                           as={RouterLink}
                           to={`/patterns/${id}/${pattern.id}`}
-                          color="blue.500"
+                          color="fg.muted"
                           textDecoration="underline"
-                          _hover={{ color: 'blue.600' }}
+                          _hover={{ color: 'fg.default' }}
+                          aria-label={`View pattern ${pattern.name}`}
                         >
                           {pattern.name}
                         </Link>
-                      </Box>
-                    )}
-                  </VStack>
-                </Box>
+                      </HStack>
+                    </Box>
+                  )}
+                </VStack>
 
                 {rowTrackers && rowTrackers.length > 0 && !finishedAt && (
                   <Box
@@ -453,7 +480,7 @@ const ProjectPage = () => {
       ) : (
         <Text>Loading...</Text>
       )}
-    </SidebarLayout>
+    </>
   );
 };
 

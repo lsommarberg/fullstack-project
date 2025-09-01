@@ -1,15 +1,8 @@
 'use client';
 
 import { ColorModeProvider } from './color-mode';
-import {
-  ChakraProvider,
-  createSystem,
-  defaultConfig,
-  defineConfig,
-} from '@chakra-ui/react';
-import { config } from '@/theme';
-
-const system = createSystem(defaultConfig, config);
+import { ChakraProvider } from '@chakra-ui/react';
+import { system } from '@/theme';
 
 export function Provider(props) {
   return (

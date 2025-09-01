@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { Field } from '@/components/ui/field';
 import ImageManager from '../ImageManager';
+import useUnsavedChangesWarning from '../../hooks/useUnSavedChangesWarning';
 
 const EditPattern = ({
   name,
@@ -29,6 +30,14 @@ const EditPattern = ({
   const [editableTags, setEditableTags] = useState(tags.join(', '));
   const [editableNotes, setEditableNotes] = useState(notes);
   const [patternFiles, setPatternFiles] = useState(files || []);
+
+  const hasUnsavedChanges =
+    editableName !== name ||
+    editableText !== text ||
+    editableLink !== link ||
+    editableTags !== tags.join(', ') ||
+    editableNotes !== notes;
+  useUnsavedChangesWarning(hasUnsavedChanges);
 
   const handleSave = (e) => {
     e?.preventDefault();
@@ -68,7 +77,7 @@ const EditPattern = ({
       shadow="lg"
       borderWidth="1px"
       borderRadius="xl"
-      bg="card.bg"
+      bg="cardPattern.bg"
       color="fg.default"
     >
       <form onSubmit={handleSave}>
@@ -102,13 +111,7 @@ const EditPattern = ({
                     onChange={(e) => setEditableName(e.target.value)}
                     placeholder="Enter a name for your pattern"
                     size="lg"
-                    bg="input.bg"
-                    color="fg.default"
-                    borderColor="input.border"
-                    _focus={{
-                      borderColor: 'blue.400',
-                      boxShadow: '0 0 0 1px blue.400',
-                    }}
+                    variant="input"
                     data-testid="pattern-name-input"
                   />
                 </Field>
@@ -119,13 +122,7 @@ const EditPattern = ({
                     onChange={(e) => setEditableLink(e.target.value)}
                     placeholder="Link to pattern source or website"
                     size="lg"
-                    bg="input.bg"
-                    color="fg.default"
-                    borderColor="input.border"
-                    _focus={{
-                      borderColor: 'blue.400',
-                      boxShadow: '0 0 0 1px blue.400',
-                    }}
+                    variant="input"
                   />
                 </Field>
 
@@ -135,13 +132,7 @@ const EditPattern = ({
                     onChange={(e) => setEditableTags(e.target.value)}
                     placeholder="Tags separated by commas (e.g., knitting, scarf, beginner)"
                     size="lg"
-                    bg="input.bg"
-                    color="fg.default"
-                    borderColor="input.border"
-                    _focus={{
-                      borderColor: 'blue.400',
-                      boxShadow: '0 0 0 1px blue.400',
-                    }}
+                    variant="input"
                   />
                 </Field>
               </VStack>
@@ -165,8 +156,8 @@ const EditPattern = ({
                   color="fg.default"
                   borderColor="input.border"
                   _focus={{
-                    borderColor: 'blue.400',
-                    boxShadow: '0 0 0 1px blue.400',
+                    borderColor: 'input.borderFocus',
+                    boxShadow: '0 0 0 1px input.borderFocus',
                   }}
                   data-testid="pattern-textarea"
                 />
@@ -181,7 +172,7 @@ const EditPattern = ({
               borderColor="section.border"
               shadow="sm"
             >
-              <Field>
+              <Field label="Pattern Images">
                 <ImageManager
                   files={patternFiles}
                   headerText="Pattern Images"
@@ -219,35 +210,25 @@ const EditPattern = ({
                   color="fg.default"
                   borderColor="input.border"
                   _focus={{
-                    borderColor: 'blue.400',
-                    boxShadow: '0 0 0 1px blue.400',
+                    borderColor: 'input.borderFocus',
+                    boxShadow: '0 0 0 1px input.borderFocus',
                   }}
                 />
               </Field>
             </Box>
 
             <HStack mt={8} spacing={4} justify="center">
-              <Button
-                onClick={handleSave}
-                size="lg"
-                colorScheme="blue"
-                px={8}
-                py={6}
-                fontSize="md"
-                fontWeight="semibold"
-                data-testid="save-button"
-              >
-                Save
+              <Button onClick={onCancel} size="xl" variant="cancel">
+                Cancel
               </Button>
               <Button
-                onClick={onCancel}
-                size="lg"
-                px={8}
-                py={6}
-                fontSize="md"
-                bg={'cancelButton'}
+                onClick={handleSave}
+                size="xl"
+                variant="primary"
+                data-testid="save-button"
+                aria-label="Save pattern changes"
               >
-                Cancel
+                Save Changes
               </Button>
             </HStack>
           </VStack>

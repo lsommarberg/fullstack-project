@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import UserSettings from './UserSettings';
 import UserAnalytics from '../analytics/UserAnalytics';
-import SidebarLayout from '../layout/SidebarLayout';
 import userService from '../../services/user';
 
 const MAX_STORAGE_LIMIT = 100 * 1024 * 1024;
@@ -62,7 +61,7 @@ const UserPage = ({ user }) => {
   };
 
   return (
-    <SidebarLayout userId={user.id}>
+    <>
       {fullUserData && isEditing ? (
         <UserSettings
           user={fullUserData}
@@ -103,7 +102,11 @@ const UserPage = ({ user }) => {
                 <Tabs.Context>
                   {(tabs) =>
                     tabs.value === 'profile' && (
-                      <Button onClick={() => setIsEditing(true)}>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setIsEditing(true)}
+                        aria-label="Edit user profile"
+                      >
                         Edit Profile
                       </Button>
                     )
@@ -159,7 +162,7 @@ const UserPage = ({ user }) => {
           </VStack>
         </Box>
       )}
-    </SidebarLayout>
+    </>
   );
 };
 

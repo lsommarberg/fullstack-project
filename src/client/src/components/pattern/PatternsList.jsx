@@ -1,46 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Text, Flex, Input, Button, Stack, Card } from '@chakra-ui/react';
+import { Text, Flex, Stack, HStack, Spacer, Button } from '@chakra-ui/react';
 import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
 import patternService from '../../services/pattern';
-import { Tag } from '@/components/ui/tag';
-import SidebarLayout from '../layout/SidebarLayout';
-
-export const ListItem = ({ item, getItemPath }) => (
-  <Card.Root
-    key={item.id}
-    bg="card.bg"
-    color="fg.default"
-    borderWidth="1px"
-    borderColor="input.border"
-    as={RouterLink}
-    to={getItemPath(item)}
-    _hover={{ boxShadow: 'md', cursor: 'pointer' }}
-    data-testid={'item-' + item.name}
-  >
-    <Card.Body>
-      <Flex
-        justify="space-between"
-        align="center"
-        p={4}
-        minHeight="50px"
-        height="50px"
-      >
-        <Text fontSize="lg" fontWeight="bold">
-          {item.name}
-        </Text>
-        <Flex>
-          {item.tags &&
-            item.tags.length > 0 &&
-            item.tags.map((tag, tagIndex) => (
-              <Tag key={tagIndex} color="fg.default" bg="input.bg" mr={2}>
-                {tag}
-              </Tag>
-            ))}
-        </Flex>
-      </Flex>
-    </Card.Body>
-  </Card.Root>
-);
+import SearchBar from '../SearchBar';
+import ListItem from '../ListItem';
 
 const PatternList = () => {
   const { id } = useParams();
@@ -82,9 +45,24 @@ const PatternList = () => {
     }
   };
 
+  const handleClearSearch = async () => {
+    setSearchQuery('');
+    setIsLoading(true);
+    try {
+      const patterns = await patternService.getPatterns(id);
+      setPatterns(patterns);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        navigate('/');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <SidebarLayout userId={id}>
-      <Flex direction="column" p={6}>
+    <Flex direction="column" p={6}>
+      <HStack mb={4} align="center" justify={'space-between'}>
         <Text
           fontSize="2xl"
           fontWeight="bold"
@@ -93,46 +71,42 @@ const PatternList = () => {
         >
           My Patterns
         </Text>
-        <Flex mb={4} gap={4} align="center">
-          <Input
-            placeholder="Search patterns..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') handleSearch();
-            }}
-            flex={2}
-            minWidth="200px"
-            borderColor="input.border"
-          />
-          <Button onClick={handleSearch} minWidth="100px">
-            Search
-          </Button>
-          <Button
-            colorScheme="teal"
-            onClick={() => navigate(`/patterns/${id}/create`)}
-            minWidth="100px"
-          >
-            Create New
-          </Button>
-        </Flex>
-        <Stack spacing={4} data-testid="patterns-list">
-          {isLoading ? (
-            <Text>Loading...</Text>
-          ) : patterns.length === 0 ? (
-            <Text>No patterns yet</Text>
-          ) : (
-            patterns.map((pattern) => (
-              <ListItem
-                item={pattern}
-                key={pattern.id}
-                getItemPath={getItemPath}
-              />
-            ))
-          )}
-        </Stack>
-      </Flex>
-    </SidebarLayout>
+        <Spacer />
+        <Button
+          onClick={() => navigate(`/patterns/${id}/create`)}
+          variant="secondary"
+        >
+          Create New
+        </Button>
+      </HStack>
+      <SearchBar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        handleSearch={handleSearch}
+        handleClearSearch={handleClearSearch}
+        placeHolderText="Search patterns..."
+        labelText="Search Patterns"
+        isLoading={isLoading}
+        showAdvanced={false}
+        status={{ value: 'pattern' }}
+      />
+      <Stack spacing={4} data-testid="patterns-list">
+        {isLoading ? (
+          <Text>Loading...</Text>
+        ) : patterns.length === 0 ? (
+          <Text>No patterns yet</Text>
+        ) : (
+          patterns.map((pattern) => (
+            <ListItem
+              item={pattern}
+              key={pattern.id}
+              getItemPath={getItemPath}
+              cardBg="cardPattern.bg"
+            />
+          ))
+        )}
+      </Stack>
+    </Flex>
   );
 };
 

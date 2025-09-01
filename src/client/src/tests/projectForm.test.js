@@ -54,7 +54,7 @@ describe('ProjectForm', () => {
       target: { value: 'This is a test project.' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /Create Project/i }));
+    fireEvent.click(screen.getByTestId('create-project-button'));
 
     await waitFor(() => {
       expect(projectService.createProject).toHaveBeenCalledWith({
@@ -89,7 +89,7 @@ describe('ProjectForm', () => {
       target: { value: 'This is a test project.' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /Create Project/i }));
+    fireEvent.click(screen.getByTestId('create-project-button'));
 
     await waitFor(() => {
       expect(toaster.error).toHaveBeenCalledWith({

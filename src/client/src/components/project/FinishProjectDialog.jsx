@@ -103,24 +103,8 @@ const FinishProjectDialog = ({
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content bg="card.bg" color="fg.default">
-            <Dialog.Header>
-              <Dialog.Title>{title}</Dialog.Title>
-            </Dialog.Header>
-
             <Dialog.Body>
               <VStack spacing={4} align="stretch">
-                <Field label="Project Name">
-                  <Input
-                    value={projectName}
-                    onChange={(e) => setProjectName(e.target.value)}
-                    placeholder="Enter project name"
-                    bg="input.bg"
-                    color="fg.default"
-                    borderColor="input.border"
-                    required
-                  />
-                </Field>
-
                 <Field label="Finish Date">
                   <Input
                     type="date"
@@ -132,9 +116,8 @@ const FinishProjectDialog = ({
                     required
                   />
                 </Field>
-
                 {currentImages && currentImages.length > 0 && (
-                  <Box>
+                  <Field label="Current Project Images">
                     <ImageManager
                       files={currentImages}
                       headerText="Current Project Images"
@@ -144,7 +127,6 @@ const FinishProjectDialog = ({
                       type="projects"
                       userId={userId}
                     />
-
                     <VStack align="start" spacing={2} mt={3}>
                       <Checkbox.Root
                         variant={'solid'}
@@ -183,9 +165,8 @@ const FinishProjectDialog = ({
                         </Checkbox.Root>
                       )}
                     </VStack>
-                  </Box>
+                  </Field>
                 )}
-
                 <Field
                   label="Add Final Images"
                   helperText="Upload any final images for this finished project (optional)"
@@ -206,7 +187,6 @@ const FinishProjectDialog = ({
                     userId={userId}
                   />
                 </Field>
-
                 <Field label="Notes (optional)">
                   <Textarea
                     value={notes}
@@ -216,34 +196,35 @@ const FinishProjectDialog = ({
                     color="fg.default"
                     borderColor="input.border"
                     rows={4}
+                    _focus={{
+                      borderColor: 'input.borderFocus',
+                      boxShadow: '0 0 0 1px input.borderFocus',
+                    }}
                   />
                 </Field>
               </VStack>
             </Dialog.Body>
-
             <Dialog.Footer>
               <HStack spacing={2}>
-                <Dialog.ActionTrigger asChild>
-                  <Button
-                    variant="outline"
-                    onClick={handleCancel}
-                    bg="cancelButton"
-                  >
-                    {cancelText}
-                  </Button>
-                </Dialog.ActionTrigger>
+                <Button
+                  onClick={handleCancel}
+                  variant="cancel"
+                  aria-label="Cancel finishing project"
+                >
+                  {cancelText}
+                </Button>
                 <Button
                   data-testid="confirm-button"
                   onClick={handleConfirm}
                   isLoading={isLoading}
                   disabled={!projectName.trim() || !finishDate}
-                  colorScheme="green"
+                  variant="primary"
+                  aria-label="Confirm finish project"
                 >
                   {confirmText}
                 </Button>
               </HStack>
             </Dialog.Footer>
-
             <Dialog.CloseTrigger asChild>
               <CloseButton size="sm" />
             </Dialog.CloseTrigger>

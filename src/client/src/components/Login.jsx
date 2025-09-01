@@ -73,9 +73,7 @@ const Login = ({ setUser }) => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              borderColor="input.border"
-              bg="input.bg"
-              color="fg.default"
+              variant="input"
             />
           </Field>
 
@@ -87,14 +85,17 @@ const Login = ({ setUser }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              borderColor="input.border"
-              bg="input.bg"
-              color="fg.default"
+              variant="input"
             />
           </Field>
         </Fieldset.Content>
 
-        <Button type="submit" width="full">
+        <Button
+          type="submit"
+          width="full"
+          variant="primary"
+          aria-label="Login to your account"
+        >
           Login
         </Button>
       </Fieldset.Root>

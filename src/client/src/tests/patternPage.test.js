@@ -81,7 +81,7 @@ describe('PatternPage', () => {
       expect(screen.getByText('Test Pattern')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Delete Pattern'));
+    fireEvent.click(screen.getByTestId('delete-pattern-button'));
 
     await waitFor(() => {
       expect(screen.getByText('Confirm Deletion')).toBeInTheDocument();
@@ -92,7 +92,7 @@ describe('PatternPage', () => {
       ).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Delete'));
+    fireEvent.click(screen.getByTestId('confirm-button'));
 
     await waitFor(() => {
       expect(patternService.deletePattern).toHaveBeenCalledWith('1', '1');
@@ -126,7 +126,7 @@ describe('PatternPage', () => {
     fireEvent.click(screen.getByText('Edit Pattern'));
 
     await waitFor(() => {
-      expect(screen.getByText('Save')).toBeInTheDocument();
+      expect(screen.getByText('Save Changes')).toBeInTheDocument();
       expect(screen.getByText('Cancel')).toBeInTheDocument();
     });
 
@@ -134,7 +134,7 @@ describe('PatternPage', () => {
       target: { value: 'Updated Pattern' },
     });
 
-    fireEvent.click(screen.getByText('Save'));
+    fireEvent.click(screen.getByText('Save Changes'));
 
     await waitFor(() => {
       expect(screen.getByText('Updated Pattern')).toBeInTheDocument();
@@ -153,7 +153,7 @@ describe('PatternPage', () => {
     fireEvent.click(screen.getByText('Edit Pattern'));
 
     await waitFor(() => {
-      expect(screen.getByText('Save')).toBeInTheDocument();
+      expect(screen.getByText('Save Changes')).toBeInTheDocument();
       expect(screen.getByText('Cancel')).toBeInTheDocument();
     });
 
@@ -177,11 +177,11 @@ describe('PatternPage', () => {
     fireEvent.click(screen.getByText('Edit Pattern'));
 
     await waitFor(() => {
-      expect(screen.getByText('Save')).toBeInTheDocument();
+      expect(screen.getByText('Save Changes')).toBeInTheDocument();
       expect(screen.getByText('Cancel')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Save'));
+    fireEvent.click(screen.getByText('Save Changes'));
 
     await waitFor(() => {
       expect(toaster.error).toHaveBeenCalledWith({
@@ -203,7 +203,7 @@ describe('PatternPage', () => {
       expect(screen.getByText('Test Pattern')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Delete Pattern'));
+    fireEvent.click(screen.getByTestId('delete-pattern-button'));
 
     await waitFor(() => {
       expect(screen.getByText('Confirm Deletion')).toBeInTheDocument();
@@ -214,7 +214,7 @@ describe('PatternPage', () => {
       ).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Delete'));
+    fireEvent.click(screen.getByTestId('confirm-button'));
 
     await waitFor(() => {
       expect(toaster.error).toHaveBeenCalledWith({

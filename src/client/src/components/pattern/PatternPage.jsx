@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import patternService from '../../services/pattern';
-import SidebarLayout from '../layout/SidebarLayout';
 import Notes from './Notes';
 import TagList from './TagList';
 import PatternText from './PatternText';
@@ -111,7 +110,7 @@ const Pattern = () => {
   };
 
   return (
-    <SidebarLayout userId={id}>
+    <>
       {!patternData ? (
         <Text>Loading...</Text>
       ) : error ? (
@@ -135,7 +134,7 @@ const Pattern = () => {
           shadow="lg"
           borderWidth="1px"
           borderRadius="xl"
-          bg="card.bg"
+          bg="cardPattern.bg"
           color="fg.default"
         >
           <VStack spacing={6} align="stretch">
@@ -145,17 +144,27 @@ const Pattern = () => {
               </Text>
               <HStack spacing={4}>
                 <Button
-                  size="sm"
+                  variant="primary"
                   onClick={() =>
                     navigate(`/projects/${id}/create`, { state: { patternId } })
                   }
+                  aria-label="Start a new project from this pattern"
                 >
                   Start Project
                 </Button>
-                <Button size="sm" onClick={toggleIsEditing}>
+                <Button
+                  variant="secondary"
+                  onClick={toggleIsEditing}
+                  aria-label="Edit this pattern"
+                >
                   Edit Pattern
                 </Button>
-                <Button size="sm" color="deleteButton" onClick={handleDelete}>
+                <Button
+                  variant="delete"
+                  onClick={handleDelete}
+                  aria-label="Delete this pattern"
+                  data-testid="delete-pattern-button"
+                >
                   Delete Pattern
                 </Button>
               </HStack>
@@ -226,6 +235,7 @@ const Pattern = () => {
                   color="blue.500"
                   isExternal
                   _hover={{ color: 'blue.600', textDecoration: 'underline' }}
+                  aria-label="External link to pattern source"
                 >
                   {link}
                 </Link>
@@ -281,14 +291,14 @@ const Pattern = () => {
             onConfirm={confirmDelete}
             title="Confirm Deletion"
             message="Are you sure you want to delete this pattern and all associated images? This action cannot be undone."
-            confirmText="Delete"
+            confirmText="Delete Pattern"
             cancelText="Cancel"
-            confirmColorScheme="red"
             isLoading={isDeleting}
+            aria-label="Confirm pattern deletion dialog"
           />
         </Box>
       )}
-    </SidebarLayout>
+    </>
   );
 };
 

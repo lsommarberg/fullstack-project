@@ -13,6 +13,7 @@ const TagList = ({ tags }) => (
         color="fg.default"
         borderColor="input.border"
         borderWidth="1px"
+        size="lg"
       >
         {tag}
       </Tag>

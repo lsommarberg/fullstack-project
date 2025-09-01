@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { Text, Flex, Stack, Spacer, Button, HStack } from '@chakra-ui/react';
 import { useParams, useNavigate } from 'react-router-dom';
 import projectService from '../../services/project';
-import SidebarLayout from '../layout/SidebarLayout';
-import { ListItem } from '../pattern/PatternsList';
-import { ProjectsSearch } from './ProjectsList';
+import ListItem from '../ListItem';
+import SearchBar from '../SearchBar';
 
 const FinishedProjectsList = () => {
   const { id } = useParams();
@@ -75,54 +74,56 @@ const FinishedProjectsList = () => {
   const projectsToShow = isSearchActive ? filteredProjects : allProjects;
 
   return (
-    <SidebarLayout userId={id}>
-      <Flex direction="column" p={6}>
-        <HStack mb={4} justify="space-between" align="center">
-          <Text fontSize="2xl" fontWeight="bold" mb={4}>
-            Finished Projects
-          </Text>
-          <Spacer />
-          <Button onClick={() => navigate(`/projects/${id}/create`)}>
-            Start New
-          </Button>
-        </HStack>
-        <ProjectsSearch
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          handleSearch={handleSearch}
-          startedAfter={startedAfter}
-          setStartedAfter={setStartedAfter}
-          startedBefore={startedBefore}
-          setStartedBefore={setStartedBefore}
-          finishedAfter={finishedAfter}
-          setFinishedAfter={setFinishedAfter}
-          finishedBefore={finishedBefore}
-          setFinishedBefore={setFinishedBefore}
-          status={{ value: 'finished' }}
-          handleClearSearch={handleClearSearch}
-        />
-        <Stack spacing={4}>
-          {isLoading ? (
-            <Text>Loading...</Text>
-          ) : projectsToShow.length === 0 ? (
-            isSearchActive ? (
-              <Text>No results found</Text>
-            ) : (
-              <Text>No finished projects yet</Text>
-            )
+    <Flex direction="column" p={6}>
+      <HStack mb={4} justify="space-between" align="center">
+        <Text fontSize="2xl" fontWeight="bold" mb={4}>
+          Finished Projects
+        </Text>
+        <Spacer />
+        <Button
+          onClick={() => navigate(`/projects/${id}/create`)}
+          variant="secondary"
+          aria-label="Start a new project"
+        >
+          Start New
+        </Button>
+      </HStack>
+      <SearchBar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        handleSearch={handleSearch}
+        startedAfter={startedAfter}
+        setStartedAfter={setStartedAfter}
+        startedBefore={startedBefore}
+        setStartedBefore={setStartedBefore}
+        finishedAfter={finishedAfter}
+        setFinishedAfter={setFinishedAfter}
+        finishedBefore={finishedBefore}
+        setFinishedBefore={setFinishedBefore}
+        status={{ value: 'finished' }}
+        handleClearSearch={handleClearSearch}
+      />
+      <Stack spacing={4}>
+        {isLoading ? (
+          <Text>Loading...</Text>
+        ) : projectsToShow.length === 0 ? (
+          isSearchActive ? (
+            <Text>No results found</Text>
           ) : (
-            projectsToShow.map((project) => (
-              <ListItem
-                item={project}
-                key={project.id}
-                getItemPath={getItemPath}
-                status={{ value: 'finished' }}
-              />
-            ))
-          )}
-        </Stack>
-      </Flex>
-    </SidebarLayout>
+            <Text>No finished projects yet</Text>
+          )
+        ) : (
+          projectsToShow.map((project) => (
+            <ListItem
+              item={project}
+              key={project.id}
+              getItemPath={getItemPath}
+              status={{ value: 'finished' }}
+            />
+          ))
+        )}
+      </Stack>
+    </Flex>
   );
 };
 
