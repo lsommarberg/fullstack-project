@@ -82,7 +82,7 @@ describe('Project Page', () => {
     await expect(page.getByText(currentDate)).toBeVisible();
     await expect(page.getByText('Row Trackers')).not.toBeVisible();
     await page.getByText('My Projects').click();
-    await page.getByText('In progress').click();
+    await page.getByRole('tab', { name: 'In progress' }).click();
     const inProgressPanel = page.getByTestId('projects-inprogress-panel');
     await expect(
       inProgressPanel.getByTestId('item-To Finish'),
