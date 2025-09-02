@@ -120,10 +120,10 @@ const config = defineConfig({
           value: { base: '#ffffff', _dark: '#0f172a' },
         },
         secondaryButton: {
-          value: { base: '#67b7efff', _dark: '#2563eb' },
+          value: { base: '#1e40af', _dark: '#2563eb' },
         },
         secondaryButtonText: {
-          value: { base: '#0f172a', _dark: '#ffffff' },
+          value: { base: '#ffffff', _dark: '#ffffff' },
         },
         deleteButton: {
           value: { base: '#ef4444', _dark: '#b91c1c' },
