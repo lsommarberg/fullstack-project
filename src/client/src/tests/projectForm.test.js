@@ -40,7 +40,7 @@ describe('ProjectForm', () => {
   });
 
   test('submits the form successfully', async () => {
-    projectService.createProject.mockResolvedValue({});
+    projectService.createProject.mockResolvedValue({ id: 'project123' });
 
     render(<ProjectForm />);
 
@@ -66,7 +66,7 @@ describe('ProjectForm', () => {
         files: [],
         tags: [],
       });
-      expect(mockNavigate).toHaveBeenCalledWith('/projects/1');
+      expect(mockNavigate).toHaveBeenCalledWith('/projects/1/project123');
       expect(toaster.success).toHaveBeenCalledWith({
         description: 'Project created successfully',
         duration: 5000,

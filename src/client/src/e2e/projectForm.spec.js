@@ -19,11 +19,8 @@ describe('Project Form', () => {
 
     await expect(page.getByText('Project created successfully')).toBeVisible();
 
-    await expect(page).toHaveURL(/\/projects\/\d+/);
+    await expect(page).toHaveURL(/\/projects\/[a-f0-9]+\/[a-f0-9]+/);
 
-    await page.getByRole('link', { name: 'My Projects' }).click();
-
-    const allPanel = page.getByTestId('projects-all-panel');
-    await expect(allPanel.getByText('Test Project')).toBeVisible();
+    await expect(page.getByText('Test Project')).toBeVisible();
   });
 });

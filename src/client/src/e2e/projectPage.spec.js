@@ -18,15 +18,12 @@ describe('Project Page', () => {
     await addProject(page);
     await expect(page.getByText('Project created successfully')).toBeVisible();
     await expect(page).toHaveURL(/\/projects\/\d+/);
-
-    await page.getByRole('link', { name: 'My Projects' }).click();
-
-    await page.getByText('All').click();
-    const allPanel = page.getByTestId('projects-all-panel');
-
-    await expect(allPanel.getByText('Test Project')).toBeVisible();
-    await allPanel.getByText('Test Project').click();
-    await expect(page).toHaveURL(/\/projects\/\d+/);
+    await expect(page.getByText('Test Project')).toBeVisible();
+    await expect(page.getByText('Row Trackers')).toBeVisible();
+    await expect(page.getByText('Main Section')).toBeVisible();
+    await expect(page.getByText('tag1')).toBeVisible();
+    await expect(page.getByText('tag2')).toBeVisible();
+    await expect(page.getByText('tag3')).toBeVisible();
     await expect(page.getByText('Test notes for this project')).toBeVisible();
   });
 
@@ -34,10 +31,7 @@ describe('Project Page', () => {
     await addProject(page, 'To Delete');
     await expect(page).toHaveURL(/\/projects\/\d+/);
 
-    await page.getByText('All').click();
-    const allPanel = page.getByTestId('projects-all-panel');
-    await expect(allPanel.getByText('To Delete')).toBeVisible();
-    await allPanel.getByText('To Delete').click();
+    await expect(page.getByText('To Delete')).toBeVisible();
 
     await page.getByRole('button', { name: 'Delete this project' }).click();
 
@@ -57,10 +51,6 @@ describe('Project Page', () => {
 
     await expect(page).toHaveURL(/\/projects\/\d+/);
 
-    await page.getByText('All').click();
-    const allPanel = page.getByTestId('projects-all-panel');
-    await allPanel.getByText('To Edit').click();
-
     await page.getByRole('button', { name: 'Edit this project' }).click();
 
     await expect(page.getByText('Edit Project')).toBeVisible();
@@ -79,10 +69,6 @@ describe('Project Page', () => {
     await addProject(page, 'To Finish');
 
     await expect(page).toHaveURL(/\/projects\/\d+/);
-
-    await page.getByText('All').click();
-    const allPanel = page.getByTestId('projects-all-panel');
-    await allPanel.getByTestId('item-To Finish').click();
 
     await page.getByRole('button', { name: 'Finish this project' }).click();
 

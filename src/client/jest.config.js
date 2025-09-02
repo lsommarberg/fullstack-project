@@ -5,16 +5,14 @@ module.exports = {
   },
   moduleFileExtensions: ['js', 'jsx'],
   testEnvironment: 'jsdom',
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/src/e2e/', // Ignore E2E tests
-  ],
+  testPathIgnorePatterns: ['/node_modules/', '/src/e2e/'],
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{js,jsx}',
     '!src/**/*.test.{js,jsx}',
     '!src/**/index.{js,jsx}',
     '!src/components/ui/**',
+    '!src/e2e/**',
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['html', 'text', 'lcov'],

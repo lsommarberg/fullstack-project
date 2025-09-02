@@ -42,7 +42,7 @@ describe('PatternForm', () => {
   });
 
   test('submits the form successfully', async () => {
-    patternService.createPattern.mockResolvedValue({});
+    patternService.createPattern.mockResolvedValue({ id: 'pattern123' });
 
     render(<PatternForm />);
 
@@ -77,7 +77,7 @@ describe('PatternForm', () => {
         description: 'Pattern created successfully',
         duration: 5000,
       });
-      expect(mockNavigate).toHaveBeenCalledWith('/users/1');
+      expect(mockNavigate).toHaveBeenCalledWith('/patterns/1/pattern123');
     });
   });
 
