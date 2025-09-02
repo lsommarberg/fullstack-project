@@ -69,4 +69,16 @@ jobs:
       - name: Run frontend tests
         working-directory: src/client
         run: npm test
+
+      - name: Install Playwright browsers
+        working-directory: src/client
+        run: npx playwright install
+
+      - name: Run E2E tests
+        working-directory: src/client
+        run: npm run e2e:ci
+        env:
+          CI: true
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+          SECRET: ${{ secrets.SECRET }}
         

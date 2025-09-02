@@ -9,6 +9,30 @@ import {
 import { Field } from '@/components/ui/field';
 import { useState } from 'react';
 
+/**
+ * Search and filter component for projects and patterns with advanced filtering options.
+ * Provides text search, date range filtering, and status-based filtering capabilities.
+ * Includes collapsible advanced filters for date ranges and project completion status.
+ *
+ * @component
+ * @param {Object} props - The component props
+ * @param {string} props.searchQuery - Current search query text
+ * @param {Function} props.setSearchQuery - Function to update search query
+ * @param {Function} props.handleSearch - Function to execute search with current filters
+ * @param {string} props.startedAfter - Start date filter (after this date)
+ * @param {Function} props.setStartedAfter - Function to update start date filter
+ * @param {string} props.startedBefore - Start date filter (before this date)
+ * @param {Function} props.setStartedBefore - Function to update start date filter
+ * @param {string} props.finishedAfter - Finish date filter (after this date)
+ * @param {Function} props.setFinishedAfter - Function to update finish date filter
+ * @param {string} props.finishedBefore - Finish date filter (before this date)
+ * @param {Function} props.setFinishedBefore - Function to update finish date filter
+ * @param {Object} props.status - Current status filter object with value property
+ * @param {Function} props.handleClearSearch - Function to reset all search filters
+ * @param {string} props.placeHolderText - Placeholder text for search input
+ * @param {string} props.labelText - Label text for search input field
+ * @returns {JSX.Element} Search form with text input and optional advanced filters
+ */
 const SearchBar = ({
   searchQuery,
   setSearchQuery,

@@ -3,6 +3,22 @@ const Pattern = require('../models/pattern');
 const User = require('../models/user');
 const { userExtractor } = require('../utils/middleware');
 
+/**
+ * Pattern management controller providing CRUD operations for knitting patterns.
+ * Includes pattern search, filtering, creation, updates, and deletion.
+ * All operations require user authentication and proper authorization.
+ */
+
+/**
+ * Search patterns by query string with optional sorting.
+ * Searches through pattern names, text content, and tags.
+ *
+ * @route GET /api/patterns/search
+ * @param {string} req.query.q - Search query string
+ * @param {string} req.query.sortBy - Sort order (optional)
+ * @returns {Array} 200 - Matching patterns
+ * @returns {Object} 400 - Missing query parameter
+ */
 router.get('/search', userExtractor, async (req, res) => {
   const { q, sortBy } = req.query;
 

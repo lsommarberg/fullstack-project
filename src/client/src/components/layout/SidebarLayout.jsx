@@ -6,6 +6,16 @@ import {
   Outlet,
 } from 'react-router-dom';
 
+/**
+ * Sidebar layout component that provides a persistent side navigation for user dashboard pages.
+ * Uses React Router's Outlet to render child routes while maintaining sidebar navigation state.
+ * Includes navigation links for user patterns, projects, and account management.
+ *
+ * @component
+ * @param {Object} props - The component props
+ * @param {string} props.userId - The current user's ID for navigation routing
+ * @returns {JSX.Element} Layout with sidebar navigation and outlet for child routes
+ */
 const SidebarLayout = ({ userId }) => {
   const navigate = useNavigate();
   const location = useLocation();

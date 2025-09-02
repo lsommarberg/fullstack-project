@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+/**
+ * Pattern model schema for storing knitting patterns and instructions.
+ * Contains pattern details, metadata, user association, and file attachments.
+ * Supports tagging, external links, and user notes for pattern organization.
+ */
 const patternSchema = new mongoose.Schema({
   name: {
     type: String,

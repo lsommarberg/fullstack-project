@@ -19,11 +19,12 @@ describe('Pattern Form', () => {
 
     await expect(page.getByText('Pattern created successfully')).toBeVisible();
 
-    await expect(page).toHaveURL(/\/users\/\d+/);
+    await expect(page).toHaveURL(/\/patterns\/[a-f0-9]+\/[a-f0-9]+/);
 
-    await page.getByRole('link', { name: 'My Patterns' }).click();
-
-    await expect(page.getByText('Test Pattern')).toBeVisible();
+    await expect(page.getByText('Test Pattern').first()).toBeVisible();
+    await expect(
+      page.getByText('This is a test pattern description'),
+    ).toBeVisible();
   });
 
   test('pattern creation form has image upload functionality', async ({

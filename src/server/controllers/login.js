@@ -5,6 +5,18 @@ const User = require('../models/user');
 
 const router = require('express').Router();
 
+/**
+ * User authentication endpoint that validates credentials and returns JWT token.
+ * Compares provided password with stored hash and generates session token on success.
+ *
+ * @route POST /api/login
+ * @param {Object} req.body - Request body containing user credentials
+ * @param {string} req.body.username - User's username
+ * @param {string} req.body.password - User's plain text password
+ * @returns {Object} 200 - User data with JWT token
+ * @returns {Object} 400 - Missing credentials error
+ * @returns {Object} 401 - Invalid credentials error
+ */
 router.post('/', async (req, res) => {
   const { username, password } = req.body;
 

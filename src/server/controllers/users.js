@@ -5,11 +5,32 @@ const { userExtractor } = require('../utils/middleware');
 
 const MAX_STORAGE_LIMIT = 100 * 1024 * 1024;
 
+/**
+ * User management controller providing CRUD operations for user accounts.
+ * Includes profile management, password updates, and storage limit tracking.
+ * All user-specific operations require authentication and authorization.
+ */
+
+/**
+ * Get all users (admin functionality).
+ *
+ * @route GET /api/users
+ * @returns {Array} 200 - List of all users
+ */
 router.get('/', async (req, res) => {
   const users = await User.find();
   res.json(users);
 });
 
+/**
+ * Get specific user by ID with authorization check.
+ * Users can only access their own profile data.
+ *
+ * @route GET /api/users/:id
+ * @param {string} req.params.id - User ID
+ * @returns {Object} 200 - User profile data
+ * @returns {Object} 403 - Access forbidden
+ */
 router.get('/:id', userExtractor, async (req, res) => {
   if (req.user.id !== req.params.id) {
     return res.status(403).json({ error: 'forbidden' });

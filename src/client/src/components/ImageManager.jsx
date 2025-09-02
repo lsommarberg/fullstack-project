@@ -7,6 +7,28 @@ import userService from '../services/user';
 
 const MAX_STORAGE_LIMIT = 100 * 1024 * 1024;
 
+/**
+ * Image management component that handles upload, display, and deletion of images.
+ * Provides storage limit checking and accessibility features for image interactions.
+ * Used across patterns, projects, and user profiles for image management.
+ *
+ * @component
+ * @param {Object} props - The component props
+ * @param {Array} props.files - Array of image files to display
+ * @param {string} props.headerText - Header text for the image section
+ * @param {string} props.type - Type of images (pattern, project, user)
+ * @param {boolean} props.showUpload - Whether to show upload functionality
+ * @param {boolean} props.showDelete - Whether to show delete functionality
+ * @param {Function} props.onImageUpload - Callback for image upload events
+ * @param {Function} props.onImageDelete - Callback for image deletion events
+ * @param {Function} props.onUploadError - Callback for upload error handling
+ * @param {string} props.itemType - Type of item the images belong to
+ * @param {string} props.buttonText - Text for the upload button
+ * @param {string} props.buttonSize - Size of the upload button
+ * @param {string} props.userId - ID of the user uploading images
+ * @param {string} props.itemId - ID of the item the images belong to
+ * @returns {JSX.Element} Image management interface with upload/delete controls
+ */
 const ImageManager = ({
   files = [],
   headerText = 'Images',

@@ -19,6 +19,14 @@ import patternService from '../../services/pattern';
 import { toaster } from '../ui/toaster';
 import ImageManager from '../ImageManager';
 
+/**
+ * Project creation form component for starting new knitting projects.
+ * Provides comprehensive project setup including pattern selection, row tracking, image upload,
+ * and project metadata.
+ *
+ * @component
+ * @returns {JSX.Element} Complete project creation form with pattern integration and row tracking
+ */
 const ProjectForm = () => {
   const { id } = useParams();
   const [name, setName] = useState('');
@@ -112,7 +120,7 @@ const ProjectForm = () => {
         .map((item) => item.trim())
         .filter((item) => item.length > 0);
 
-      await projectService.createProject({
+      const createdProject = await projectService.createProject({
         name,
         startedAt,
         rowTrackers: validRowTrackers,
@@ -125,7 +133,7 @@ const ProjectForm = () => {
         description: 'Project created successfully',
         duration: 5000,
       });
-      navigate(`/projects/${id}`);
+      navigate(`/projects/${id}/${createdProject.id}`);
     } catch (error) {
       console.error('Error creating project:', error);
       toaster.error({ description: 'Error creating project', duration: 5000 });

@@ -3,6 +3,18 @@ const User = require('../models/user');
 
 const router = require('express').Router();
 
+/**
+ * User registration endpoint that creates new user accounts with encrypted passwords.
+ * Validates username uniqueness and password strength before creating account.
+ *
+ * @route POST /api/users
+ * @param {Object} req.body - Request body containing registration data
+ * @param {string} req.body.username - Desired username (must be unique)
+ * @param {string} req.body.password - User's plain text password
+ * @returns {Object} 201 - Created user data
+ * @returns {Object} 400 - Missing fields or validation errors
+ * @returns {Object} 409 - Username already exists
+ */
 router.post('/', async (req, res) => {
   const { username, password } = req.body;
 

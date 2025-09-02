@@ -14,6 +14,14 @@ import patternService from '../../services/pattern';
 import { toaster } from '../ui/toaster';
 import ImageManager from '../ImageManager';
 
+/**
+ * Pattern creation form component for adding new knitting patterns.
+ * Provides form fields for pattern name, instructions, external links, tags, notes, and images.
+ * Handles form submission and navigation after successful pattern creation.
+ *
+ * @component
+ * @returns {JSX.Element} Pattern creation form with all necessary fields and image upload
+ */
 const PatternForm = () => {
   const { id } = useParams();
   const [name, setName] = useState('');
@@ -60,7 +68,7 @@ const PatternForm = () => {
       .map((item) => item.trim())
       .filter((item) => item.length > 0);
     try {
-      await patternService.createPattern({
+      const createdPattern = await patternService.createPattern({
         name,
         text,
         link,
@@ -72,7 +80,7 @@ const PatternForm = () => {
         description: 'Pattern created successfully',
         duration: 5000,
       });
-      navigate(`/users/${id}`);
+      navigate(`/patterns/${id}/${createdPattern.id}`);
     } catch (error) {
       console.error('Error creating pattern:', error);
       toaster.error({ description: 'Error creating pattern', duration: 5000 });

@@ -18,13 +18,8 @@ describe('Pattern Page', () => {
   test('user can view a pattern', async ({ page }) => {
     await addPattern(page);
     await expect(page.getByText('Pattern created successfully')).toBeVisible();
-    await expect(page).toHaveURL(/\/users\/\d+/);
+    await expect(page).toHaveURL(/\/patterns\/[a-f0-9]+\/[a-f0-9]+/);
 
-    await page.getByRole('link', { name: 'My Patterns' }).click();
-
-    await expect(page.getByText('Test Pattern')).toBeVisible();
-    await page.getByText('Test Pattern').click();
-    await expect(page).toHaveURL(/\/patterns\/\d+/);
     await expect(
       page.getByText('This is a test pattern description'),
     ).toBeVisible();
@@ -37,7 +32,7 @@ describe('Pattern Page', () => {
 
   test('user can delete a pattern', async ({ page }) => {
     await addPattern(page, 'To Delete');
-    await expect(page).toHaveURL(/\/users\/\d+/);
+    await expect(page).toHaveURL(/\/patterns\/[a-f0-9]+\/[a-f0-9]+/);
 
     await page.getByRole('link', { name: 'My Patterns' }).click();
 
@@ -59,7 +54,7 @@ describe('Pattern Page', () => {
 
   test('User can edit a pattern', async ({ page }) => {
     await addPattern(page, 'To Edit');
-    await expect(page).toHaveURL(/\/users\/\d+/);
+    await expect(page).toHaveURL(/\/patterns\/[a-f0-9]+\/[a-f0-9]+/);
 
     await page.getByRole('link', { name: 'My Patterns' }).click();
 
@@ -76,5 +71,67 @@ describe('Pattern Page', () => {
     await expect(page).toHaveURL(/\/patterns\/\d+/);
     await expect(page.getByText('Pattern updated successfully')).toBeVisible();
     await expect(page.getByText('Edited Pattern')).toBeVisible();
+  });
+
+  test('User gets notified when trying to leave with unsaved changes', async ({
+    page,
+  }) => {
+    await addPattern(page, 'To Edit');
+    await expect(page).toHaveURL(/\/patterns\/[a-f0-9]+\/[a-f0-9]+/);
+
+    await page.getByRole('link', { name: 'My Patterns' }).click();
+
+    await expect(page.getByText('To Edit')).toBeVisible();
+    await page.getByText('To Edit').click();
+
+    await page.getByRole('button', { name: 'Edit this pattern' }).click();
+
+    await page.getByTestId('pattern-name-input').fill('Edited Pattern');
+
+    let dialogTriggered = false;
+    page.on('dialog', async (dialog) => {
+      expect(dialog.type()).toBe('beforeunload');
+      dialogTriggered = true;
+      await dialog.accept();
+    });
+
+    await page.reload();
+
+    expect(dialogTriggered).toBe(true);
+
+    await expect(page).toHaveURL(/\/patterns\/\d+/);
+    await expect(page.getByText('To Edit')).toBeVisible();
+  });
+
+  test('User can choose to stay when warned about unsaved changes', async ({
+    page,
+  }) => {
+    await addPattern(page, 'To Edit');
+    await expect(page).toHaveURL(/\/patterns\/[a-f0-9]+\/[a-f0-9]+/);
+
+    await page.getByRole('link', { name: 'My Patterns' }).click();
+    await expect(page.getByText('To Edit')).toBeVisible();
+    await page.getByText('To Edit').click();
+    await page.getByRole('button', { name: 'Edit this pattern' }).click();
+    await page.getByTestId('pattern-name-input').fill('Edited Pattern');
+
+    let dialogTriggered = false;
+    page.on('dialog', async (dialog) => {
+      expect(dialog.type()).toBe('beforeunload');
+      dialogTriggered = true;
+      await dialog.dismiss();
+    });
+
+    try {
+      await page.reload({ timeout: 5000 });
+    } catch (error) {
+      expect(error.message).toContain('Timeout');
+    }
+    expect(dialogTriggered).toBe(true);
+
+    await expect(page).toHaveURL(/\/patterns\/\d+/);
+    await expect(page.getByTestId('pattern-name-input')).toHaveValue(
+      'Edited Pattern',
+    );
   });
 });

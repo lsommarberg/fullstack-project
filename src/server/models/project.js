@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+/**
+ * Project model schema for tracking knitting project progress and management.
+ * Contains project metadata, progress tracking, pattern association, and completion status.
+ * Supports row tracking, tagging, notes, and file attachments for comprehensive project management.
+ */
 const projectSchema = new mongoose.Schema({
   name: {
     type: String,

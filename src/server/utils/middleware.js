@@ -1,6 +1,19 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
+/**
+ * Authentication and authorization middleware functions.
+ * Provides JWT token extraction and user authentication for protected routes.
+ */
+
+/**
+ * Extract JWT token from Authorization header.
+ * Looks for Bearer token format and sets req.token for downstream middleware.
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next function
+ */
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get('authorization');
   if (authorization && authorization.startsWith('Bearer ')) {
@@ -11,6 +24,15 @@ const tokenExtractor = (req, res, next) => {
   next();
 };
 
+/**
+ * Extract and validate user from JWT token.
+ * Verifies token signature and loads user data for authorization checks.
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next function
+ * @returns {Object} 401 - Invalid or missing token
+ */
 const userExtractor = async (req, res, next) => {
   if (!req.token) {
     return res.status(401).json({ error: 'token missing' });

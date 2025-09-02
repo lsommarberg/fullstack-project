@@ -12,6 +12,25 @@ import { Field } from '@/components/ui/field';
 import ImageManager from '../ImageManager';
 import useUnsavedChangesWarning from '../../hooks/useUnSavedChangesWarning';
 
+/**
+ * Pattern editing form component with unsaved changes warning and comprehensive pattern management.
+ * Allows editing of pattern name, instructions, external links, tags, notes, and associated images.
+ * Provides save/cancel functionality with automatic change detection to warn about unsaved changes.
+ *
+ * @component
+ * @param {Object} props - The component props
+ * @param {string} props.name - Current pattern name
+ * @param {string} props.text - Current pattern instructions/text
+ * @param {string} props.link - External link to pattern source
+ * @param {Array} props.tags - Pattern tags array
+ * @param {string} props.notes - Pattern notes
+ * @param {Array} props.files - Pattern image files
+ * @param {Function} props.onSave - Callback function when pattern is saved
+ * @param {Function} props.onCancel - Callback function when editing is cancelled
+ * @param {string} props.userId - Current user ID
+ * @param {string} props.patternId - ID of the pattern being edited
+ * @returns {JSX.Element} Comprehensive pattern editing form with change detection
+ */
 const EditPattern = ({
   name,
   text,

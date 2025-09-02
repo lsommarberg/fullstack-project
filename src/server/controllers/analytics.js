@@ -4,6 +4,22 @@ const Project = require('../models/project');
 const Pattern = require('../models/pattern');
 const { userExtractor } = require('../utils/middleware');
 
+/**
+ * Analytics controller providing comprehensive user statistics and insights.
+ * Generates project completion rates, pattern usage, activity trends, and performance metrics.
+ * All analytics are user-scoped and require proper authentication.
+ */
+
+/**
+ * Get comprehensive analytics data for a specific user.
+ * Includes project statistics, completion rates, pattern usage, and activity trends.
+ *
+ * @route GET /api/analytics/:id
+ * @param {string} req.params.id - User ID for analytics
+ * @returns {Object} 200 - Complete analytics dashboard data
+ * @returns {Object} 403 - Access forbidden
+ * @returns {Object} 500 - Server error during analytics calculation
+ */
 router.get('/:id', userExtractor, async (req, res) => {
   if (req.user.id !== req.params.id) {
     return res.status(403).json({ error: 'forbidden' });

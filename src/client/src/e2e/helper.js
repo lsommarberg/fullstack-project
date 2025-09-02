@@ -27,6 +27,7 @@ const addProject = async (page, name, date) => {
   await page.getByLabel('Project Name').fill(name || 'Test Project');
 
   await page.getByLabel('Started At').fill(date || '2025-01-01');
+  await page.getByLabel('Tags').fill('tag1, tag2, tag3');
   await page.getByTestId('tracker-section').fill('Main Section');
   await page.getByTestId('tracker-total-rows').fill('100');
 
