@@ -2,9 +2,9 @@
 
 A full-stack web application for managing knitting patterns and tracking project progress. Built with React, Node.js, Express, and MongoDB.
 
-## 🔗 Link to Application
-
-[Knitting Pattern Manager](https://fullstack-project-client.onrender.com)
+## Status
+The application is currently not deployed.  
+It can be run locally using Docker or by following the setup instructions below.
 
 ## Features
 
